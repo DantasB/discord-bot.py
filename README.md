@@ -12,7 +12,7 @@ Betina is an original Discord bot written in Python 3.6+ and entirely written in
 ### Setup
 Setting up the Betina isn't painfull, just follow the guide below:
 1. Install the discord.py rewrite library
-2. Install the requirements library
+2. Install all the libraries located at the requirements.txt
 3. Acess the https://discordapp.com/developers/applications/ and create your bot.
 
 
