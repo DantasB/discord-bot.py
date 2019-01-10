@@ -1,3 +1,6 @@
+""" If you have any trouble with the bot and want some help, fell free to send me a message on discord: DantasB#7096.
+    Some commands that i used in this bot were inspired in another discord bots functions."""
+
 import random
 import time
 import discord
