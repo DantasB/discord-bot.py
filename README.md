@@ -25,3 +25,4 @@ There are many commands that can be used with the bot. Most notably, the $play c
 Use a bot in the discord is a good thing and will help you to manage or have fun in your server.So, according to this ,there are some documentations that will help you to improve Betina or construct a bot from zero:
 1. https://discordapp.com/developers/docs/intro
 2. https://discordpy.readthedocs.io/en/rewrite/
+3. https://sourcecode.glitch.me/
