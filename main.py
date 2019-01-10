@@ -3,9 +3,6 @@ import time
 import discord
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
-from dhooks import Webhook
-from discord import Webhook, AsyncWebhookAdapter
-import aiohttp
 
 
 startup_extensions = ['Music']
