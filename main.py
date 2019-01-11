@@ -55,15 +55,29 @@ async def on_ready():
 async def on_guild_join(guild):
         for membro in guild.members:
             if membro.guild_permissions.administrator and membro != client.user:
-                await membro.send('```Olá, eu sou a Betina.\nMuito obrigada por me colocar em seu servidor,'
-                                  ' atualmente estou em construção e algumas funções não estão funcionando'
-                                  ' corretamente. Caso encontre algum problema, por favor avise ao meu criador:'
-                                  ' BDantas#7096.\nAgora vamos aos meus comandos: Para conhecer um pouco mais'
-                                  ' sobre as coisas que eu posso fazer, aconselho que você utilize o comando'
-                                  ' $help e receberá uma lista de comandos para utilizar.```\n'
-                                  'Tenha um ótimo proveito ❤. ')
-    
-    
+
+                embed = discord.Embed(title="Bem vindo ao Suporte da Betina", colour=discord.Colour(0x370c5e),
+                                      description="Olá, eu sou a betina: \n esse suporte está aqui para te ajudar e ajudar ao meu criador ```\nSim, eu não vou roubar seus dados...```",
+                                      timestamp=datetime.datetime.utcfromtimestamp(1547228918))
+                embed.set_image(
+                    url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                embed.set_thumbnail(
+                    url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                embed.set_author(name="Betina")
+                embed.set_footer(text="footer text",
+                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+
+                embed.add_field(name="Precisa de ajuda?🤔", value="para usar meus comandos utilize o $help")
+                embed.add_field(name="Teve alguma ideia boa ? 😱: ",
+                                value="fale com o meu criador, ele poderá implementar!")
+                embed.add_field(name="Teve algum problema com o bot ?🙄",
+                                value="não se preocupe, alguns problemas são comuns considerando o fato do bot estar em construção, mas, de qualquer forma,  fale com o meu criador.")
+                embed.add_field(name="Criador do bot:", value="DantasB#7096", inline=True)
+                embed.add_field(name="Maiores informações:", value="github.com/DantasB", inline=True)
+
+                await membro.send(embed=embed)
+
+        
 @client.event
 async def on_member_join(member):
     """Envia uma mensagem quando o membro entra no servidor"""
