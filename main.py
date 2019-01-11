@@ -83,27 +83,26 @@ async def on_message(message):
     await client.process_commands(message)
 
 
-@client.command()
+@client.command(name='bate', aliases=['hit', 'punch', 'kick'])
 async def bate(ctx, member: discord.Member):
     """<membro>: Tome cuidado com isso."""
     msg = await ctx.send('{} bate em {}'.format(ctx.author.mention, member.mention))
     await msg.add_reaction('😯')
 
 
-@client.command()
+@client.command(name='abraça', aliases=['hug', 'abraço'])
 async def abraça(ctx, member: discord.Member):
     """<membro>: Use isso com amor <3."""
     msg = await ctx.send('{} abraça {}'.format(ctx.author.mention, member.mention))
     await msg.add_reaction('🤗')
 
-
-@client.command()
+@client.command(name='apaga', aliases=['delete', 'clean', 'clear', 'c'])
 async def apaga(ctx, amount: int):
     """Apaga uma quantidade amount de mensagens no servidor"""
     await ctx.channel.purge(limit=amount)
 
 
-@client.command()
+@client.command(name='ppt', aliases=['Rsp'])
 async def ppt(ctx, msg: str):
     """Pedra, papel e tesoura"""
     t = ['pedra', 'papel', 'tesoura']
@@ -133,7 +132,7 @@ async def ppt(ctx, msg: str):
         await ctx.send('``Escreve direito, por favor!``')
 
 
-@client.command()
+@client.command(name='devemais', aliases=['ntp', 'medeve', 'pay'])
 async def devemais(ctx, member: discord.Member, a: float):
     """Adiciona o credito"""
     if (member in devedores) and (ctx.author in devidos):
@@ -143,8 +142,8 @@ async def devemais(ctx, member: discord.Member, a: float):
         devedores[member] = devidos
     await ctx.send('{} deve R$ {} ao {}'.format(member.mention, devidos[ctx.author], ctx.author.mention))
 
-
-@client.command()
+    
+@client.command(name='devemenos', aliases=['dntp', 'naomedeve', 'npay'])
 async def devemenos(ctx, member: discord.Member, a: float):
     """Diminui o credito"""
     if (member in devedores) and (ctx.author in devidos):
@@ -168,7 +167,7 @@ async def devemenos(ctx, member: discord.Member, a: float):
         await ctx.send('{} deve R$ {} ao {}'.format(ctx.author.mention, devidos[member], member.mention))
 
 
-@client.command()
+@client.command(name='deve', aliases=['rsp', 'owe'])
 async def deve(ctx, member: discord.Member):
     """Diz o quanto uma pessoa deve as outras"""
     if not (member in devedores):
@@ -181,7 +180,7 @@ async def deve(ctx, member: discord.Member):
                 await ctx.send('R$ {} ao {}'.format(devidos[membros], membros.mention))
 
 
-@client.command()
+@client.command(name='conversor', aliases=['converter', 'converte'])
 async def conversor(ctx, moeda1, moeda2, quantidade=None):
     """Vê o valor da moeda 1 em moeda 2"""
     try:
@@ -206,7 +205,7 @@ async def treta(ctx):
     pass
 
 
-@client.command(pass_context=True)
+@client.command(name='rola', aliases=['roll', 'dice'])
 async def rola(ctx, a: int):
     """Um Dado de até 20 lados."""
     if a > 20:
@@ -220,7 +219,7 @@ async def rola(ctx, a: int):
         await ctx.send("Você está rolando um ``d{}`` e tirou ``{}``".format(a, argumento))
 
 
-@client.command()
+@client.command(pass_context=True)
 async def ping(ctx):
     """Retorna o Ping do usuario mais uma piadinha tosca!"""
     channel = ctx.channel
@@ -240,8 +239,7 @@ async def pong(ctx):
     await ctx.send('Ping! Uovel em ossI {} sµ.'.format(round(1000 * (t2-t1))))
 
 
-
-@client.command()
+@client.command(name='moeda', aliases=['coin', 'ht'])
 async def moeda(ctx):
     """Heads and Tails!"""
     resultado = random.randint(1, 2)
