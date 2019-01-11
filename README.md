@@ -6,7 +6,7 @@ A simple Discord bot constructed using python 3 and some libraries.
 
 
 ## Important 
-This bot is only compatible with the rewrite discord.py library, which can be installed using python3 -m pip install -U git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py[voice]. Some of the commands doesn't work with Python 2. 
+This bot is only compatible with the rewrite discord.py library, which can be installed using python3 -m pip install -U git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py[voice]. Some of the commands doesn't work with Python2. 
 
 
 ### Setup
