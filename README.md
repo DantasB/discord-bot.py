@@ -6,7 +6,7 @@ A simple Discord bot constructed using python.
 This bot is only compatible with the rewrite discord.py library, which can be installed using python3 -m pip install -U git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py[voice]. Some of the commands doesn't work with **Python 2**.
 
  
-Betina is an original Discord bot written in Python 3.6+ and entirely written in Portuguese, using the discord.py library. It plays requested songs from YouTube and other services into a Discord server and also have funny functions that can help the server administrator. The project is a little simple according to the functionalities and how other bots use the permission system, but it still in construction.
+>Betina is an original Discord bot written in Python 3.6+ and entirely written in Portuguese, using the discord.py library. It plays requested songs from YouTube and other services into a Discord server and also have funny functions that can help the server administrator. The project is a little simple according to the functionalities and how other bots use the permission system, but it still in construction.
 
 
 ### Setup
