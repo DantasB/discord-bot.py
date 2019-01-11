@@ -47,7 +47,7 @@ async def on_ready():
     print('ID do Bot: ' + str(client.user.id))
     print('Versao do Discord: ' + discord.__version__)
     print('--------------BD--------------')
-    game = discord.Game("com a API")
+    game = discord.Game("$help")
     await client.change_presence(status=discord.Status.idle, activity=game)
 
 
@@ -57,6 +57,8 @@ async def on_member_join(member):
     guild = member.guild.get_channel('id do canal que você quer dar boas vindas')
     fmt = 'Bem vindo ao servidor {1.name}, {0.mention}, aproveita e segue o baile.'
     await guild.send(fmt.format(member, member.guild))
+    role = discord.utils.get(member.guild.roles, name='Nome do cargo')
+    await member.add_roles(role) #sempre que alguem entrar no servidor receberá esse cargo.
 
 
 @client.event
