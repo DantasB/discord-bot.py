@@ -52,6 +52,19 @@ async def on_ready():
 
 
 @client.event
+async def on_guild_join(guild):
+        for membro in guild.members:
+            if membro.guild_permissions.administrator and membro != client.user:
+                await membro.send('```Olá, eu sou a Betina.\nMuito obrigada por me colocar em seu servidor,'
+                                  ' atualmente estou em construção e algumas funções não estão funcionando'
+                                  ' corretamente. Caso encontre algum problema, por favor avise ao meu criador:'
+                                  ' BDantas#7096.\nAgora vamos aos meus comandos: Para conhecer um pouco mais'
+                                  ' sobre as coisas que eu posso fazer, aconselho que você utilize o comando'
+                                  ' $help e receberá uma lista de comandos para utilizar.```\n'
+                                  'Tenha um ótimo proveito ❤. ')
+    
+    
+@client.event
 async def on_member_join(member):
     """Envia uma mensagem quando o membro entra no servidor"""
     guild = member.guild.get_channel('id do canal que você quer dar boas vindas')
