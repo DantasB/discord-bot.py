@@ -18,6 +18,12 @@ Setting up the Betina isn't painfull, just follow the guide below:
 
 
 ### Commands
+- $deve @user => returns how many the user needs to pay you;
+- $devemais @user quantity => increase a quantity in how much the user needs to pay you;
+- $devemenos @user quantity => decrease a quantity in how much the user needs to pay you;
+- $conversor coin1 coin2 => returns how much is the coin1 in relation to coin2;
+- $ppt (Pedra, Papel or Tesoura) => It's a Rock scissors paper game;
+
 There are many commands that can be used with the bot. Most notably, the $play command will download and play a song from YouTube or a similar site. A full list of commands can be founded using the $help command.
 
 
@@ -26,3 +32,5 @@ Use a bot in the discord is a good thing and will help you to manage or have fun
 1. https://discordapp.com/developers/docs/intro
 2. https://discordpy.readthedocs.io/en/rewrite/
 3. https://sourcecode.glitch.me/
+
+If you still need help, join us on [discord](https://discord.gg/ZPXecux)
