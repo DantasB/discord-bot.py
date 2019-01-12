@@ -22,6 +22,7 @@ DEALINGS IN THE SOFTWARE.
 import random
 import time
 import discord
+import datetime
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
 
