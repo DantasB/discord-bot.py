@@ -132,7 +132,7 @@ async def abraça(ctx, member: discord.Member):
     await msg.add_reaction('🤗')
 
 
- @abraça.error
+@abraça.error
 async def abraça_handler(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         if error.param.name == 'member':
