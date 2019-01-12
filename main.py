@@ -118,11 +118,26 @@ async def bate(ctx, member: discord.Member):
     await msg.add_reaction('😯')
 
 
+@bate.error
+async def bate_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'member':
+            await ctx.send("``Você precisa me dizer qual membro você quer bater. Ex:``** $bate @fulaninho**")    
+    
+    
 @client.command(name='abraça', aliases=['hug', 'abraço'])
 async def abraça(ctx, member: discord.Member):
     """<membro>: Use isso com amor <3."""
     msg = await ctx.send('{} abraça {}'.format(ctx.author.mention, member.mention))
     await msg.add_reaction('🤗')
+
+
+ @abraça.error
+async def abraça_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'member':
+            await ctx.send("``Você precisa me dizer qual membro você quer abraçar. Ex:``** $abraça @fulaninho**")   
+ 
 
 @client.command(name='apaga', aliases=['delete', 'clean', 'clear', 'c'])
 async def apaga(ctx, amount: int):
@@ -130,6 +145,13 @@ async def apaga(ctx, amount: int):
     await ctx.channel.purge(limit=amount)
 
 
+@apaga.error
+async def apaga_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'amount':
+            await ctx.send("``Você precisa me dizer a quantidade de mensagens que quer apagar. Ex:``** $apaga quantidade**")    
+    
+    
 @client.command(name='ppt', aliases=['Rsp'])
 async def ppt(ctx, msg: str):
     """Pedra, papel e tesoura"""
@@ -160,6 +182,13 @@ async def ppt(ctx, msg: str):
         await ctx.send('``Escreve direito, por favor!``')
 
 
+@ppt.error
+async def ppt_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'msg':
+            await ctx.send("``Você precisa me dizer se quer pedra, papel ou tesoura. Ex:``** $ppt pedra**")        
+        
+        
 @client.command(name='devemais', aliases=['ntp', 'medeve', 'pay'])
 async def devemais(ctx, member: discord.Member, a: float):
     """Adiciona o credito"""
@@ -170,6 +199,15 @@ async def devemais(ctx, member: discord.Member, a: float):
         devedores[member] = devidos
     await ctx.send('{} deve R$ {} ao {}'.format(member.mention, devidos[ctx.author], ctx.author.mention))
 
+    
+@devemais.error
+async def devemais_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'member':
+            await ctx.send("``Você precisa me dizer quem deve você. Ex:``** $devemais @fulano 10**")
+        elif error.param.name == 'a':
+            await ctx.send("``Você precisa me dizer a quantidade que a pessoa te deve. Ex:``** $devemais @fulano 10**")
+    
     
 @client.command(name='devemenos', aliases=['dntp', 'naomedeve', 'npay'])
 async def devemenos(ctx, member: discord.Member, a: float):
@@ -195,6 +233,15 @@ async def devemenos(ctx, member: discord.Member, a: float):
         await ctx.send('{} deve R$ {} ao {}'.format(ctx.author.mention, devidos[member], member.mention))
 
 
+@devemenos.error
+async def devemenos_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'member':
+            await ctx.send("``Você precisa me dizer quem pagou você. Ex:``** $devemenos @fulano 10**")
+        elif error.param.name == 'a':
+            await ctx.send("``Você precisa me dizer a quantidade que a pessoa te pagou. Ex:``** $devemenos @fulano 10**")
+        
+             
 @client.command(name='deve', aliases=['rsp', 'owe'])
 async def deve(ctx, member: discord.Member):
     """Diz o quanto uma pessoa deve as outras"""
@@ -208,6 +255,13 @@ async def deve(ctx, member: discord.Member):
                 await ctx.send('R$ {} ao {}'.format(devidos[membros], membros.mention))
 
 
+@deve.error
+async def deve_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'member':
+            await ctx.send("``Você precisa me dizer qual a pessoa. Ex:``** $deve @fulano**")                
+                
+                
 @client.command(name='conversor', aliases=['converter', 'converte'])
 async def conversor(ctx, moeda1, moeda2, quantidade=None):
     """Vê o valor da moeda 1 em moeda 2"""
@@ -226,7 +280,16 @@ async def conversor(ctx, moeda1, moeda2, quantidade=None):
         await msg.add_reaction('❤')
 
 
+@conversor.error
+async def conversor_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'moeda1':
+            await ctx.send("``Você precisa me dizer qual o código da moeda que você quer converter. Ex:`` **$conversor usd brl**")
+        elif error.param.name =='moeda2':
+            await ctx.send(
+                "``Você precisa me dizer qual o código da moeda no qual você quer saber o valor. Ex:`` **$conversor usd brl**")
 
+        
 @client.command()
 async def treta(ctx):
     """Todas as tretas do grupo!"""
@@ -247,6 +310,13 @@ async def rola(ctx, a: int):
         await ctx.send("Você está rolando um ``d{}`` e tirou ``{}``".format(a, argumento))
 
 
+@rola.error
+async def rola_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'a':
+            await ctx.send("``Você precisa me dizer qual o número de lados do dado. Ex:`` **$rola 10**")        
+        
+        
 @client.command(pass_context=True)
 async def ping(ctx):
     """Retorna o Ping do usuario mais uma piadinha tosca!"""
