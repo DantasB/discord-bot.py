@@ -32,5 +32,6 @@ Use a bot in the discord is a good thing and will help you to manage or have fun
 1. https://discordapp.com/developers/docs/intro
 2. https://discordpy.readthedocs.io/en/rewrite/
 3. https://sourcecode.glitch.me/
+4. https://leovoel.github.io/embed-visualizer/
 
 If you still need help, join us on [discord](https://discord.gg/ZPXecux)
