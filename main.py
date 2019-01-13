@@ -165,7 +165,7 @@ async def abraça_handler(ctx, error):
             await msg.add_reaction("❓")
 
 
-@client.command(name='apaga', aliases=['delete', 'clean', 'clear', 'c'])
+@client.command(name='apaga', aliases=['delete', 'clean'])
 async def apaga(ctx, amount: int):
     """Apaga uma quantidade amount de mensagens no servidor"""
     await ctx.channel.purge(limit=amount)
@@ -191,7 +191,7 @@ async def apaga_handler(ctx, error):
             await msg.add_reaction("❓")   
     
     
-@client.command(name='ppt', aliases=['Rsp'])
+@client.command(name='ppt', aliases=['Rsp', 'jogo'])
 async def ppt(ctx, msg: str):
     """Pedra, papel e tesoura"""
     t = ['pedra', 'papel', 'tesoura']
@@ -242,7 +242,7 @@ async def ppt_handler(ctx, error):
             await msg.add_reaction("❓")        
         
         
-@client.command(name='devemais', aliases=['ntp', 'medeve', 'pay'])
+@client.command(name='devemais', aliases=['ntp', 'medeve'])
 async def devemais(ctx, member: discord.Member, a: float):
     """Adiciona o credito"""
     if (member in devedores) and (ctx.author in devidos):
@@ -291,7 +291,7 @@ async def devemais_handler(ctx, error):
             await msg.add_reaction("❓")
     
     
-@client.command(name='devemenos', aliases=['dntp', 'naomedeve', 'npay'])
+@client.command(name='devemenos', aliases=['dntp', 'naomedeve'])
 async def devemenos(ctx, member: discord.Member, a: float):
     """Diminui o credito"""
     if (member in devedores) and (ctx.author in devidos):
