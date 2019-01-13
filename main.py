@@ -144,7 +144,32 @@ async def abraça(ctx, member: discord.Member):
     msg = await ctx.send('{} abraça {}'.format(ctx.author.mention, member.mention))
     await msg.add_reaction('🤗')
 
+    
+@client.command(name='beija', aliases=['kiss', 'beijou'])
+async def beija(ctx, member: discord.Member):
+    """<membro>: Use isso com amor <3."""
+    msg = await ctx.send('{} beijou {}'.format(ctx.author.mention, member.mention))
+    await msg.add_reaction('💋')
 
+
+@beija.error
+async def beija_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'member':
+            embed = discord.Embed(title="Comando $beija:", colour=discord.Colour(0x370c5e),
+                                  description="Beija o usuário\n \n**Como usar: $beija <usuário>**",
+                                  timestamp=datetime.datetime.utcfromtimestamp(1547337793))
+
+            embed.set_author(name="Betina#9182",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+            embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+
+            embed.add_field(name="📖**Exemplos:**", value="$beija @fulano\n$beija @sicrano", inline=False)
+            embed.add_field(name="🔀**Outros Comandos**", value="``$kiss, $beijou.``", inline=False)
+
+            msg = await ctx.send(embed=embed)
+            await msg.add_reaction("❓")
 @abraça.error
 async def abraça_handler(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
@@ -519,30 +544,144 @@ async def moeda(ctx):
 async def help(ctx):
     """Manda mensagem privada pro usuario!"""
     author = ctx.author
-    embed = discord.Embed(colour=discord.Colour.orange())
-    embed.set_author(name='Ajuda eles aí, Betina:')
-    embed.add_field(name='$ping', value='Retorna Pong!', inline=False)
-    embed.add_field(name='$pong', value='???', inline=False)
-    embed.add_field(name='$treta', value='Algo tenso acontece', inline=False)
-    embed.add_field(name='$abraça @usuario', value='Abraca o usuario', inline=False)
-    embed.add_field(name='$bate @usuario', value='bate no usuario', inline=False)
-    embed.add_field(name='$conversor moeda1 moeda2', value='Dá a cotacao da moeda1 em relacao a moeda2', inline=False)
-    embed.add_field(name='$devemais @usuario quantidade', value='O usuario te deve + quantidade', inline=False)
-    embed.add_field(name='$devemenos @usuario quantidade', value='O usuario te deve - quantidade', inline=False)
-    embed.add_field(name='$deve @usuario', value='Retorna uma lista de pessoas a quem usuario deve', inline=False)
-    embed.add_field(name='$rola n', value='Retona um valor aleatorio de um dado de n lados', inline=False)
-    embed.add_field(name='$apaga ***', value='Apaga *** linhas acima da sua mensagem, incluindo ela', inline=False)
-    embed.add_field(name='$moeda', value='Retorna Cara ou Coroa', inline=False)
-    embed.add_field(name='$play música', value='Procura a música no youtube e da play.', inline=False)
-    embed.add_field(name='$skip', value='Pula a música que está tocando', inline=False)
-    embed.add_field(name='$pause', value='Pausa a música que está tocando', inline=False)
-    embed.add_field(name='$stop', value='Para de tocar a música que esta tocando', inline=False)
-    embed.add_field(name='$volume **', value='Altera o volume da música para **%', inline=False)
-    embed.add_field(name='$fila', value='Diz a fila das músicas que estão tocando', inline=False)
-    embed.add_field(name='$tocando', value='Diz qual música esta tocando', inline=False)
-    embed.add_field(name='$resume', value='Retorna a tocar a música pausada', inline=False)
+    embed = discord.Embed(title="Escolha uma categoria", colour=discord.Colour(0x370c5e),
+                          description="```Bem vindo ao"
+                                      " meu suporte, escolha abaixo uma das categorias"
+                                      " para obter mais informações sobre minhas utilidades ```",
+                          timestamp=datetime.datetime.utcfromtimestamp(1547379087))
+    embed.set_footer(text="Betina Brazilian Bot",
+                     icon_url="https://images.discordapp.net/avatars/"
+                              "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
 
-    await author.send(embed=embed)
+    embed.add_field(name="😂 **Diversão**", value="``$moeda, $ppt, $rola ...``", inline=False)
+    embed.add_field(name="💰 **Cobrança**", value="``$devemais, $devemenos, $deve...``", inline=False)
+    embed.add_field(name="🎵 **Música**", value="``$play, $resume, $stop, $fila...``", inline=False)
+    embed.add_field(name="🗣 **Interação**", value="``$bate, $abraça, $treta...``", inline=False)
+
+    message = await author.send(embed=embed, delete_after=25)
+
+    reaction_list = ["😂", "💰", "🎵", "🗣"]
+
+    for reaction in reaction_list:
+        await message.add_reaction(reaction)
+
+    def check(reaction, user):
+        return user == author and str(reaction.emoji) in reaction_list
+
+    try:
+        reaction, user = await client.wait_for('reaction_add', timeout=20, check=check)
+    except:
+        return
+
+    if str(reaction.emoji) == "💰":
+        await message.delete()
+        embed = discord.Embed(title="Cobrança", colour=discord.Colour(0x370c5e),
+                              description="*Bem vindo a categoria Cobrança:\nAqui você encontrará"
+                                          " comandos que ajudará você a ter noção de finanças.*",
+                              timestamp=datetime.datetime.utcfromtimestamp(1547379087))
+        embed.set_thumbnail(
+            url="https://images.discordapp.net/avatars/527565353199337474"
+                "/40042c09bb354a396928cb91e0288384.png?size=256")
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/527565353199337474/"
+                                  "40042c09bb354a396928cb91e0288384.png?size=256")
+        embed.add_field(name="**$devemais <usuário> <quantidade>**", value="``Você aumentará o quanto um"
+                                                                           " usuário te deve!``", inline=False)
+        embed.add_field(name="**$devemenos**", value="``Você diminuirá o quanto um usuário te deve!``",
+                        inline=False)
+        embed.add_field(name="**$deve**", value="``Mostra uma lista de todas as pessoas que um usuário"
+                                                " deve!``", inline=False)
+        embed.add_field(name="**$conversor <moeda1> <moeda2>"
+                             " <quantidade>**", value="``Diz a cotação da moeda 1 em relação a moeda 2,"
+                                                      " a quantidade é a quantidade vezes o valor da cotação``",
+                        inline=False)
+        msg = await author.send(embed=embed, delete_after=30)
+        await msg.add_reaction("🔙")
+
+
+    elif str(reaction.emoji) == "😂":
+        await message.delete()
+        embed = discord.Embed(title="Diversão", colour=discord.Colour(0x370c5e),
+                              description="*Bem vindo a categoria diversão:\n"
+                                          "Aqui você encontrará comandos que trará alegria a todos no servidor.*",
+                              timestamp=datetime.datetime.utcfromtimestamp(1547379087))
+        embed.set_thumbnail(
+            url="https://images.discordapp.net/avatars/527565353199337474/"
+                "40042c09bb354a396928cb91e0288384.png?size=256")
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+
+        embed.add_field(name="**$moeda**", value="``Jogarei uma moeda. Poderá cair cara ou coroa!``",
+                        inline=False)
+        embed.add_field(name="**$rola**", value="``Rolarei um dado de até 20 lados!``", inline=False)
+        embed.add_field(name="**$ppt <Pedra, Papel ou Tesoura>**", value="``Começarei um jogo de pedra, papel"
+                                                                         " ou tesoura contra você!``",
+                        inline=False)
+
+        msg = await author.send(embed=embed, delete_after=30)
+        await msg.add_reaction("🔙")
+
+
+    elif str(reaction.emoji) == "🎵":
+        await message.delete()
+        embed = discord.Embed(title="Música", colour=discord.Colour(0x370c5e),
+                              description="*Bem vindo a categoria Música:\nAqui você encontrará"
+                                          " comandos que ajudará você a ouvir música enquanto faz suas atividades"
+                                          "no discord.*",
+                              timestamp=datetime.datetime.utcfromtimestamp(1547379087))
+        embed.set_thumbnail(
+            url="https://images.discordapp.net/avatars/527565353199337474"
+                "/40042c09bb354a396928cb91e0288384.png?size=256")
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/527565353199337474/"
+                                  "40042c09bb354a396928cb91e0288384.png?size=256")
+
+        embed.add_field(name="**$play <música>**",
+                        value="``Busco pela música ou toco a música de link específico!``",
+                        inline=False)
+        embed.add_field(name="**$pause**", value="``Pauso a música que está tocando atualmente!``",
+                        inline=False)
+        embed.add_field(name="**$stop**", value="``Paro de tocar a música e saio do canal de voz!``",
+                        inline=False)
+        embed.add_field(name="**$skip **", value="``Pularei a música que está tocando atualmente!``",
+                        inline=False)
+        embed.add_field(name="**$volume <quantidade>**",
+                        value="``Mudarei o volume que está tocando a música!``",
+                        inline=False)
+        embed.add_field(name="**$fila **", value="``Mostrarei todas as músicas que estão na fila!``",
+                        inline=False)
+        embed.add_field(name="**$tocando**", value="``Direi a música que está tocando a música atualmente``",
+                        inline=False)
+        embed.add_field(name="**$sai**", value="``Sairei do canal de voz!``", inline=False)
+        msg = await author.send(embed=embed, delete_after=30)
+        await msg.add_reaction("🔙")
+
+
+    elif str(reaction.emoji) == "🗣":
+        await message.delete()
+        embed = discord.Embed(title="Interação", colour=discord.Colour(0x370c5e),
+                              description="*Bem vindo a categoria Interação:\nAqui você encontrará"
+                                          " comandos que ajudará você a interagir com outros membros do seu servidor*",
+                              timestamp=datetime.datetime.utcfromtimestamp(1547379087))
+        embed.set_thumbnail(
+            url="https://images.discordapp.net/avatars/527565353199337474"
+                "/40042c09bb354a396928cb91e0288384.png?size=256")
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/527565353199337474/"
+                                  "40042c09bb354a396928cb91e0288384.png?size=256")
+
+        embed.add_field(name="**$treta **", value="``Diz coisas assustadoras sobre as pessoas do servidor!``",
+                        inline=False)
+        embed.add_field(name="**$abraça <usuário>**", value="``Abraça o usuário!``",
+                        inline=False)
+        embed.add_field(name="**$beija <usuário>**", value="``Beija o usuário!``", inline=False)
+        embed.add_field(name="**$bate <usuário> **", value="``Bate no usuário!``", inline=False)
+
+
+        msg = await author.send(embed=embed, delete_after=30)
+        await msg.add_reaction("🔙")
+
 
 
 @client.command()
