@@ -23,9 +23,10 @@ import random
 import time
 import discord
 import datetime
+
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
-
+from discord.utils import get
 
 startup_extensions = ['Music']
 prefix = '$'
