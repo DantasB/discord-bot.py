@@ -23,10 +23,12 @@ import random
 import time
 import discord
 import datetime
+import aiohttp
 
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
 from discord.utils import get
+from dhooks import Webhook
 
 startup_extensions = ['Music']
 prefix = '$'
@@ -777,289 +779,34 @@ async def conversor_handler(ctx, error):
 
 
 @commands.guild_only()
-@client.command(name='adicionatreta', aliases=['phr', 'addtreta'])
-async def adicionatreta(ctx, a: str):
-    """Adiciona uma string na lista de tretas."""
-    lista.append(a)
-
-    
-@commands.guild_only()
-@client.command(name='ppt', aliases=['Rsp', 'jogo'])
-async def ppt(ctx, msg: str):
-    t = ['pedra', 'papel', 'tesoura']
-    channel = ctx.channel
-    computer = t[random.randint(0, 2)]
-    player = msg.lower()
-    await ctx.send('``Você escolheu {}{}``'.format(player[:1].upper(), player[1:]))
-    await channel.trigger_typing()
-    if player == computer:
-        await ctx.send('``Empatei contigo!``')
-    elif player == 'pedra':
-        if computer == 'papel':
-            await ctx.send('``Você perdeu! Papel encobre pedra``')
-        else:
-            await ctx.send('``Você ganhou! Pedra destroi tesoura``')
-    elif player == 'papel':
-        if computer == 'tesoura':
-            await ctx.send('``Você perdeu! Tesoura corta papel``')
-        else:
-            await ctx.send('``Você ganhou! Papel encobre pedra``')
-    elif player == 'tesoura':
-        if computer == 'pedra':
-            await ctx.send('``Você perdeu! Pedra destroi tesoura!``')
-        else:
-            await ctx.send('``Você ganhou! Tesoura corta papel!``')
-    else:
-        await ctx.send('``Escreve direito, por favor!``')
-
-
-@ppt.error
-async def ppt_handler(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        if error.param.name == 'msg':
-            embed = discord.Embed(title="Comando $ppt:", colour=discord.Colour(0x370c5e),
-                                  description="Inicia um jogo de Pedra, Papel ou tesoura com o bot\n \n**Como usar"
-                                              ": $ppt <Pedra, Papel ou Tesoura>**",
-                                  timestamp=datetime.datetime.utcfromtimestamp(1547337793))
-
-            embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-
-            embed.add_field(name="📖**Exemplos:**", value="$ppt pedra\n$ppt tesoura", inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$Rsp, $jogo.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
-
-
-@commands.guild_only()
-@client.command(name='devemais', aliases=['ntp', 'medeve', 'pay'])
-async def devemais(ctx, member: discord.Member, a: float):
-    """Adiciona o credito"""
-    if member.mention != client.user.mention:
-        if (member in devedores) and (ctx.author in devidos):
-            devidos[ctx.author] += a
-        else:
-            devidos[ctx.author] = a
-            devedores[member] = devidos
-        await ctx.send('**{} deve R$ {} ao {}**'.format(member.mention, devidos[ctx.author], ctx.author.mention))
-    else:
-        msg = await ctx.send('**Eu sou uma bot e não uma prostituta!! Eu não devo nada a ninguem!**')
-        await msg.add_reaction('😡')
-
-
-@devemais.error
-async def devemais_handler(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        if error.param.name == 'member':
-            embed = discord.Embed(title="Comando $devemais:", colour=discord.Colour(0x370c5e),
-                                  description="Você adiciona uma quantidade ao quanto um usuário te deve\n \n**Como"
-                                              " usar: $devemais <usuário> <valor>**",
-                                  timestamp=datetime.datetime.utcfromtimestamp(1547337793))
-
-            embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-
-            embed.add_field(name="📖**Exemplos:**", value="$devemais @sicrano 500\n$devemais @fulano 10", inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$ntp, $medeve.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
-
-        elif error.param.name == 'a':
-            embed = discord.Embed(title="Comando $devemais:", colour=discord.Colour(0x370c5e),
-                                  description="Você adiciona uma quantidade ao quanto um usuário te deve\n \n**Como"
-                                              " usar: $devemais <usuário> <valor>**",
-                                  timestamp=datetime.datetime.utcfromtimestamp(1547337793))
-
-            embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-
-            embed.add_field(name="📖**Exemplos:**", value="$devemais @sicrano 500\n$devemais @fulano 10", inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$ntp, $medeve.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
-
-
-@commands.guild_only()
-@client.command(name='devemenos', aliases=['dntp', 'naomedeve'])
-async def devemenos(ctx, member: discord.Member, a: float):
-    """Diminui o credito"""
-    if member.mention != client.user.mention:
-        if (member in devedores) and (ctx.author in devidos):
-            devidos[ctx.author] -= a
-            if devidos[ctx.author] < 0:
-                if (ctx.author in devedores) and (member in devidos):
-                    devidos[member] += (- devidos[ctx.author])
-                    devidos[ctx.author] = 0
-                else:
-                    devidos[member] = (- devidos[ctx.author])
-                    devidos[ctx.author] = 0
-                    devedores[ctx.author] = devidos
-                await ctx.send('**Agora {} deve R$ {} ao {}**'.format(ctx.author.mention, devidos[member], member.mention))
-            elif devidos[ctx.author] == 0:
-                await ctx.send('**{} não deve nada a {}**'.format(ctx.author.mention, member.mention))
-            else:
-                await ctx.send('**{} deve R$ {} ao {}**'.format(member.mention, devidos[ctx.author], ctx.author.mention))
-        else:
-            devedores[ctx.author] = devidos
-            devidos[member] = a
-            await ctx.send('**{} deve R$ {} ao {}**'.format(ctx.author.mention, devidos[member], member.mention))
-    else:
-        msg = await ctx.send('**Eu sou uma bot, não uma prostituta!!! Como você pode ficar me devendo algo ???**')
-        await msg.add_reaction("🤔")
-
-
-@devemenos.error
-async def devemenos_handler(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        if error.param.name == 'member':
-            embed = discord.Embed(title="Comando $devemenos:", colour=discord.Colour(0x370c5e),
-                                  description="Você diminui uma quantidade ao quanto um usuário te deve\n \n**Como"
-                                              " usar: $devemenos <usuário> <valor>**",
-                                  timestamp=datetime.datetime.utcfromtimestamp(1547337793))
-
-            embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-
-            embed.add_field(name="📖**Exemplos:**", value="$devemenos @sicrano 500\n$devemenos @fulano 10",
-                            inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$dntp, $naomedeve.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
-
-        elif error.param.name == 'a':
-            embed = discord.Embed(title="Comando $devemenos:", colour=discord.Colour(0x370c5e),
-                                  description="Você diminui uma quantidade ao quanto um usuário te deve\n \n**Como"
-                                              " usar: $devemenos <usuário> <valor>**",
-                                  timestamp=datetime.datetime.utcfromtimestamp(1547337793))
-
-            embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-
-            embed.add_field(name="📖**Exemplos:**", value="$devemenos @sicrano 500\n$devemenos @fulano 10",
-                            inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$dntp, $naomedeve.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
-
-
-@commands.guild_only()
-@client.command(name='deve', aliases=['rsp', 'owe'])
-async def deve(ctx, member: discord.Member):
-    if member.mention != client.user.mention:
-        if not (member in devedores):
-            msg = await ctx.send('**{} não deve nada a ninguem!**'.format(member.mention))
-            await msg.add_reaction('😯')
-        else:
-            await ctx.send('**{} deve a tais pessoas: **'.format(member.mention))
-            for membros in devedores[member]:
-                if membros.id != member.id:
-                    await ctx.send('**Deve R$ {} ao {}**'.format(devidos[membros], membros.mention))
-    else:
-        msg = await ctx.send('**Eu sou uma Bot! Nunca deverei nada a ninguem!**')
-        await msg.add_reaction('🤷')
-
-
-@deve.error
-async def deve_handler(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        if error.param.name == 'member':
-            embed = discord.Embed(title="Comando $deve:", colour=discord.Colour(0x370c5e),
-                                  description="Diz o quanto o usuário deve a cada pessoa do servidor\n \n**Como usar"
-                                              ": $deve <usuário>**",
-                                  timestamp=datetime.datetime.utcfromtimestamp(1547337793))
-
-            embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-
-            embed.add_field(name="📖**Exemplos:**", value="$deve @sicrano\n$deve @fulano", inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$rsp, $owe.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
-
-
-@commands.guild_only()
-@client.command(name='conversor', aliases=['converter', 'converte'])
-async def conversor(ctx, moeda1, moeda2, quantidade=None):
-    """Vê o valor da moeda 1 em moeda 2"""
-    try:
-        channel = ctx.channel
-        await channel.trigger_typing()
-        c = CurrencyRates()
-        msg = c.get_rate(f'''{moeda1.upper()}''', f'''{moeda2.upper()}''')
-        if quantidade is None:
-            await ctx.send(
-                'Esse é o valor da cotacao atual do ``{}`` em ``{}``: **{}**'.format(moeda1.upper(), moeda2.upper(),
-                                                                                     msg))
-        else:
-            msg = msg * quantidade
-            await ctx.send(
-                'Esse é o valor de {} ``{}`` em ``{}``: **{}**'.format(quantidade, moeda1.upper(), moeda2.upper(), msg))
-    except:
-        msg = await ctx.send('Tente utilizar o codigo de uma moeda existente. **Por exemplo: $conversor usd brl**')
-        await msg.add_reaction('❤')
-
-
-@conversor.error
-async def conversor_handler(ctx, error):
-    if isinstance(error, commands.MissingRequiredArgument):
-        if error.param.name == 'moeda1':
-            embed = discord.Embed(title="Comando $conversor:", colour=discord.Colour(0x370c5e),
-                                  description="Você converte a moeda1 em termos de moeda2\n \n**Como"
-                                              " usar: $converte <moeda1> <moeda2>**",
-                                  timestamp=datetime.datetime.utcfromtimestamp(1547337793))
-
-            embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-
-            embed.add_field(name="📖**Exemplos:**", value="$converte usd brl\n$converte eur pln", inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$converter, $converte.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
-
-        elif error.param.name == 'moeda2':
-            embed = discord.Embed(title="Comando $conversor:", colour=discord.Colour(0x370c5e),
-                                  description="Você converte a moeda1 em termos de moeda2\n \n**Como"
-                                              " usar: $converte <moeda1> <moeda2>**",
-                                  timestamp=datetime.datetime.utcfromtimestamp(1547337793))
-
-            embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-
-            embed.add_field(name="📖**Exemplos:**", value="$converte usd brl\n$converte eur pln", inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$converter, $converte.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
-
-
-@commands.guild_only()
 @client.command()
 async def treta(ctx):
     """Todas as tretas do grupo!"""
     pass
+
+
+@commands.guild_only()
+@client.command()
+async def faustao(ctx):
+    with open("faustop.png", "rb") as imageFile:
+        file = bytearray(imageFile.read())
+    channel = ctx.channel
+    async with aiohttp.ClientSession() as session:
+        webhook = await channel.create_webhook(name='Faustão', avatar=file)
+
+    await webhook.send("Esta Fera Bicho!")
+
+
+@commands.guild_only()
+@client.command()
+async def bolsonaro(ctx):
+    with open("bolsoboy.png", "rb") as imageFile:
+        file = bytearray(imageFile.read())
+    channel = ctx.channel
+    async with aiohttp.ClientSession() as session:
+        webhook = await channel.create_webhook(name='Bolsonaro', avatar=file)
+
+    await webhook.send("Taokei?")
 
 
 @commands.guild_only()
@@ -1220,6 +967,14 @@ async def help(ctx):
         embed.add_field(name="**$rola**", value="``Rolarei um dado de até 20 lados!``", inline=False)
         embed.add_field(name="**$ppt <Pedra, Papel ou Tesoura>**", value="``Começarei um jogo de pedra, papel"
                                                                          " ou tesoura contra você!``",
+                        inline=False)
+        embed.add_field(name="**$bolsonaro**", value="``???``",
+                        inline=False)
+        embed.add_field(name="**$faustao**", value="``???``",
+                        inline=False)
+        embed.add_field(name="**$pong**", value="``???``",
+                        inline=False)
+        embed.add_field(name="**$ping**", value="``Retorna o ping do usuário!``",
                         inline=False)
 
         msg = await author.send(embed=embed)
