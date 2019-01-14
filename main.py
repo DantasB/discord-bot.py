@@ -933,7 +933,7 @@ async def help(ctx):
                              " <quantidade>**", value="``Diz a cotação da moeda 1 em relação a moeda 2,"
                                                       " a quantidade é a quantidade vezes o valor da cotação``",
                         inline=False)
-        msg = await author.send(embed=embed)
+        msg = await author.send(embed=embed, delete_after=40)
         await msg.add_reaction("🔙")
 
         def check(reaction, user):
@@ -977,7 +977,7 @@ async def help(ctx):
         embed.add_field(name="**$ping**", value="``Retorna o ping do usuário!``",
                         inline=False)
 
-        msg = await author.send(embed=embed)
+        msg = await author.send(embed=embed, delete_after=40)
         await msg.add_reaction("🔙")
 
         def check(reaction, user):
@@ -1022,7 +1022,7 @@ async def help(ctx):
         embed.add_field(name="**$tocando**", value="``Direi a música que está tocando a música atualmente``",
                         inline=False)
         embed.add_field(name="**$sai**", value="``Sairei do canal de voz!``", inline=False)
-        msg = await author.send(embed=embed)
+        msg = await author.send(embed=embed, delete_after=40)
         await msg.add_reaction("🔙")
 
         def check(reaction, user):
@@ -1059,7 +1059,7 @@ async def help(ctx):
         embed.add_field(name="**$tnc **", value="``Manda alguem do servidor tomar no você sabe onde!``",
                         inline=False)
 
-        msg = await author.send(embed=embed)
+        msg = await author.send(embed=embed, delete_after=40)
         await msg.add_reaction("🔙")
 
         def check(reaction, user):
