@@ -115,7 +115,6 @@ async def on_message(message):
         await message.channel.send(fquote, tts=True)
     await client.process_commands(message)
 
-
 @commands.guild_only()
 @client.command(name='bate', aliases=['hit', 'punch'])
 async def bate(ctx, member: discord.Member):
@@ -125,13 +124,16 @@ async def bate(ctx, member: discord.Member):
     gif = [x for x in giphy.search("slap")][index]
 
     if member.mention == client.user.mention:
-        msg = await ctx.send('**Não acredito que você foi capaz de dar um tapa em alguem como eu {}**'.
-                             format(ctx.author.mention))
+        await ctx.send('**Não acredito que você foi capaz de tentar dar um tapa em alguem'
+                       ' como eu {}**. \n\n{} deu um soco em {}'.
+                       format(ctx.author.mention, member.mention, ctx.author.mention))
+
+        msg = await ctx.send(gif)
         await msg.add_reaction('😭')
-        await ctx.send(gif)
+
     else:
-        msg = await ctx.send('{} **deu um soco em** {}'.format(ctx.author.mention, member.mention))
-        await ctx.send(gif)
+        await ctx.send('{} **deu um soco em** {}'.format(ctx.author.mention, member.mention))
+        msg = await ctx.send(gif)
     await msg.add_reaction('😯')
 
 
@@ -199,19 +201,17 @@ async def beija(ctx, member: discord.Member):
     giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
     index1 = random.randrange(len(lista))
     index2 = random.randint(1, 20)
-    gif1 = [x for x in giphy.search("angry")][index1]
+    gif1 = [x for x in giphy.search("slap")][index1]
     gif2 = [y for y in giphy.search("kiss")][index2]
 
     if member.mention == client.user.mention:
-        await ctx.send('**Como você pode fazer isso, {} ? Eu tenho namorado!!!**'.format(ctx.author.mention))
+        await ctx.send('**Como você pôde fazer isso, {} ? Eu tenho namorado!!!**'.format(ctx.author.mention))
         msg = await ctx.send(gif1)
         await msg.add_reaction('😡')
     else:
         await ctx.send('{} **deu um beijo em** {}'.format(ctx.author.mention, member.mention))
         msg = await ctx.send(gif2)
         await msg.add_reaction('💋')
-
-
 
 
 @beija.error
@@ -234,6 +234,146 @@ async def beija_handler(ctx, error):
             await msg.add_reaction("❓")
 
 
+@client.command()
+async def tnc(ctx):
+    lista1 = [2, 5, 6, 7, 9, 10]
+    lista2 = [0, 2, 3, 4, 8]
+    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
+    index1 = random.randrange(len(lista1))
+    index2 = random.randrange(len(lista2))
+    gif1 = [x for x in giphy.search("angry")][index1]
+    gif2 = [y for y in giphy.search("omg")][index2]
+
+    person = random.choice(list(ctx.guild.members))
+    if person.mention == client.user.mention:
+        await ctx.send('{} mandou {} tomar no cuelinho!'.format(ctx.author.mention, person.mention))
+        await ctx.send('**Você é louco em fazer isso comigo, {} ???**'.format(ctx.author.mention))
+        msg = await ctx.send(gif1)
+        await msg.add_reaction('😡')
+    else:
+        await ctx.send('{} mandou {} tomar no cuelinho!'.format(ctx.author.mention, person.mention))
+        msg = await ctx.send(gif2)
+        await msg.add_reaction('😮')
+
+
+@commands.guild_only()
+@client.command(name='voltapracaverna', aliases=['caverna', 'goback'])
+async def voltapracaverna(ctx, member: discord.Member):
+    """<membro>: Use isso com amor <3."""
+    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
+    index2 = random.randint(0, 3)
+    gif2 = [y for y in giphy.search("cave")][index2]
+
+    if member.mention == client.user.mention:
+        await ctx.send('**Como você pode fazer isso,** {} **? Volta pra caverna você!**'
+                       '\n\n{} mandou {} de volta pra caverna'.format(ctx.author.mention, member.mention, ctx.author.mention))
+        msg = await ctx.send(gif2)
+        await msg.add_reaction('😡')
+    else:
+        await ctx.send('{} **mandou** {} **de volta pra caverna**'.format(ctx.author.mention, member.mention))
+        msg = await ctx.send(gif2)
+        await msg.add_reaction('😮')
+
+
+@voltapracaverna.error
+async def voltapracaverna_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'member':
+            embed = discord.Embed(title="Comando $voltapracaverna:", colour=discord.Colour(0x370c5e),
+                                  description="Manda o usuário de volta pra caverna\n \n**Como usar: $volta pra caverna"
+                                              " <usuário>**",
+                                  timestamp=datetime.datetime.utcfromtimestamp(1547337793))
+
+            embed.set_author(name="Betina#9182",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+            embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+
+            embed.add_field(name="📖**Exemplos:**", value="$voltapracaverna @fulano\n$voltapracaverna"
+                                                          " @sicrano", inline=False)
+            embed.add_field(name="🔀**Outros Comandos**", value="``$caverna, $goback.``", inline=False)
+
+            msg = await ctx.send(embed=embed)
+            await msg.add_reaction("❓")
+
+
+@commands.guild_only()
+@client.command(name='dança', aliases=['dance', 'dançar'])
+async def dança(ctx, member: discord.Member):
+    """<membro>: Use isso com amor <3."""
+    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
+    index = random.randint(0, 20)
+    gif = [x for x in giphy.search("dance")][index]
+
+    if member.mention == client.user.mention:
+        await ctx.send('**Fico lisonjeada ao receber um pedido de dança seu seu, {}**'.format(ctx.author.mention))
+    else:
+        await ctx.send('{} **começou a dançar com** {}'.format(ctx.author.mention, member.mention))
+    msg = await ctx.send(gif)
+    await msg.add_reaction('💃')
+
+
+@dança.error
+async def dança_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'member':
+            embed = discord.Embed(title="Comando $dança:", colour=discord.Colour(0x370c5e),
+                                  description="Dança com o usuário\n \n**Como usar: $dança <usuário>**",
+                                  timestamp=datetime.datetime.utcfromtimestamp(1547337793))
+
+            embed.set_author(name="Betina#9182",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+            embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+
+            embed.add_field(name="📖**Exemplos:**", value="$dança @fulano\n$dança @sicrano", inline=False)
+            embed.add_field(name="🔀**Outros Comandos**", value="``$dance, $dançar.``", inline=False)
+
+            msg = await ctx.send(embed=embed)
+            await msg.add_reaction("❓")
+
+
+@commands.guild_only()
+@client.command(name='ataca', aliases=['attack', 'atacar'])
+async def ataca(ctx, member: discord.Member):
+    """<membro>: Cuidado com isso!"""
+    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
+    index = random.randint(1, 20)
+    gif = [x for x in giphy.search("attack")][index]
+
+    if member.mention == client.user.mention:
+        await ctx.send('**Como você ousa tentar fazer isso comigo?** \n\n {} deu '
+                       'um ataque em {}'.format(member.mention, ctx.author.mention))
+        msg = await ctx.send(gif)
+        await msg.add_reaction('😡')
+        await msg.add_reaction('🥊')
+    else:
+        await ctx.send('{} **deu um ataque em** {}'.format(ctx.author.mention, member.mention))
+        msg = await ctx.send(gif)
+        await msg.add_reaction('😮')
+        await msg.add_reaction('🥊')
+
+
+@ataca.error
+async def ataca_handler(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'member':
+            embed = discord.Embed(title="Comando $ataca:", colour=discord.Colour(0x370c5e),
+                                  description="ataca o usuário\n \n**Como usar: $ataca <usuário>**",
+                                  timestamp=datetime.datetime.utcfromtimestamp(1547337793))
+
+            embed.set_author(name="Betina#9182",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+            embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+
+            embed.add_field(name="📖**Exemplos:**", value="$ataca @fulano\n$ataca @sicrano", inline=False)
+            embed.add_field(name="🔀**Outros Comandos**", value="``$attack, $atacar.``", inline=False)
+
+            msg = await ctx.send(embed=embed)
+            await msg.add_reaction("❓")
+            
+            
 @commands.guild_only()
 @client.command(name='apaga', aliases=['delete', 'clean'])
 async def apaga(ctx, amount: int):
@@ -900,7 +1040,6 @@ async def moeda(ctx):
     else:
         await ctx.send('👑')
 
-
 @commands.guild_only()
 @client.command()
 async def help(ctx):
@@ -919,10 +1058,11 @@ async def help(ctx):
     embed.add_field(name="💰 **Cobrança**", value="``$devemais, $devemenos, $deve...``", inline=False)
     embed.add_field(name="🎵 **Música**", value="``$play, $resume, $stop, $fila...``", inline=False)
     embed.add_field(name="🗣 **Interação**", value="``$bate, $abraça, $treta...``", inline=False)
+    embed.add_field(name="👮 **Administração**", value="``$apaga, $ping, $pong...``", inline=False)
 
-    message = await author.send(embed=embed, delete_after=40)
+    message = await author.send(embed=embed, delete_after=60)
 
-    reaction_list = ["😂", "💰", "🎵", "🗣"]
+    reaction_list = ["😂", "💰", "🎵", "🗣", "👮"]
 
     for reaction in reaction_list:
         await message.add_reaction(reaction)
@@ -972,7 +1112,6 @@ async def help(ctx):
             await ctx.invoke(client.get_command("help"))
 
 
-
     elif str(reaction.emoji) == "😂":
         await message.delete()
         embed = discord.Embed(title="Diversão", colour=discord.Colour(0x370c5e),
@@ -992,13 +1131,9 @@ async def help(ctx):
         embed.add_field(name="**$ppt <Pedra, Papel ou Tesoura>**", value="``Começarei um jogo de pedra, papel"
                                                                          " ou tesoura contra você!``",
                         inline=False)
-        embed.add_field(name="**$bolsonaro**", value="``???``",
+        embed.add_field(name="**$bolsonaro**", value="``Taokei ?``",
                         inline=False)
-        embed.add_field(name="**$faustao**", value="``???``",
-                        inline=False)
-        embed.add_field(name="**$pong**", value="``???``",
-                        inline=False)
-        embed.add_field(name="**$ping**", value="``Retorna o ping do usuário!``",
+        embed.add_field(name="**$faustao**", value="``Esta Fera, bicho!``",
                         inline=False)
 
         msg = await author.send(embed=embed, delete_after=40)
@@ -1014,6 +1149,7 @@ async def help(ctx):
         else:
             await msg.delete()
             await ctx.invoke(client.get_command("help"))
+
 
     elif str(reaction.emoji) == "🎵":
         await message.delete()
@@ -1080,6 +1216,10 @@ async def help(ctx):
                         inline=False)
         embed.add_field(name="**$beija <usuário>**", value="``Beija o usuário!``", inline=False)
         embed.add_field(name="**$bate <usuário> **", value="``Bate no usuário!``", inline=False)
+        embed.add_field(name="**$dança <usuário> **", value="``Dança com o usuário!``", inline=False)
+        embed.add_field(name="**$ataca <usuário> **", value="``Dá um ataque no usuário!``", inline=False)
+        embed.add_field(name="**$voltapracaverna <usuário> **", value="``Manda o usuário voltar "
+                                                                      "pro seu lugar de origem!``", inline=False)
         embed.add_field(name="**$tnc **", value="``Manda alguem do servidor tomar no você sabe onde!``",
                         inline=False)
 
@@ -1098,6 +1238,47 @@ async def help(ctx):
             await ctx.invoke(client.get_command("help"))
 
 
+    elif str(reaction.emoji) == "👮":
+        await message.delete()
+        embed = discord.Embed(title="Administração", colour=discord.Colour(0x370c5e),
+                              description="*Bem vindo a categoria Administração:\nAqui você encontrará"
+                                          " comandos que ajudará você a ajudar a controlar seu servidor.*",
+                              timestamp=datetime.datetime.utcfromtimestamp(1547379087))
+        embed.set_thumbnail(
+            url="https://images.discordapp.net/avatars/527565353199337474"
+                "/40042c09bb354a396928cb91e0288384.png?size=256")
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/527565353199337474/"
+                                  "40042c09bb354a396928cb91e0288384.png?size=256")
+        embed.add_field(name="**$apaga <quantidade>**", value="``Eu apagarei uma"
+                                                              " quantidade de mensagens!``", inline=False)
+        embed.add_field(name="**$ping**", value="``Retornarei o ping do usuário``", inline=False)
+        embed.add_field(name="**$pong**", value="``oiráusu od gnip o ieranroter``", inline=False)
+        embed.add_field(name="**$warn**", value="``Em breve!``", inline=False)
+        embed.add_field(name="**$mute**", value="``Em breve!``", inline=False)
+        embed.add_field(name="**$ban**", value="``Em breve!``", inline=False)
+
+        msg = await author.send(embed=embed, delete_after=40)
+        await msg.add_reaction("🔙")
+
+        def check(reaction, user):
+            return user == author and str(reaction.emoji) == "🔙"
+
+        try:
+            reaction, user = await client.wait_for('reaction_add', check=check)
+        except:
+            return
+        else:
+            await msg.delete()
+            await ctx.invoke(client.get_command("help"))
+
+
+@commands.guild_only()
+@client.command()
+async def ajuda(ctx):
+    await ctx.invoke(client.get_command("help"))
+    
+    
 @commands.guild_only()
 @client.command()
 async def entra(ctx):
