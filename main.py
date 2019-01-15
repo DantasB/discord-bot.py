@@ -24,7 +24,6 @@ import time
 import discord
 import datetime
 import aiohttp
-import giphypop
 
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
@@ -38,11 +37,39 @@ TOKEN = 'Insira seu token aqui!'
 GIPHY_TOKEN = 'Insira seu token do Giphy'
 
 client.remove_command('help')
-
+# Musica
 players = {}
+
+# devemais e devemenos
 devedores = {}
 devidos = {}
-lista = ['[nome] insira frases com [nome] ou não']
+
+# tretas
+lista = ['[nome] é um bosta! ', '[nome] acha que é gente', '[nome] se acha viado mas na verdade ta certo',
+         '[nome] é horrível', '[nome] se acha foda mas perde em qualquer jogo', '[nome] parece que tem 5 anos de idade',
+         '[nome] diz que bebe mas é fraco', 'Todo mundo aqui é burro menos eu',
+         'Tucker transformou sua filha em um cachorro', '[nome] stalker pra caralho',
+         '[nome] não pega ninguem nem na propria casa', 'Eu vou dominar o mundo e to nem aí',
+         'Eu sou o grande sabio [nome] e eu vou atirar minha merda em você',
+         'Obrigado [nome]! Mas a nossa princesa está em outro castelo!', '[nome] diz que sabe algo mas não sabe nada!',
+         '[nome] diz que não tem medo de morrer mas não quer estar lá na hora que isso acontecer!',
+         '[nome] se diz bom em cozinhar, mas não sabe cozinhar um ovo!',
+         '[nome] é tão azarado que, se quisesse achar uma agulha no palheiro, era só sentar nele',
+         '[nome] é tão bonito que quando foi se olhar no espelho ficou apaixonado',
+         '[nome] fala tanta merda que quando foi cagar conversou pela bunda!',
+         '[nome] aqui nao é a pedovan e não ta dando doce, o que veio fazer aqui ?',
+         'Se eu ganhasse um centavo a cada pessoa feia que me aparecesse, só com você, [nome], eu seria bilionaria',
+         '[nome] é tão bosta que cheira a merda']
+
+# gifs
+angry = [] #links do site giphy
+cave = [] #links do site giphy
+slap = [] #links do site giphy
+dance = [] #links do site giphy
+hug = [] #links do site giphy
+kiss = [] #links do site giphy
+attack = [] #links do site giphy
+omg = [] #links do site giphy
 
 
 @client.event
@@ -115,25 +142,35 @@ async def on_message(message):
         await message.channel.send(fquote, tts=True)
     await client.process_commands(message)
 
+
 @commands.guild_only()
 @client.command(name='bate', aliases=['hit', 'punch'])
 async def bate(ctx, member: discord.Member):
     """<membro>: Tome cuidado com isso."""
-    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
-    index = random.randint(0, 20)
-    gif = [x for x in giphy.search("slap")][index]
+    gif = random.choice(slap)
+
+    bate1 = '**Não acredito que você foi capaz de tentar dar um tapa em alguem como eu !**. \n\n{} deu um ' \
+            'soco em {}'.format(client.user.mention, ctx.author.mention)
+    bate2 = '{} **deu um soco em** {}'.format(ctx.author.mention, member.mention)
 
     if member.mention == client.user.mention:
-        await ctx.send('**Não acredito que você foi capaz de tentar dar um tapa em alguem'
-                       ' como eu {}**. \n\n{} deu um soco em {}'.
-                       format(ctx.author.mention, member.mention, ctx.author.mention))
+        embed = discord.Embed(title="**Tapão!**", colour=discord.Colour(0x370c5e), description="{}".format(bate1))
 
-        msg = await ctx.send(gif)
+        embed.set_image(url="{}".format(gif))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
         await msg.add_reaction('😭')
 
     else:
-        await ctx.send('{} **deu um soco em** {}'.format(ctx.author.mention, member.mention))
-        msg = await ctx.send(gif)
+        embed = discord.Embed(title="**Tapão!**", colour=discord.Colour(0x370c5e), description="{}".format(bate2))
+
+        embed.set_image(url="{}".format(gif))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
     await msg.add_reaction('😯')
 
 
@@ -161,15 +198,27 @@ async def bate_handler(ctx, error):
 @client.command(name='abraça', aliases=['hug', 'abraço'])
 async def abraça(ctx, member: discord.Member):
     """<membro>: Use isso com amor <3."""
-    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
-    index = random.randint(0, 20)
-    gif = [x for x in giphy.search("hug")][index]
+    gif = random.choice(hug)
+
+    abraça1 = '**Fico lisonjeada ao receber um abraço seu, {}**'.format(ctx.author.mention)
+    abraça2 = '{} **deu um abraço em** {}'.format(ctx.author.mention, member.mention)
 
     if member.mention == client.user.mention:
-        await ctx.send('**Fico lisonjeada ao receber um abraço seu, {}**'.format(ctx.author.mention))
+        embed = discord.Embed(title="**Abraço!**", colour=discord.Colour(0x370c5e), description="{}".format(abraça1))
+
+        embed.set_image(url="{}".format(gif))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
     else:
-        await ctx.send('{} **deu um abraço em** {}'.format(ctx.author.mention, member.mention))
-    msg = await ctx.send(gif)
+        embed = discord.Embed(title="**Abraço!**", colour=discord.Colour(0x370c5e), description="{}".format(abraça2))
+
+        embed.set_image(url="{}".format(gif))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
     await msg.add_reaction('🤗')
 
 
@@ -197,20 +246,29 @@ async def abraça_handler(ctx, error):
 @client.command(name='beija', aliases=['kiss', 'beijou'])
 async def beija(ctx, member: discord.Member):
     """<membro>: Use isso com amor <3."""
-    lista = [2, 5, 6, 7, 9, 10]
-    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
-    index1 = random.randrange(len(lista))
-    index2 = random.randint(1, 20)
-    gif1 = [x for x in giphy.search("slap")][index1]
-    gif2 = [y for y in giphy.search("kiss")][index2]
+    gif1 = random.choice(slap)
+    gif2 = random.choice(kiss)
+
+    beija1 = '**Como você pôde fazer isso ? Eu tenho namorado!!!**'.format(ctx.author.mention)
+    beija2 = '{} **deu um beijo em** {}'.format(ctx.author.mention, member.mention)
 
     if member.mention == client.user.mention:
-        await ctx.send('**Como você pôde fazer isso, {} ? Eu tenho namorado!!!**'.format(ctx.author.mention))
-        msg = await ctx.send(gif1)
+        embed = discord.Embed(title="**Tapão!**", colour=discord.Colour(0x370c5e), description="{}".format(beija1))
+
+        embed.set_image(url="{}".format(gif1))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
         await msg.add_reaction('😡')
     else:
-        await ctx.send('{} **deu um beijo em** {}'.format(ctx.author.mention, member.mention))
-        msg = await ctx.send(gif2)
+        embed = discord.Embed(title="**Beijo!**", colour=discord.Colour(0x370c5e), description="{}".format(beija2))
+
+        embed.set_image(url="{}".format(gif2))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
         await msg.add_reaction('💋')
 
 
@@ -236,23 +294,29 @@ async def beija_handler(ctx, error):
 
 @client.command()
 async def tnc(ctx):
-    lista1 = [2, 5, 6, 7, 9, 10]
-    lista2 = [0, 2, 3, 4, 8]
-    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
-    index1 = random.randrange(len(lista1))
-    index2 = random.randrange(len(lista2))
-    gif1 = [x for x in giphy.search("angry")][index1]
-    gif2 = [y for y in giphy.search("omg")][index2]
+    gif1 = random.choice(angry)
+    gif2 = random.choice(omg)
+
+    tnc1 = '{} mandou {} tomar no cuelinho!'.format(ctx.author.mention, person.mention)
+    tnc2 = '**Você é louco em fazer isso comigo ???**'.format(ctx.author.mention)
 
     person = random.choice(list(ctx.guild.members))
     if person.mention == client.user.mention:
-        await ctx.send('{} mandou {} tomar no cuelinho!'.format(ctx.author.mention, person.mention))
-        await ctx.send('**Você é louco em fazer isso comigo, {} ???**'.format(ctx.author.mention))
-        msg = await ctx.send(gif1)
+        await ctx.send(tnc1)
+        embed = discord.Embed(title="**Raiva!**", colour=discord.Colour(0x370c5e), description="{}".format(tnc2))
+        embed.set_image(url="{}".format(gif1))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
         await msg.add_reaction('😡')
     else:
-        await ctx.send('{} mandou {} tomar no cuelinho!'.format(ctx.author.mention, person.mention))
-        msg = await ctx.send(gif2)
+        embed = discord.Embed(title="**Raiva!**", colour=discord.Colour(0x370c5e), description="{}".format(tnc1))
+        embed.set_image(url="{}".format(gif2))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
         await msg.add_reaction('😮')
 
 
@@ -260,18 +324,29 @@ async def tnc(ctx):
 @client.command(name='voltapracaverna', aliases=['caverna', 'goback'])
 async def voltapracaverna(ctx, member: discord.Member):
     """<membro>: Use isso com amor <3."""
-    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
-    index2 = random.randint(0, 3)
-    gif2 = [y for y in giphy.search("cave")][index2]
+    gif = random.choice(cave)
+
+    cave1 = '**Como você pode fazer isso,** {} **? Volta pra caverna você!**' \
+            '\n\n{} mandou {} de volta pra caverna'.format(ctx.author.mention, member.mention, ctx.author.mention)
+    cave2 = '{} **mandou** {} **de volta pra caverna**'.format(ctx.author.mention, member.mention)
 
     if member.mention == client.user.mention:
-        await ctx.send('**Como você pode fazer isso,** {} **? Volta pra caverna você!**'
-                       '\n\n{} mandou {} de volta pra caverna'.format(ctx.author.mention, member.mention, ctx.author.mention))
-        msg = await ctx.send(gif2)
+        embed = discord.Embed(title="**Volta pra caverna você!**", colour=discord.Colour(0x370c5e),
+                              description="{}".format(cave1))
+        embed.set_image(url="{}".format(gif))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
         await msg.add_reaction('😡')
     else:
-        await ctx.send('{} **mandou** {} **de volta pra caverna**'.format(ctx.author.mention, member.mention))
-        msg = await ctx.send(gif2)
+        embed = discord.Embed(title="**Volta pra Caverna!**", colour=discord.Colour(0x370c5e),
+                              description="{}".format(cave2))
+        embed.set_image(url="{}".format(gif))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
         await msg.add_reaction('😮')
 
 
@@ -301,15 +376,25 @@ async def voltapracaverna_handler(ctx, error):
 @client.command(name='dança', aliases=['dance', 'dançar'])
 async def dança(ctx, member: discord.Member):
     """<membro>: Use isso com amor <3."""
-    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
-    index = random.randint(0, 20)
-    gif = [x for x in giphy.search("dance")][index]
+    gif = random.choice(dance)
+
+    dança1 = '**Fico lisonjeada ao receber um pedido de dança seu seu, {}**'.format(ctx.author.mention)
+    dança2 = '{} **começou a dançar com** {}'.format(ctx.author.mention, member.mention)
 
     if member.mention == client.user.mention:
-        await ctx.send('**Fico lisonjeada ao receber um pedido de dança seu seu, {}**'.format(ctx.author.mention))
+        embed = discord.Embed(title="**Raiva!**", colour=discord.Colour(0x370c5e), description="{}".format(dança1))
+        embed.set_image(url="{}".format(gif))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
     else:
-        await ctx.send('{} **começou a dançar com** {}'.format(ctx.author.mention, member.mention))
-    msg = await ctx.send(gif)
+        embed = discord.Embed(title="**Raiva!**", colour=discord.Colour(0x370c5e), description="{}".format(dança2))
+        embed.set_image(url="{}".format(gif))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
     await msg.add_reaction('💃')
 
 
@@ -337,19 +422,28 @@ async def dança_handler(ctx, error):
 @client.command(name='ataca', aliases=['attack', 'atacar'])
 async def ataca(ctx, member: discord.Member):
     """<membro>: Cuidado com isso!"""
-    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
-    index = random.randint(1, 20)
-    gif = [x for x in giphy.search("attack")][index]
+    gif = random.choice(attack)
+
+    ataca1 = '**Como você ousa tentar fazer isso comigo?** ' \
+             '\n\n {} deu um ataque em {}'.format(member.mention, ctx.author.mention)
+    ataca2 = '{} **deu um ataque em** {}'.format(ctx.author.mention, member.mention)
 
     if member.mention == client.user.mention:
-        await ctx.send('**Como você ousa tentar fazer isso comigo?** \n\n {} deu '
-                       'um ataque em {}'.format(member.mention, ctx.author.mention))
-        msg = await ctx.send(gif)
+        embed = discord.Embed(title="**Raiva!**", colour=discord.Colour(0x370c5e), description="{}".format(ataca1))
+        embed.set_image(url="{}".format(gif))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
         await msg.add_reaction('😡')
         await msg.add_reaction('🥊')
     else:
-        await ctx.send('{} **deu um ataque em** {}'.format(ctx.author.mention, member.mention))
-        msg = await ctx.send(gif)
+        embed = discord.Embed(title="**Ataque!**", colour=discord.Colour(0x370c5e), description="{}".format(ataca2))
+        embed.set_image(url="{}".format(gif))
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url="https://images.discordapp.net/avatars/"
+                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
         await msg.add_reaction('😮')
         await msg.add_reaction('🥊')
 
@@ -372,8 +466,8 @@ async def ataca_handler(ctx, error):
 
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
-            
-            
+
+
 @commands.guild_only()
 @client.command(name='apaga', aliases=['delete', 'clean'])
 async def apaga(ctx, amount: int):
