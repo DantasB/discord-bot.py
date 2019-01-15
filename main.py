@@ -24,6 +24,7 @@ import time
 import discord
 import datetime
 import aiohttp
+import giphypop
 
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
@@ -34,6 +35,7 @@ startup_extensions = ['Music']
 prefix = '$'
 client = commands.Bot(command_prefix=prefix)
 TOKEN = 'Insira seu token aqui!'
+GIPHY_TOKEN = 'Insira seu token do Giphy'
 
 client.remove_command('help')
 
@@ -118,12 +120,18 @@ async def on_message(message):
 @client.command(name='bate', aliases=['hit', 'punch'])
 async def bate(ctx, member: discord.Member):
     """<membro>: Tome cuidado com isso."""
+    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
+    index = random.randint(0, 20)
+    gif = [x for x in giphy.search("slap")][index]
+
     if member.mention == client.user.mention:
         msg = await ctx.send('**Não acredito que você foi capaz de dar um tapa em alguem como eu {}**'.
                              format(ctx.author.mention))
         await msg.add_reaction('😭')
+        await ctx.send(gif)
     else:
         msg = await ctx.send('{} **deu um soco em** {}'.format(ctx.author.mention, member.mention))
+        await ctx.send(gif)
     await msg.add_reaction('😯')
 
 
