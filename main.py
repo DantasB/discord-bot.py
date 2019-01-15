@@ -159,10 +159,15 @@ async def bate_handler(ctx, error):
 @client.command(name='abraça', aliases=['hug', 'abraço'])
 async def abraça(ctx, member: discord.Member):
     """<membro>: Use isso com amor <3."""
+    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
+    index = random.randint(0, 20)
+    gif = [x for x in giphy.search("hug")][index]
+
     if member.mention == client.user.mention:
-        msg = await ctx.send('**Fico lisonjeada ao receber um abraço seu, {}**'.format(ctx.author.mention))
+        await ctx.send('**Fico lisonjeada ao receber um abraço seu, {}**'.format(ctx.author.mention))
     else:
-        msg = await ctx.send('{} **deu um abraço em** {}'.format(ctx.author.mention, member.mention))
+        await ctx.send('{} **deu um abraço em** {}'.format(ctx.author.mention, member.mention))
+    msg = await ctx.send(gif)
     await msg.add_reaction('🤗')
 
 
@@ -190,12 +195,23 @@ async def abraça_handler(ctx, error):
 @client.command(name='beija', aliases=['kiss', 'beijou'])
 async def beija(ctx, member: discord.Member):
     """<membro>: Use isso com amor <3."""
+    lista = [2, 5, 6, 7, 9, 10]
+    giphy = giphypop.Giphy(api_key=GIPHY_TOKEN)
+    index1 = random.randrange(len(lista))
+    index2 = random.randint(1, 20)
+    gif1 = [x for x in giphy.search("angry")][index1]
+    gif2 = [y for y in giphy.search("kiss")][index2]
+
     if member.mention == client.user.mention:
-        msg = await ctx.send('**Como você pode fazer isso, {} ? Eu tenho namorado!!!**'.format(ctx.author.mention))
+        await ctx.send('**Como você pode fazer isso, {} ? Eu tenho namorado!!!**'.format(ctx.author.mention))
+        msg = await ctx.send(gif1)
         await msg.add_reaction('😡')
     else:
-        msg = await ctx.send('{} **deu um beijo em** {}'.format(ctx.author.mention, member.mention))
+        await ctx.send('{} **deu um beijo em** {}'.format(ctx.author.mention, member.mention))
+        msg = await ctx.send(gif2)
         await msg.add_reaction('💋')
+
+
 
 
 @beija.error
