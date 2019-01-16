@@ -2,4 +2,3 @@ youtube-dl
 dhooks
 asyncio
 forex-python
-giphypop
