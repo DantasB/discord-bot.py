@@ -11,191 +11,16 @@ from discord.utils import get
 from discord.ext.commands import has_permissions, MissingPermissions
 
 # gifs
-angry = ['https://media.giphy.com/media/l1J9u3TZfpmeDLkD6/giphy.gif',
-         'https://media.giphy.com/media/11tTNkNy1SdXGg/giphy.gif',
-         'https://media.giphy.com/media/10UHehEC098kAE/giphy.gif',
-         'https://media.giphy.com/media/88i7NElG87uXGpjpBr/giphy.gif',
-         'https://media.giphy.com/media/3Fkw8DCq4eUxp31E4n/giphy.gif',
-         'https://media.giphy.com/media/DvNwi41Iqrzos/giphy.gif',
-         'https://media.giphy.com/media/WH85q8e201wlO/giphy.gif',
-         'https://media.giphy.com/media/ZebTmyvw85gnm/giphy.gif',
-         'https://media.giphy.com/media/xTiTnF6v2Th2GPmZ7q/giphy.gif',
-         'https://media.giphy.com/media/ntjBjvfnakKJ2/giphy.gif',
-         'https://media.giphy.com/media/OOezqqxPB8aJ2/giphy.gif',
-         'https://media.giphy.com/media/10juQ7fAaQjuHS/giphy.gif',
-         'https://media.giphy.com/media/Vzku9jyuef09G/giphy.gif',
-         'https://media.giphy.com/media/pYI1hSqUdcBiw/giphy.gif',
-         'https://media.giphy.com/media/11u2JnMZwQVm3S/giphy.gif',
-         'https://media.giphy.com/media/8pMS5BXOUVZyo/giphy.gif',
-         'https://media.giphy.com/media/3GCeasnPeeImI/giphy.gif',
-         'https://media.giphy.com/media/eXUlPn1gmZavu/giphy.gif',
-         'https://media.giphy.com/media/H9Mm0ULO8AtMc/giphy.gif',
-         'https://media.giphy.com/media/Zaeyj0lscMhA4/giphy.gif',
-         'https://media.giphy.com/media/ySVKduoNNFoRy/giphy.gif',
-         'https://media.giphy.com/media/3oJpyi7wBpo0sV9V9C/giphy.gif',
-         'https://media.giphy.com/media/26ufixlZznOaDs3ja/giphy.gif',
-         'https://media.giphy.com/media/eb4WGfjWeIsgM/giphy.gif']
-cave = ['https://media.giphy.com/media/7U9Jw8lHCZTQQ/giphy.gif',
-        'https://media.giphy.com/media/GLjbMKJdoob60/giphy.gif',
-        'https://media.giphy.com/media/8UYMQ5MCmuqXu/giphy.gif',
-        'https://media.giphy.com/media/t0Da5LwHxxZwA/giphy.gif']
-slap = ['https://media.giphy.com/media/3XlEk2RxPS1m8/giphy.gif',
-        'https://media.giphy.com/media/vxvNnIYFcYqEE/giphy.gif'
-    , 'https://media.giphy.com/media/RrLbvyvatbi36/giphy.gif',
-        'https://media.giphy.com/media/55TZk1pnXsBQA/giphy.gif',
-        'https://media.giphy.com/media/6Fad0loHc6Cbe/giphy.gif'
-    , 'https://media.giphy.com/media/jX708Wo6abfC8/giphy.gif',
-        'https://media.giphy.com/media/3wtc9qlgBxaq4/giphy.gif',
-        'https://media.giphy.com/media/uqSU9IEYEKAbS/giphy.gif'
-    , 'https://media.giphy.com/media/zvDT09xBhcuMo/giphy.gif',
-        'https://media.giphy.com/media/4Nphcg0CCOfba/giphy.gif',
-        'https://media.giphy.com/media/mEtSQlxqBtWWA/giphy.gif'
-    , 'https://media.giphy.com/media/uG3lKkAuh53wc/giphy.gif',
-        'https://media.giphy.com/media/j3iGKfXRKlLqw/giphy.gif',
-        'https://media.giphy.com/media/tV0HkQju9zHR6/giphy.gif'
-    , 'https://media.giphy.com/media/w5FSoU86sXRFm/giphy.gif',
-        'https://media.giphy.com/media/s5zXKfeXaa6ZO/giphy.gif',
-        'https://media.giphy.com/media/wXgBk2fM696gM/giphy.gif'
-    , 'https://media.giphy.com/media/kIagrwoLKaLYc/giphy.gif',
-        'https://media.giphy.com/media/Y6c59hTH3TJoA/giphy.gif',
-        'https://media.giphy.com/media/l0MYthTiOGtg1zsT6/giphy.gif',
-        'https://media.giphy.com/media/q8AiNhQJVyDoQ/giphy.gif',
-        'https://media.giphy.com/media/l1Avzvn1gWvk1pwsM/giphy.gif']
-dance = ['https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif',
-         'https://media.giphy.com/media/xJjs8eGVbjNYY/giphy.gif',
-         'https://media.giphy.com/media/j3gsT2RsH9K0w/giphy.gif',
-         'https://media.giphy.com/media/jzaZ23z45UxK8/giphy.gif',
-         'https://media.giphy.com/media/l3V0lsGtTMSB5YNgc/giphy.gif',
-         'https://media.giphy.com/media/RX7N03MEUafW8/giphy.gif',
-         'https://media.giphy.com/media/TfKfqjt2i4GIM/giphy.gif',
-         'https://media.giphy.com/media/3ornkdtVzQfIRpwfug/giphy.gif',
-         'https://media.giphy.com/media/l0HUqsz2jdQYElRm0/giphy.gif',
-         'https://media.giphy.com/media/fIXtW1VlTyPba/giphy.gif',
-         'https://media.giphy.com/media/xUA7b2S7SxhM1cGdsQ/giphy.gif',
-         'https://media.giphy.com/media/5xaOcLGvzHxDKjufnLW/giphy.gif',
-         'https://media.giphy.com/media/SGkufeMafyuBhIw796/giphy.gif',
-         'https://media.giphy.com/media/6fScAIQR0P0xW/giphy.gif',
-         'https://media.giphy.com/media/BkL4Vyz0z2iYQMhwFw/giphy.gif',
-         'https://media.giphy.com/media/Pjs1kqtH1KTaU/giphy.gif',
-         'https://media.giphy.com/media/MVDPX3gaKFPuo/giphy.gif',
-         'https://media.giphy.com/media/elbwkxVuAfGiQ/giphy.gif',
-         'https://media.giphy.com/media/KPgOYtIRnFOOk/giphy.gif',
-         'https://media.giphy.com/media/MLZYKauKxeqKk/giphy.gif']
-hug = ['https://media.giphy.com/media/EvYHHSntaIl5m/giphy.gif',
-       'https://media.giphy.com/media/42YlR8u9gV5Cw/giphy.gif',
-       'https://media.giphy.com/media/llmZp6fCVb4ju/giphy.gif',
-       'https://media.giphy.com/media/lXiRKBj0SAA0EWvbG/giphy.gif',
-       'https://media.giphy.com/media/16bJmyPvRbCDu/giphy.gif',
-       'https://media.giphy.com/media/6uEE79cXjssla/giphy.gif',
-       'https://media.giphy.com/media/3oriNWfntn0yXfOW6A/giphy.gif',
-       'https://media.giphy.com/media/l4FGy5UyZ1KnVZ7BC/giphy.gif',
-       'https://media.giphy.com/media/8tpiC1JAYVMFq/giphy.gif',
-       'https://media.giphy.com/media/QbkL9WuorOlgI/giphy.gif',
-       ' https://media.giphy.com/media/3oEdv4hwWTzBhWvaU0/giphy.gif',
-       'https://media.giphy.com/media/8KKRIP5ZHUo2k/giphy.gif',
-       'https://media.giphy.com/media/fyx8vjZc2ZvoY/giphy.gif',
-       ' https://media.giphy.com/media/gnXG2hODaCOru/giphy.gif',
-       'https://media.giphy.com/media/oaQgdY6DCGKre/giphy.gif'
-    , 'https://media.giphy.com/media/VGACXbkf0AeGs/giphy.gif',
-       'https://media.giphy.com/media/3oz8xJfB6XGBwOA8HS/giphy.gif',
-       'https://media.giphy.com/media/l0HlKDJgw54pm4hgY/giphy.gif',
-       'https://media.giphy.com/media/kooPUWvhaGe7C/giphy.gif',
-       'https://media.giphy.com/media/OiKAQbQEQItxK/giphy.gif']
-kiss = ['https://media.giphy.com/media/l2Je2M4Nfrit0L7sQ/giphy.gif',
-        'https://media.giphy.com/media/bCY7hoYdXmD4c/giphy.gif',
-        'https://media.giphy.com/media/frHK797nhEUow/giphy.gif'
-    , 'https://media.giphy.com/media/10UUe8ZsLnaqwo/giphy.gif',
-        'https://media.giphy.com/media/HhPJIIpNIGXHq/giphy.gif',
-        'https://media.giphy.com/media/124gj4XvM8f3fa/giphy.gif',
-        'https://media.giphy.com/media/udiIFmPkJQzkI/giphy.gif',
-        'https://media.giphy.com/media/lTQF0ODLLjhza/giphy.gif',
-        'https://media.giphy.com/media/108M7gCS1JSoO4/giphy.gif',
-        'https://media.giphy.com/media/TftAZamDxqUdq/giphy.gif',
-        'https://media.giphy.com/media/rDSIz6yb2JIHe/giphy.gif',
-        'https://media.giphy.com/media/tCWMUAuZLMvKg/giphy.gif',
-        'https://media.giphy.com/media/wf4UuPMYnwBck/giphy.gif'
-    , 'https://media.giphy.com/media/ROnAaM2l5Rayk/giphy.gif',
-        'https://media.giphy.com/media/6uFetT0Kw9Isg/giphy.gif',
-        'https://media.giphy.com/media/3o85xrApQMfuCr0D60/giphy.gif',
-        'https://media.giphy.com/media/FjBnClwCFoity/giphy.gif',
-        'https://media.giphy.com/media/KH1CTZtw1iP3W/giphy.gif'
-    , 'https://media.giphy.com/media/wDEWXcisSjrQQ/giphy.gif',
-        'https://media.giphy.com/media/xAVhxModUI2Pu/giphy.gif']
-attack = ['https://media.giphy.com/media/Eq49yQGJL835K/giphy.gif',
-          'https://media.giphy.com/media/rVYbN0uxznAaI/giphy.gif',
-          'https://media.giphy.com/media/67tQ4947zCIQo/giphy.gif',
-          'https://media.giphy.com/media/3o8doYRSVzXu3l000g/giphy.gif',
-          'https://media.giphy.com/media/l0MYOheN243NvYkco/giphy.gif',
-          'https://media.giphy.com/media/KZp3Mj1AoTHCo/giphy.gif',
-          'https://media.giphy.com/media/hiOTu0M0ILSIU/giphy.gif',
-          'https://media.giphy.com/media/o2Lwy4g7Dzptu/giphy.gif',
-          'https://media.giphy.com/media/63MO9LTRoTXQk/giphy.gif',
-          'https://media.giphy.com/media/q0cairP4p5MFG/giphy.gif',
-          'https://media.giphy.com/media/3ornjXJUIDbLSlnZwQ/giphy.gif',
-          'https://media.giphy.com/media/feoIvi3j0MxcFTazV8/giphy.gif',
-          'https://media.giphy.com/media/l0MYz5lF8DEvLrYKQ/giphy.gif',
-          'https://media.giphy.com/media/3o7btQ8jDTPGDpgc6I/giphy.gif',
-          'https://media.giphy.com/media/vGLqAadWShT5m/giphy.gif']
-omg = ['https://media.giphy.com/media/5VKbvrjxpVJCM/giphy.gif',
-       'https://media.giphy.com/media/ygCJ5Bul73NArGOSFN/giphy.gif',
-       'https://media.giphy.com/media/oYtVHSxngR3lC/giphy.gif',
-       'https://media.giphy.com/media/1ykTax6hrAKpTQ0Mnb/giphy.gif',
-       'https://media.giphy.com/media/PUBxelwT57jsQ/giphy.gif',
-       'https://media.giphy.com/media/6b9DUG33FIF74J9H2O/giphy.gif',
-       'https://media.giphy.com/media/sR2YaENch4sog/giphy.gif',
-       'https://media.giphy.com/media/bGPTxLislwm3u/giphy.gif',
-       'https://media.giphy.com/media/WuGSL4LFUMQU/giphy.gif',
-       'https://media.giphy.com/media/3ohzdMk3uz9WSpdTvW/giphy.gif',
-       'https://media.giphy.com/media/vQqeT3AYg8S5O/giphy.gif',
-       'https://media.giphy.com/media/57ZvMMkuBIVMlU88Yh/giphy.gif',
-       'https://media.giphy.com/media/MuTenSRsJ7TQQ/giphy.gif',
-       'https://media.giphy.com/media/fpXxIjftmkk9y/giphy.gif',
-       'https://media.giphy.com/media/3o72F8t9TDi2xVnxOE/giphy.gif',
-       'https://media.giphy.com/media/1yMQuIU3lQLPpXCK7t/giphy.gif',
-       'https://media.giphy.com/media/5p2wQFyu8GsFO/giphy.gif',
-       'https://media.giphy.com/media/xT9IgAmXNP23ftHIsM/giphy.gif',
-       'https://media.giphy.com/media/QjrrSbYaqgi1q/giphy.gif',
-       'https://media.giphy.com/media/26xBC0xYwcSWzTL2g/giphy.gif',
-       'https://media.giphy.com/media/m48e80jhv4Kk/giphy.gif',
-       'https://media.giphy.com/media/l1J9EBp9Dcd6jtsbu/giphy.gif',
-       'https://media.giphy.com/media/hPUm88VMjUIM0/giphy.gif',
-       'https://media.giphy.com/media/vmGJdiqLTG4lq/giphy.gif',
-       'https://media.giphy.com/media/OzHKDlB6CqwZG/giphy.gif']
-rage = ['https://media.giphy.com/media/p8Uw3hzdAE2dO/giphy.gif',
-        'https://media.giphy.com/media/13EjnL7RwHmA2Q/giphy.gif',
-        'https://media.giphy.com/media/6hE3b5HSuMrMk/giphy.gif',
-        'https://media.giphy.com/media/LTpmRMNSmZgIw/giphy.gif',
-        'https://media.giphy.com/media/ntjBjvfnakKJ2/giphy.gif',
-        'https://media.giphy.com/media/SiItwB3nrAZuRKl3vP/giphy.gif',
-        'https://media.giphy.com/media/ZMJQEhBskQmQM/giphy.gif',
-        'https://media.giphy.com/media/mRGsFJImjeXPW/giphy.gif',
-        'https://media.giphy.com/media/vHcCevWbWkzwk/giphy.gif',
-        'https://media.giphy.com/media/l0Iyo3JenZWJuEP0Q/giphy.gif',
-        'https://media.giphy.com/media/qDfgfLkj47lDi/giphy.gif',
-        'https://media.giphy.com/media/sN7VFBDZWCgjm/giphy.gif',
-        'https://media.giphy.com/media/3o7ZeGtJoHORdUuPgA/giphy.gif',
-        'https://media.giphy.com/media/6RoUMn34pqvcs/giphy.gif',
-        'https://media.giphy.com/media/aaoG2VSbUdUe4/giphy.gif',
-        'https://media.giphy.com/media/3o6ZsY8110mu207jvG/giphy.gif',
-        'https://media.giphy.com/media/JWLp2eO1gdYFG/giphy.gif',
-        'https://media.giphy.com/media/udv8jAcfnPaIU/giphy.gif',
-        'https://media.giphy.com/media/KdKhwLw3CLH9u/giphy.gif']
-end = ['https://media.giphy.com/media/DAtJCG1t3im1G/giphy.gif',
-       'https://media.giphy.com/media/110IlProGBQgs8/giphy.gif',
-       'https://media.giphy.com/media/l2JeaFDEUkyXjoULK/giphy.gif',
-       'https://media.giphy.com/media/hRqxN8UbaaGuA/giphy.gif',
-       'https://media.giphy.com/media/l46CrXrr945SmMA0g/giphy.gif',
-       'https://media.giphy.com/media/AkLGHCYGv43uw/giphy.gif',
-       'https://media.giphy.com/media/4ECepQbplGd0I/giphy.gif',
-       'https://media.giphy.com/media/26Ff4PUGXu6OgoiWI/giphy.gif',
-       'https://media.giphy.com/media/l1AszMouJ4dU9u3p6/giphy.gif',
-       'https://media.giphy.com/media/13S0cgc6oDYqPK/giphy.gif',
-       'https://media.giphy.com/media/SIPIe590rx6iA/giphy.gif',
-       'https://media.giphy.com/media/l3vQXpNnRGaAVprjO/giphy.gif',
-       'https://media.giphy.com/media/dkuZHIQsslFfy/giphy.gif',
-       'https://media.giphy.com/media/oDxCE80IULQ6Q/giphy.gif',
-       'https://media.giphy.com/media/LQDupOVfCgsSY/giphy.gif',
-       'https://media.giphy.com/media/AIlrItaxPyivS/giphy.gif']
+angry = [] #giphy angry links
+cave = [] #giphy cave links
+slap = [] #giphy slap links
+dance = [] #giphy dance links
+hug = [] #giphy hug links
+kiss = [] #giphy kiss links
+attack = [] #giphy attack links
+omg = [] #giphy omg links
+rage = [] #giphy rage links
+end = [] #giphy end links
 
 
 class Interação:
@@ -473,7 +298,7 @@ class Interação:
 
         person = random.choice(list(ctx.guild.members))
 
-        tnc1 = '{} mandou {} tomar no cu!'.format(ctx.author.mention, person.mention)
+        tnc1 = '{} mandou {} tomar no cuelinho!'.format(ctx.author.mention, person.mention)
 
         embed = discord.Embed(title="**Raiva!**", colour=discord.Colour(0x370c5e), description="{}".format(tnc1))
         embed.set_image(url="{}".format(gif2))
