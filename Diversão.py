@@ -10,29 +10,8 @@ from dhooks import Webhook
 from discord.utils import get
 from discord.ext.commands import has_permissions, MissingPermissions
 
-dead = ['https://media.giphy.com/media/OaegIr7dIGfjq/giphy.gif',
-        'https://media.giphy.com/media/i8tV2kJB8Gig8/giphy.gif',
-        'https://media.giphy.com/media/xT77Y9wvUx4iSsPaNi/giphy.gif',
-        'https://media.giphy.com/media/eBCnpuRGBhQGY/giphy.gif',
-        'https://media.giphy.com/media/Z5ULYTFVaL2Ok/giphy.gif',
-        'https://media.giphy.com/media/12tVVnJSacDXby/giphy.gif',
-        'https://media.giphy.com/media/8VR88d4XXCdBS/giphy.gif',
-        'https://media.giphy.com/media/RCwOTgJidoMda/giphy.gif',
-        'https://media.giphy.com/media/z1bMHX8k9Z3yg/giphy.gif',
-        'https://media.giphy.com/media/xTiTnMjBxzRzgs7wMo/giphy.gif',
-        'https://media.giphy.com/media/3o85xu10Wg5Nl7xwVG/giphy.gif',
-        'https://media.giphy.com/media/3o6Mb5WxERQyuy7qJa/giphy.gif']
-alive = ['https://media.giphy.com/media/3tHQUCykC63f6i099R/giphy.gif',
-         'https://media.giphy.com/media/UqUJhrD0om73q/giphy.gif',
-         'https://media.giphy.com/media/Lkn0vwucikQ6Y/giphy.gif',
-         'https://media.giphy.com/media/3ohfFDTJAG7QNE07Ju/giphy.gif',
-         'https://media.giphy.com/media/BoHUqcC5f6idb9GrgF/giphy.gif',
-         'https://media.giphy.com/media/5Yl9hNHJK9KYzDKry1/giphy.gif',
-         'https://media.giphy.com/media/xUA7b6hsKzNMALWAq4/giphy.gif',
-         'https://media.giphy.com/media/1061df76cNmwUg/giphy.gif',
-         'https://media.giphy.com/media/xThuWajlhERPKggI1i/giphy.gif',
-         'https://media.giphy.com/media/sC9UgrhTNgBFe/giphy.gif',
-         'https://media.giphy.com/media/S0WRbwzykYaB2/giphy.gif']
+dead = [] #giphy dead links
+alive = [] #giphy alive links
 
 
 class Diversão:
