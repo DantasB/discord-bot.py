@@ -32,7 +32,7 @@ from discord.utils import get
 from discord.ext.commands import has_permissions, MissingPermissions
 
 
-startup_extensions = ['Music', 'Diversão', 'Interação', 'Cobrança', 'Administração']
+startup_extensions = ['Music', 'Diversão', 'Interação', 'Cobrança', 'Administração', 'Error']
 prefix = 'prefixo de interesse'
 client = commands.Bot(command_prefix=prefix)
 TOKEN = 'Seu discord bot token'
@@ -44,6 +44,8 @@ players = {}
 # tretas
 lista = ['[nome] saiu de casa novo']#Deve ser escrito como: '[nome] fez algo'
 
+# afk
+afklist = {}
 
 @client.event
 async def on_ready():
@@ -118,16 +120,43 @@ async def on_message(message):
         await message.channel.send(fquote)
 
     if message.content.lower().startswith('$cargo'):
-        role = get(message.guild.roles, name='Cargo que deseja anotar ao digitar esse comando')
+        role = get(message.guild.roles, name='Iniciado')
         await message.author.add_roles(role)
-        await message.author.remove_roles(get(message.guild.roles, name='Cargo que será apagado ao receber esse novo cargo'))
+        await message.author.remove_roles(get(message.guild.roles, name='Baby boy'))
+
+
+    if len(message.mentions) > 0:
+        user = message.author
+        channel = message.channel
+        if user.id in afklist:
+            del afklist[user.id]
+            embed = discord.Embed(colour=discord.Colour(0x370c5e),
+                                      description=f" Bem vindo de volta {user}")
+            await message.channel.send(embed=embed, delete_after=10)
+        else:
+            mentions = message.mentions
+            for member in mentions:
+                if member.id in afklist:
+                    embed = discord.Embed(colour=discord.Colour(0x370c5e),
+                                              description=f"{member.name} está **AFK**: *{afklist[member.id]}*")
+                    await message.channel.send(embed=embed, delete_after=10)
+    else:
+        user = message.author
+        channel = message.channel
+        if user.id in afklist:
+            del afklist[user.id]
+            embed = discord.Embed(colour=discord.Colour(0x370c5e),
+                                  description=f" Bem vindo de volta {user}")
+            await message.channel.send(embed=embed, delete_after=10)
+
+
 
     await client.process_commands(message)
 
 
 @commands.guild_only()
 @client.command()
-async def help(ctx): #Help totalmente interativo!
+async def help(ctx):
     """Manda mensagem privada pro usuario!"""
     author = ctx.author
     embed = discord.Embed(title="Escolha uma categoria", colour=discord.Colour(0x370c5e),
@@ -214,10 +243,10 @@ async def help(ctx): #Help totalmente interativo!
         embed.add_field(name="**$ppt <Pedra, Papel ou Tesoura>**", value="``Começarei um jogo de pedra, papel"
                                                                          " ou tesoura contra você!``",
                         inline=False)
-        embed.add_field(name="**$bolsonaro**", value="``Taokei ?``",
+        embed.add_field(name="**$bolsonaro**", value="``O Bolsonaro aparece?``",
                         inline=False)
-        embed.add_field(name="**$faustao**", value="``Esta Fera, bicho!``",
-                        inline=False)
+        embed.add_field(name="**$faustao**", value="``O Faustão aparece!!``", inline=False)
+        embed.add_field(name="**$miranha**", value="``O Miranha aparece!``", inline=False)
 
         msg = await author.send(embed=embed, delete_after=40)
         await msg.add_reaction("🔙")
@@ -302,6 +331,7 @@ async def help(ctx): #Help totalmente interativo!
         embed.add_field(name="**$emputece <usuário> **", value="``Deixa o usuário puto!``", inline=False)
         embed.add_field(name="**$voltapracaverna <usuário> **", value="``Manda o usuário voltar "
                                                                       "pro seu lugar de origem!``", inline=False)
+        embed.add_field(name="**$ship <usuário1> <usuário2> (opcional)**", value="``Forma um novo casal!``", inline=False)
         embed.add_field(name="**$tnc **", value="``Manda alguem do servidor tomar no você sabe onde!``",
                         inline=False)
 
@@ -335,9 +365,12 @@ async def help(ctx): #Help totalmente interativo!
                                                               " quantidade de mensagens!``", inline=False)
         embed.add_field(name="**$ping**", value="``Retornarei o ping do usuário``", inline=False)
         embed.add_field(name="**$pong**", value="``oiráusu od gnip o ieranroter``", inline=False)
-        embed.add_field(name="**$warn**", value="``Em breve!``", inline=False)
+        embed.add_field(name="**$userinfo**", value="``Retorna informações sobre o usuário!``", inline=False)
+        embed.add_field(name="**$serverinfo**", value="``Retorna informações sobre o servidor!``", inline=False)
+        embed.add_field(name="**$afk <motivo> (opcional)**", value="``Define o usuário como afk!``", inline=False)
+        embed.add_field(name="**$warn**", value="``Dá um Warn no usuário!``", inline=False)
         embed.add_field(name="**$mute**", value="``Em breve!``", inline=False)
-        embed.add_field(name="**$ban**", value="``Bane o usuário do servidor por um motivo!``", inline=False)
+        embed.add_field(name="**$ban <motivo> (opcional)**", value="``Bane o usuário do servidor!``", inline=False)
 
         msg = await author.send(embed=embed, delete_after=40)
         await msg.add_reaction("🔙")
@@ -352,6 +385,96 @@ async def help(ctx): #Help totalmente interativo!
         else:
             await msg.delete()
             await ctx.invoke(client.get_command("help"))
+
+
+@commands.guild_only()
+@client.command(pass_context=True, name='afk', aliases=['away', 'ausente'])
+@has_permissions(manage_messages=True)
+async def afk(ctx, *, arg: str = None):
+    if arg == None:
+        reason = 'Sem motivos específicados!'
+    else:
+        reason = arg
+
+    afklist[ctx.message.author.id] = reason
+    embed = discord.Embed(colour=discord.Colour(0x370c5e), description=f"{ctx.author.mention} Está como afk agora! | {reason}")
+    await ctx.send(embed=embed, delete_after=10)
+
+
+@afk.error
+async def afk_handler(ctx, error):
+    if isinstance(error, MissingPermissions):
+        embed = discord.Embed(title="Comando $afk:", colour=discord.Colour(0x370c5e),
+                                description="Dá o status de afk ao usuário"
+                                              "\n \n**Como usar: $afk <motivo> (opcional)**")
+
+        embed.set_author(name="Betina#9182",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                            "ter a permissão de* ``"
+                                                            "Gerenciar as mensagens`` *para utilizar este comando!*",
+                            inline=False)
+        embed.add_field(name="📖**Exemplos:**", value="$afk fui a praia\n$afk ", inline=False)
+        embed.add_field(name="🔀**Outros Comandos**", value="``$away, $ausente.``", inline=False)
+
+        msg = await ctx.send(embed=embed)
+        await msg.add_reaction("❓")
+
+
+@commands.guild_only()
+@client.command(pass_context=True, name='addtreta', aliases=['maistreta', 'adiciona'])
+@has_permissions(administrator=True)
+async def addtreta(ctx, *, arg: str):
+    lista.append(arg)
+
+
+
+@addtreta.error
+async def addtreta_handler(ctx, error):
+    if isinstance(error, MissingPermissions):
+        embed = discord.Embed(title="Comando $addtreta:", colour=discord.Colour(0x370c5e),
+                                description="Adiciona uma treta a lista de tretas"
+                                              "\n \n**Como usar: $addtreta <treta> Obs: dentro da treta em vez "
+                                            "do nome do usuário, deve-se colocar [nome]!**")
+
+        embed.set_author(name="Betina#9182",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                            "ter a permissão de* ``"
+                                                            "Administrador`` *para utilizar este comando!*",
+                            inline=False)
+        embed.add_field(name="📖**Exemplos:**", value="$addtreta [nome] é vacilão\n$addtreta [nome] só faz besteira"
+                                                      "", inline=False)
+        embed.add_field(name="🔀**Outros Comandos**", value="``$maistreta, $adiciona.``", inline=False)
+
+        msg = await ctx.send(embed=embed)
+        await msg.add_reaction("❓")
+
+    elif isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'arg':
+            embed = discord.Embed(title="Comando $addtreta:", colour=discord.Colour(0x370c5e),
+                                  description="Adiciona uma treta a lista de tretas"
+                                              "\n \n**Como usar: $addtreta <treta> Obs: dentro da treta em vez "
+                                              "do nome do usuário, deve-se colocar [nome]!**")
+
+            embed.set_author(name="Betina#9182",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+            embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+            embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                            "ter a permissão de* ``"
+                                                            "Administrador`` *para utilizar este comando!*",
+                            inline=False)
+            embed.add_field(name="📖**Exemplos:**", value="$addtreta [nome] é vacilão\n$addtreta [nome] só faz besteira"
+                                                          "", inline=False)
+            embed.add_field(name="🔀**Outros Comandos**", value="``$maistreta, $adiciona.``", inline=False)
+
+            msg = await ctx.send(embed=embed)
+            await msg.add_reaction("❓")
 
 
 if __name__ == '__main__':
