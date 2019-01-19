@@ -11,8 +11,39 @@ from dhooks import Webhook
 from discord.utils import get
 from discord.ext.commands import has_permissions, MissingPermissions
 
-banhammer = [] #giphy banhammer links
-omg = [] #giphy omg links
+banhammer = ['https://media.giphy.com/media/fe4dDMD2cAU5RfEaCU/giphy.gif',
+             'https://media.giphy.com/media/qPD4yGsrc0pdm/giphy.gif',
+             'https://media.giphy.com/media/e3WNjAUKGNGoM/giphy.gif',
+             'https://media.giphy.com/media/xT5LMDzs9xYtHXeItG/giphy.gif',
+             'https://media.giphy.com/media/HXcALJVPgaR4A/giphy.gif',
+             'https://media.giphy.com/media/3o751XbGLXpORSxtQY/giphy.gif',
+             'https://media.giphy.com/media/uC9e2ojJn1ZXW/giphy.gif',
+             'https://media.giphy.com/media/qpqgxqebabVjq/giphy.gif']
+omg = ['https://media.giphy.com/media/5VKbvrjxpVJCM/giphy.gif',
+       'https://media.giphy.com/media/ygCJ5Bul73NArGOSFN/giphy.gif',
+       'https://media.giphy.com/media/oYtVHSxngR3lC/giphy.gif',
+       'https://media.giphy.com/media/1ykTax6hrAKpTQ0Mnb/giphy.gif',
+       'https://media.giphy.com/media/PUBxelwT57jsQ/giphy.gif',
+       'https://media.giphy.com/media/6b9DUG33FIF74J9H2O/giphy.gif',
+       'https://media.giphy.com/media/sR2YaENch4sog/giphy.gif',
+       'https://media.giphy.com/media/bGPTxLislwm3u/giphy.gif',
+       'https://media.giphy.com/media/WuGSL4LFUMQU/giphy.gif',
+       'https://media.giphy.com/media/3ohzdMk3uz9WSpdTvW/giphy.gif',
+       'https://media.giphy.com/media/vQqeT3AYg8S5O/giphy.gif',
+       'https://media.giphy.com/media/57ZvMMkuBIVMlU88Yh/giphy.gif',
+       'https://media.giphy.com/media/MuTenSRsJ7TQQ/giphy.gif',
+       'https://media.giphy.com/media/fpXxIjftmkk9y/giphy.gif',
+       'https://media.giphy.com/media/3o72F8t9TDi2xVnxOE/giphy.gif',
+       'https://media.giphy.com/media/1yMQuIU3lQLPpXCK7t/giphy.gif',
+       'https://media.giphy.com/media/5p2wQFyu8GsFO/giphy.gif',
+       'https://media.giphy.com/media/xT9IgAmXNP23ftHIsM/giphy.gif',
+       'https://media.giphy.com/media/QjrrSbYaqgi1q/giphy.gif',
+       'https://media.giphy.com/media/26xBC0xYwcSWzTL2g/giphy.gif',
+       'https://media.giphy.com/media/m48e80jhv4Kk/giphy.gif',
+       'https://media.giphy.com/media/l1J9EBp9Dcd6jtsbu/giphy.gif',
+       'https://media.giphy.com/media/hPUm88VMjUIM0/giphy.gif',
+       'https://media.giphy.com/media/vmGJdiqLTG4lq/giphy.gif',
+       'https://media.giphy.com/media/OzHKDlB6CqwZG/giphy.gif']
 
 
 with open('reports.json', encoding='utf-8') as f:
@@ -480,8 +511,6 @@ class Administração:
                 await msg.add_reaction("❓")
 
 
-
-
     @commands.guild_only()
     @commands.command(pass_context=True, name='warnings', aliases=['avisos', 'wrns'])
     @has_permissions(kick_members=True, ban_members=True)
@@ -558,8 +587,8 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-                                       
-                                       
+
+
+
 def setup(client):
     client.add_cog(Administração(client))
-     
