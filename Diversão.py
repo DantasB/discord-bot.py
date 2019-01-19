@@ -31,9 +31,6 @@ from dhooks import Webhook
 from discord.utils import get
 from discord.ext.commands import has_permissions, MissingPermissions
 
-dead = [] #giphy dead links
-alive = [] #giphy alive links
-
 
 class Diversão:
     def __init__(self, client):
@@ -120,65 +117,6 @@ class Diversão:
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
 
-    @commands.guild_only()
-    @commands.command(name='roletarussa', aliases=['roulette', 'rr'])
-    async def roletarussa(self, ctx, a: int):
-        gif1 = random.choice(dead)
-        gif2 = random.choice(alive)
-        msg1 = '``Que pena, você morreu!``'
-        msg2 = '``Parabéns, você ainda não morreu!``'
-        numero = random.randint(1, 6)
-        if a < 1 or a > 6:
-            embed = discord.Embed(title="Comando $roletarussa:", colour=discord.Colour(0x370c5e),
-                                  description="Inicia um jogo de roleta russa contra o bot\n \n**Como usar"
-                                              ": $rola <n>**")
-
-            embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-            embed.add_field(name="❗**Atenção:**", value="Escolha um número entre 1 e 6", inline=False)
-            embed.add_field(name="📖**Exemplos:**", value="$roletarussa 6\n$roletarussa 1", inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$roulette, $rr.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
-        else:
-            if (a == numero):
-                embed = discord.Embed(title="**Morte!**", colour=discord.Colour(0x370c5e),
-                                      description="{}".format(msg1))
-                embed.set_image(url="{}".format(gif1))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/"
-                                          "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-                msg = await ctx.send(embed=embed)
-            else:
-                embed = discord.Embed(title="**Sobreviveu!**", colour=discord.Colour(0x370c5e),
-                                      description="{}".format(msg2))
-                embed.set_image(url="{}".format(gif2))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/"
-                                          "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-                msg = await ctx.send(embed=embed)
-
-    @roletarussa.error
-    async def roletarussa_handler(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            if error.param.name == 'a':
-                embed = discord.Embed(title="Comando $roletarussa:", colour=discord.Colour(0x370c5e),
-                                      description="Inicia um jogo de roleta russa contra o bot\n \n**Como usar"
-                                                  ": $rola <n>**")
-
-                embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
-                embed.add_field(name="❗**Atenção:**", value="Escolha um número entre 1 e 6", inline=False)
-                embed.add_field(name="📖**Exemplos:**", value="$roletarussa 6\n$roletarussa 1", inline=False)
-                embed.add_field(name="🔀**Outros Comandos**", value="``$roulette, $rr.``", inline=False)
-
-                msg = await ctx.send(embed=embed)
-                await msg.add_reaction("❓")
 
     @commands.guild_only()
     @commands.command()
@@ -190,7 +128,8 @@ class Diversão:
             webhook = await channel.create_webhook(name='Faustão', avatar=file)
 
         await webhook.send("Esta Fera Bicho!")
-
+        await webhook.delete()
+        
     @commands.guild_only()
     @commands.command()
     async def bolsonaro(self, ctx):
@@ -201,6 +140,20 @@ class Diversão:
             webhook = await channel.create_webhook(name='Bolsonaro', avatar=file)
 
         await webhook.send("Taokei?")
+        await webhook.delete()
+
+    @commands.guild_only()
+    @commands.command()
+    async def miranha(self, ctx):
+        with open("miranha.png", "rb") as imageFile:
+            file = bytearray(imageFile.read())
+        channel = ctx.channel
+        async with aiohttp.ClientSession() as session:
+            webhook = await channel.create_webhook(name='Miranha', avatar=file)
+
+        await webhook.send("EU SOU O MIRANHA!")
+        await webhook.delete()
+
 
     @commands.guild_only()
     @commands.command(name='moeda', aliases=['coin', 'ht'])
