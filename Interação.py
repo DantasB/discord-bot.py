@@ -42,7 +42,9 @@ attack = [] #giphy attack links
 omg = [] #giphy omg links
 rage = [] #giphy rage links
 end = [] #giphy end links
-
+dead = [] #giphy dead links
+alive = [] #giphy alive links
+highfive = [] #giphy highfive links
 
 class Interação:
     def __init__(self, client):
@@ -319,7 +321,7 @@ class Interação:
 
         person = random.choice(list(ctx.guild.members))
 
-        tnc1 = '{} mandou {} tomar no cuelinho!'.format(ctx.author.mention, person.mention)
+        tnc1 = '{} mandou {} tomar no cu!'.format(ctx.author.mention, person.mention)
 
         embed = discord.Embed(title="**Raiva!**", colour=discord.Colour(0x370c5e), description="{}".format(tnc1))
         embed.set_image(url="{}".format(gif2))
@@ -388,6 +390,7 @@ class Interação:
     @commands.guild_only()
     @commands.command(name='dança', aliases=['dance', 'dançar'])
     async def dança(self, ctx, member: discord.Member, membro=None):
+
         if membro == None:
             membro = ctx.author
         else:
@@ -486,6 +489,173 @@ class Interação:
 
                 embed.add_field(name="📖**Exemplos:**", value="$ataca @fulano\n$ataca @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$attack, $atacar.``", inline=False)
+
+                msg = await ctx.send(embed=embed)
+                await msg.add_reaction("❓")
+
+
+    @commands.guild_only()
+    @commands.command(name='ship', aliases=['shipar', 'shipou'])
+    async def ship(self, ctx, member: discord.Member, membro: discord.Member = None):
+        if membro == None:
+            membro = ctx.author
+        else:
+            if ctx.author == member == membro:
+                await ctx.invoke(self.client.get_command('endeline'))
+                await msg.delete()
+        """<membro>: Cuidado com isso!"""
+        gif = random.choice(ship)
+        ataca2 = '{} e {} **Formaram um casal!**'.format(membro.mention, member.mention)
+
+        embed = discord.Embed(title="**Shipados!**", colour=discord.Colour(0x370c5e), description="{}".format(ataca2))
+        embed.set_image(url="{}".format(gif))
+        embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url="https://images.discordapp.net/avatars/"
+                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
+
+        await msg.add_reaction("🔙")
+
+        def check(reaction, user):
+            return user == member and str(reaction.emoji) == "🔙"
+
+        try:
+            reaction, user = await self.client.wait_for('reaction_add', check=check)
+        except:
+            return
+        else:
+            await msg.delete()
+            await ctx.invoke(self.client.get_command('ship'), ctx.author, member)
+
+
+    @ship.error
+    async def ship_handler(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            if error.param.name == 'member':
+                embed = discord.Embed(title="Comando $ship:", colour=discord.Colour(0x370c5e),
+                                      description="Inicia um novo casal!\n \n**Como usar: $ship <usuário1> <usuário2> (opcional)**")
+
+                embed.set_author(name="Betina#9182",
+                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+
+                embed.add_field(name="📖**Exemplos:**", value="$ship @fulano @sicrano\n$ship @sicrano", inline=False)
+                embed.add_field(name="🔀**Outros Comandos**", value="``$shipar, $shipou.``", inline=False)
+
+                msg = await ctx.send(embed=embed)
+                await msg.add_reaction("❓")
+
+
+    @commands.guild_only()
+    @commands.command(name='roletarussa', aliases=['roleta', 'rr'])
+    async def roletarussa(self, ctx):
+        if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+            avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+        else:
+            avi = ctx.message.author.avatar_url_as(static_format='png')
+
+        gif1 = random.choice(dead)
+        gif2 = random.choice(alive)
+
+        embed = discord.Embed(title=f"*Vamos começar a jogar, {ctx.message.author} ? Chame mais pessoas para jogarem conosco!*",
+                              colour=discord.Colour(0x370c5e))
+
+        embed.set_author(name=f"{ctx.message.author}", icon_url=f"{avi}")
+        embed.set_footer(text="Betina Brazilian Bot", icon_url='https://images.discordapp'
+                                                               '.net/avatars/527565353199337474/40042c09'
+                                                               'bb354a396928cb91e0288384.png?size=256')
+        embed.add_field(name="**Regras do jogo:**",
+                        value="```Clique na arma para participar. Quando tivermos 6 participantes começarei o jogo!```")
+        message = await ctx.send(embed=embed)
+        await message.add_reaction("🔫")
+
+        def check(reaction, number_of_reactions):
+            return reaction.count == 6 and str(reaction.emoji) == '🔫'
+
+        try:
+            reaction, user = await self.client.wait_for('reaction_add', check=check)
+
+        except:
+            return
+
+        if str(reaction.emoji) == "🔫":
+
+            iterator = reaction.users()
+            users = await iterator.flatten()
+            while len(users) > 1:
+                loser = random.choice(users)
+                users.remove(loser)
+                msg1 = f'``Que pena, você morreu, {loser}!``'
+                embed = discord.Embed(title="**Morte!**", colour=discord.Colour(0x370c5e),
+                                      description="{}".format(msg1))
+                embed.set_image(url="{}".format(gif1))
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url="https://images.discordapp.net/avatars/"
+                                          "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                msg = await ctx.send(embed=embed)
+                await asyncio.sleep(5)
+
+            winner = random.choice(users)
+            msg2 = f'``Parabéns, {winner}! Você sobreviveu!``'
+            embed = discord.Embed(title="**Sobreviveu!**", colour=discord.Colour(0x370c5e),
+                                  description="{}".format(msg2))
+            embed.set_image(url="{}".format(gif2))
+            embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url="https://images.discordapp.net/avatars/"
+                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+            msg = await ctx.send(embed=embed)
+            await ctx.invoke(self.client.get_command('apaga'), 7)
+
+
+    @commands.guild_only()
+    @commands.command(name='highfive', aliases=['hf', 'batemao'])
+    async def highfive(self, ctx, member: discord.Member, membro: discord.Member = None):
+        if membro == None:
+            membro = ctx.author
+        else:
+            if ctx.author == member == membro:
+                await ctx.invoke(self.client.get_command('endeline'))
+                await msg.delete()
+        """<membro>: Cuidado com isso!"""
+        gif = random.choice(highfives)
+        ataca2 = '{} e {} **Deram um High Five!**'.format(membro.mention, member.mention)
+
+        embed = discord.Embed(title="**Shipados!**", colour=discord.Colour(0x370c5e), description="{}".format(ataca2))
+        embed.set_image(url="{}".format(gif))
+        embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url="https://images.discordapp.net/avatars/"
+                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+        msg = await ctx.send(embed=embed)
+
+        await msg.add_reaction("🔙")
+
+        def check(reaction, user):
+            return user == member and str(reaction.emoji) == "🔙"
+
+        try:
+            reaction, user = await self.client.wait_for('reaction_add', check=check)
+        except:
+            return
+        else:
+            await msg.delete()
+            await ctx.invoke(self.client.get_command('highfive'), ctx.author, member)
+
+
+    @highfive.error
+    async def highfive_handler(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            if error.param.name == 'member':
+                embed = discord.Embed(title="Comando $highfive:", colour=discord.Colour(0x370c5e),
+                                      description="Bate na mão do usuário!\n \n**Como usar: $highfive <usuário1>**")
+
+                embed.set_author(name="Betina#9182",
+                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+
+                embed.add_field(name="📖**Exemplos:**", value="$highfive @fulano\n$highfive @sicrano", inline=False)
+                embed.add_field(name="🔀**Outros Comandos**", value="``$hf, $batemao.``", inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
