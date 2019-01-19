@@ -1,14 +1,8 @@
-import random
-import time
 import discord
-import datetime
-import aiohttp
+import sys
+import traceback
 
 from discord.ext import commands
-from forex_python.converter import CurrencyRates
-from dhooks import Webhook
-from discord.utils import get
-from discord.ext.commands import has_permissions, MissingPermissions
 
 
 class Error:
@@ -32,13 +26,13 @@ class Error:
                 avi = ctx.message.author.avatar_url_as(static_format='png')
 
             embed = discord.Embed(title=f"*Não consegui encontrar esse comando, {ctx.message.author}. "
-            f"Tente utilizar o comando $ajuda para quais são os meus comandos*", colour=discord.Colour(0x370c5e))
+            f"Tente utilizar o comando $ajuda para quais são os meus comandos.*", colour=discord.Colour(0x370c5e))
 
             embed.set_author(name=f"{ctx.message.author}", icon_url=f"{avi}")
             embed.set_footer(text="Betina Brazilian Bot", icon_url='https://images.discordapp'
                                                                    '.net/avatars/527565353199337474/40042c09'
                                                                    'bb354a396928cb91e0288384.png?size=256')
-            return await ctx.send(embed=embed)
+            return await ctx.send(embed=embed, delete_after=10)
 
         # For this error example we check to see where it came from...
         elif isinstance(error, commands.BadArgument):
@@ -50,7 +44,7 @@ class Error:
                 embed.set_footer(text="Betina Brazilian Bot", icon_url='https://images.discordapp'
                                                                        '.net/avatars/527565353199337474/40042c09'
                                                                        'bb354a396928cb91e0288384.png?size=256')
-                return await ctx.send(embed=embed)
+                return await ctx.send(embed=embed, delete_after=10)
 
 
         # All other Errors not returned come here... And we can just print the default TraceBack.
@@ -60,3 +54,4 @@ class Error:
 
 def setup(client):
     client.add_cog(Error(client))
+
