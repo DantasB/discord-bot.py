@@ -24,6 +24,7 @@ import time
 import discord
 import datetime
 import aiohttp
+import json
 
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
@@ -45,7 +46,12 @@ players = {}
 lista = ['[nome] saiu de casa novo']#Deve ser escrito como: '[nome] fez algo'
 
 # afk
-afklist = {}
+with open('afks.json', encoding='utf-8') as f:
+    try:
+        afklist = json.load(f)
+    except ValueError:
+        afklist = {}
+
 
 @client.event
 async def on_ready():
@@ -55,25 +61,25 @@ async def on_ready():
     print('ID do Bot: ' + str(client.user.id))
     print('Versao do Discord: ' + discord.__version__)
     print('--------------BD--------------')
-    game = discord.Game("$help")
+    game = discord.Game("sua mãe da sacada")
     await client.change_presence(status=discord.Status.online, activity=game)
 
 
 @client.event
 async def on_member_join(member):
-    guild = member.guild.get_channel('Id do Canal que deseja dar boas-vindas')
+    guild = member.guild.get_channel(531136627351748610)
     fmt = 'Bem vindo ao servidor {1.name}, {0.mention}, aproveita e segue o baile.'
-    await guild.send(fmt.format(member, member.guild))
-    role = discord.utils.get(member.guild.roles, name='Cargo ao usuário entrar no seu servidor')
+    await guild.send(fmt.format(member, member.guild), delete_after=15)
+    role = discord.utils.get(member.guild.roles, name='Baby boy')
     await member.add_roles(role)
     print((("Cargo '" + role.name) + "' adicionado para ") + member.name)
 
 
 @client.event
 async def on_member_remove(member):
-    guild = member.guild.get_channel('Id do Canal que deseja anotar quando alguem entrar ou sair)
-    fmt = '{0.mention} ficou bolado e saiu do servidor'
-    await guild.send(fmt.format(member))
+    guild = member.guild.get_channel(531136627351748610)
+    fmt = '{0.mention} ficou putinha e saiu do servidor'
+    await guild.send(fmt.format(member), delete_after=15)
 
 
 @client.event
@@ -128,28 +134,46 @@ async def on_message(message):
     if len(message.mentions) > 0:
         user = message.author
         channel = message.channel
-        if user.id in afklist:
-            del afklist[user.id]
+        if str(user.id) in afklist:
+            del afklist[str(user.id)]
             embed = discord.Embed(colour=discord.Colour(0x370c5e),
                                       description=f" Bem vindo de volta {user}")
             await message.channel.send(embed=embed, delete_after=10)
         else:
             mentions = message.mentions
             for member in mentions:
-                if member.id in afklist:
+                if str(member.id) in afklist:
+
                     embed = discord.Embed(colour=discord.Colour(0x370c5e),
                                               description=f"{member.name} está **AFK**: *{afklist[member.id]}*")
                     await message.channel.send(embed=embed, delete_after=10)
+                else:
+                    if member.id == client.user.id:
+                        if message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                            avi = message.author.avatar_url.rsplit("?", 1)[0]
+                        else:
+                            avi = message.author.avatar_url_as(static_format='png')
+
+                        embed = discord.Embed(
+                            title="Olá, meu nome é Betina. Caso queira saber mais sobre minhas funções, utilize o comando $help",
+                            colour=discord.Colour(0x370c5e))
+
+                        embed.set_author(name=f"{message.author.name}", icon_url=avi)
+                        embed.set_footer(text="Betina Brazilian Bot ",
+                                         icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256g")
+
+                        await message.channel.send(embed=embed)
     else:
         user = message.author
         channel = message.channel
-        if user.id in afklist:
-            del afklist[user.id]
+        if str(user.id) in afklist:
+            del afklist[str(user.id)]
             embed = discord.Embed(colour=discord.Colour(0x370c5e),
                                   description=f" Bem vindo de volta {user}")
             await message.channel.send(embed=embed, delete_after=10)
 
-
+    with open("afks.json", "w") as file:
+        file.write(json.dumps(afklist))
 
     await client.process_commands(message)
 
@@ -239,7 +263,6 @@ async def help(ctx):
         embed.add_field(name="**$moeda**", value="``Jogarei uma moeda. Poderá cair cara ou coroa!``",
                         inline=False)
         embed.add_field(name="**$rola**", value="``Rolarei um dado de até 20 lados!``", inline=False)
-        embed.add_field(name="**$roletarussa**", value="``Brincadei de roleta russa com você!``", inline=False)
         embed.add_field(name="**$ppt <Pedra, Papel ou Tesoura>**", value="``Começarei um jogo de pedra, papel"
                                                                          " ou tesoura contra você!``",
                         inline=False)
@@ -334,6 +357,10 @@ async def help(ctx):
         embed.add_field(name="**$ship <usuário1> <usuário2> (opcional)**", value="``Forma um novo casal!``", inline=False)
         embed.add_field(name="**$tnc **", value="``Manda alguem do servidor tomar no você sabe onde!``",
                         inline=False)
+        embed.add_field(name="**$highfive <usuário>**", value="``Bate na mão do usuário!``",
+                        inline=False)
+        embed.add_field(name="**$roletarussa**", value="``Brincarei de roleta russa com você "
+                                                       "e mais 4 pessoas!``", inline=False)
 
         msg = await author.send(embed=embed, delete_after=40)
         await msg.add_reaction("🔙")
@@ -396,9 +423,12 @@ async def afk(ctx, *, arg: str = None):
     else:
         reason = arg
 
-    afklist[ctx.message.author.id] = reason
+    afklist[str(ctx.message.author.id)] = reason
     embed = discord.Embed(colour=discord.Colour(0x370c5e), description=f"{ctx.author.mention} Está como afk agora! | {reason}")
-    await ctx.send(embed=embed, delete_after=10)
+    await ctx.send(embed=embed)
+
+    with open("afks.json", "w") as file:
+        file.write(json.dumps(afklist))
 
 
 @afk.error
