@@ -46,11 +46,12 @@ players = {}
 lista = ['[nome] saiu de casa novo']#Deve ser escrito como: '[nome] fez algo'
 
 # afk
-with open('afks.json', encoding='utf-8') as f:
+with open('afks.json', 'r') as file:
     try:
-        afklist = json.load(f)
+        afklist = json.load(file)
     except ValueError:
         afklist = {}
+
 
 
 @client.event
@@ -131,52 +132,72 @@ async def on_message(message):
         await message.author.remove_roles(get(message.guild.roles, name='Baby boy'))
 
 
+    guild_id = str(message.guild.id)
+    author_id = str(message.author.id)
+    afk_users = []
+
     if len(message.mentions) > 0:
-        user = message.author
-        channel = message.channel
-        if str(user.id) in afklist:
-            del afklist[str(user.id)]
-            embed = discord.Embed(colour=discord.Colour(0x370c5e),
-                                      description=f" Bem vindo de volta {user}")
-            await message.channel.send(embed=embed, delete_after=10)
+
+        if guild_id in afklist:
+            if author_id in afklist[guild_id]:
+                del afklist[guild_id][author_id]
+                embed = discord.Embed(colour=discord.Colour(0x370c5e),
+                                      description=f" Bem vindo de volta {message.author}")
+                await message.channel.send(embed=embed, delete_after=10)
+            else:
+                mentions = message.mentions
+                for member in mentions:
+                    if guild_id in afklist:
+                        if str(member.id) in afklist[guild_id]:
+                            embed = discord.Embed(colour=discord.Colour(0x370c5e),
+                                              description=f"{member.name} está **AFK**: *{afklist[str(guild_id)][str(member.id)]}*")
+                            await message.channel.send(embed=embed, delete_after=10)
+                        else:
+                            if member.id == client.user.id:
+                                if message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                                    avi = message.author.avatar_url.rsplit("?", 1)[0]
+                                else:
+                                    avi = message.author.avatar_url_as(static_format='png')
+
+                                embed = discord.Embed(
+                                    title="Olá, meu nome é Betina. Caso queira saber mais sobre minhas funções, utilize o comando $help",
+                                    colour=discord.Colour(0x370c5e))
+
+                                embed.set_author(name=f"{message.author.name}", icon_url=avi)
+                                embed.set_footer(text="Betina Brazilian Bot ",
+                                         icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256g")
+                                await message.channel.send(embed=embed)
         else:
             mentions = message.mentions
             for member in mentions:
-                if str(member.id) in afklist:
+                if member.id == client.user.id:
+                    if message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                        avi = message.author.avatar_url.rsplit("?", 1)[0]
+                    else:
+                        avi = message.author.avatar_url_as(static_format='png')
 
-                    embed = discord.Embed(colour=discord.Colour(0x370c5e),
-                                              description=f"{member.name} está **AFK**: *{afklist[member.id]}*")
-                    await message.channel.send(embed=embed, delete_after=10)
-                else:
-                    if member.id == client.user.id:
-                        if message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
-                            avi = message.author.avatar_url.rsplit("?", 1)[0]
-                        else:
-                            avi = message.author.avatar_url_as(static_format='png')
+                    embed = discord.Embed(
+                        title="Olá, meu nome é Betina. Caso queira saber mais sobre minhas funções, utilize o comando $help",
+                        colour=discord.Colour(0x370c5e))
 
-                        embed = discord.Embed(
-                            title="Olá, meu nome é Betina. Caso queira saber mais sobre minhas funções, utilize o comando $help",
-                            colour=discord.Colour(0x370c5e))
-
-                        embed.set_author(name=f"{message.author.name}", icon_url=avi)
-                        embed.set_footer(text="Betina Brazilian Bot ",
-                                         icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256g")
-
-                        await message.channel.send(embed=embed)
+                    embed.set_author(name=f"{message.author.name}", icon_url=avi)
+                    embed.set_footer(text="Betina Brazilian Bot ",
+                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256g")
+                    await message.channel.send(embed=embed)
     else:
-        user = message.author
-        channel = message.channel
-        if str(user.id) in afklist:
-            del afklist[str(user.id)]
-            embed = discord.Embed(colour=discord.Colour(0x370c5e),
-                                  description=f" Bem vindo de volta {user}")
-            await message.channel.send(embed=embed, delete_after=10)
+        if guild_id in afklist:
+            if author_id in afklist[guild_id]:
+                del afklist[guild_id][author_id]
+                embed = discord.Embed(colour=discord.Colour(0x370c5e),
+                                  description=f" Bem vindo de volta {message.author}")
+                await message.channel.send(embed=embed, delete_after=10)
 
-    with open("afks.json", "w") as file:
-        file.write(json.dumps(afklist))
+
+    with open('afks.json', 'w') as file:
+        json.dump(afklist, file)
+
 
     await client.process_commands(message)
-
 
 @commands.guild_only()
 @client.command()
@@ -415,20 +436,28 @@ async def help(ctx):
 
 
 @commands.guild_only()
-@client.command(pass_context=True, name='afk', aliases=['away', 'ausente'])
+@client.command(name='afk', aliases=['away', 'ausente'])
 @has_permissions(manage_messages=True)
 async def afk(ctx, *, arg: str = None):
     if arg == None:
         reason = 'Sem motivos específicados!'
     else:
         reason = arg
+    guild_id = str(ctx.guild.id)
+    user_id = str(ctx.author.id)
 
-    afklist[str(ctx.message.author.id)] = reason
-    embed = discord.Embed(colour=discord.Colour(0x370c5e), description=f"{ctx.author.mention} Está como afk agora! | {reason}")
-    await ctx.send(embed=embed)
+    if guild_id in afklist:
+        afklist[guild_id][user_id] = reason
+        embed = discord.Embed(colour=discord.Colour(0x370c5e), description=f"{ctx.author.mention} Está como afk agora! | {reason}")
+        await ctx.send(embed=embed)
+    else:
+        afklist[guild_id] = {}
+        afklist[guild_id][user_id] = reason
+        embed = discord.Embed(colour=discord.Colour(0x370c5e), description=f"{ctx.author.mention} Está como afk agora! | {reason}")
+        await ctx.send(embed=embed)
 
     with open("afks.json", "w") as file:
-        file.write(json.dumps(afklist))
+        json.dump(afklist, file)
 
 
 @afk.error
