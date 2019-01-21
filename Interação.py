@@ -67,7 +67,7 @@ class Interação:
         embed.set_image(url="{}".format(gif))
         embed.set_footer(text="Betina Brazilian Bot",
                          icon_url="https://images.discordapp.net/avatars/"
-                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                  "527565353199337474/d9bbb0a041182b2896ecdab36a223ad2.png?size=256")
         await ctx.send(embed=embed, delete_after=10)
 
     @commands.guild_only()
@@ -88,8 +88,7 @@ class Interação:
 
         embed.set_image(url="{}".format(gif))
         embed.set_footer(text="Betina Brazilian Bot",
-                            icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                            icon_url=betina_icon)
         msg = await ctx.send(embed=embed)
         await msg.add_reaction('😡')
 
@@ -112,9 +111,9 @@ class Interação:
                                       description="Emputece o usuário\n \n**Como usar: $emputece <usuário>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$emputece @fulano\n$emputece @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$rage, $angry.``", inline=False)
@@ -136,8 +135,7 @@ class Interação:
 
         embed.set_image(url="{}".format(gif))
         embed.set_footer(text="Betina Brazilian Bot",
-                            icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                            icon_url=betina_icon)
         msg = await ctx.send(embed=embed)
         await msg.add_reaction('😡')
 
@@ -170,8 +168,7 @@ class Interação:
 
         embed.set_image(url="{}".format(gif))
         embed.set_footer(text="Betina Brazilian Bot",
-                            icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                            icon_url=betina_icon)
         msg = await ctx.send(embed=embed)
 
         await msg.add_reaction("🔙")
@@ -195,9 +192,9 @@ class Interação:
                                       description="Bate no usuário\n \n**Como usar: $bate <usuário>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$bate @fulano\n$bate @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$hit, $punch.``", inline=False)
@@ -225,8 +222,7 @@ class Interação:
 
         embed.set_image(url="{}".format(gif))
         embed.set_footer(text="Betina Brazilian Bot",
-                            icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                            icon_url=betina_icon)
         msg = await ctx.send(embed=embed)
 
         await msg.add_reaction("🔙")
@@ -250,9 +246,9 @@ class Interação:
                                       description="Abraça o usuário\n \n**Como usar: $abraça <usuário>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$abraça @fulano\n$abraça @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$hug, $abraço.``", inline=False)
@@ -279,8 +275,7 @@ class Interação:
 
         embed.set_image(url="{}".format(gif2))
         embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
         msg = await ctx.send(embed=embed)
 
         await msg.add_reaction("🔙")
@@ -304,9 +299,9 @@ class Interação:
                                       description="Beija o usuário\n \n**Como usar: $beija <usuário>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$beija @fulano\n$beija @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$kiss, $beijou.``", inline=False)
@@ -321,13 +316,12 @@ class Interação:
 
         person = random.choice(list(ctx.guild.members))
 
-        tnc1 = '{} mandou {} tomar no cuelinho!'.format(ctx.author.mention, person.mention)
+        tnc1 = '{} mandou {} tomar no cu!'.format(ctx.author.mention, person.mention)
 
         embed = discord.Embed(title="**Raiva!**", colour=discord.Colour(0x370c5e), description="{}".format(tnc1))
         embed.set_image(url="{}".format(gif2))
         embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
         msg = await ctx.send(embed=embed)
         await msg.add_reaction('😮')
 
@@ -350,8 +344,7 @@ class Interação:
                                   description="{}".format(cave2))
         embed.set_image(url="{}".format(gif))
         embed.set_footer(text="Betina Brazilian Bot",
-                            icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                            icon_url=betina_icon)
         msg = await ctx.send(embed=embed)
 
         await msg.add_reaction("🔙")
@@ -376,9 +369,9 @@ class Interação:
                                                   " <usuário>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$voltapracaverna @fulano\n$voltapracaverna"
                                                               " @sicrano", inline=False)
@@ -407,8 +400,7 @@ class Interação:
                                   description="{}".format(dança2))
         embed.set_image(url="{}".format(gif))
         embed.set_footer(text="Betina Brazilian Bot",
-                            icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                            icon_url=betina_icon)
         msg = await ctx.send(embed=embed)
 
         await msg.add_reaction("🔙")
@@ -432,9 +424,9 @@ class Interação:
                                       description="Dança com o usuário\n \n**Como usar: $dança <usuário>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$dança @fulano\n$dança @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$dance, $dançar.``", inline=False)
@@ -458,8 +450,7 @@ class Interação:
         embed = discord.Embed(title="**Ataque!**", colour=discord.Colour(0x370c5e), description="{}".format(ataca2))
         embed.set_image(url="{}".format(gif))
         embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
         msg = await ctx.send(embed=embed)
 
         await msg.add_reaction("🔙")
@@ -483,9 +474,9 @@ class Interação:
                                       description="ataca o usuário\n \n**Como usar: $ataca <usuário>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$ataca @fulano\n$ataca @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$attack, $atacar.``", inline=False)
@@ -510,8 +501,7 @@ class Interação:
         embed = discord.Embed(title="**Shipados!**", colour=discord.Colour(0x370c5e), description="{}".format(ataca2))
         embed.set_image(url="{}".format(gif))
         embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
         msg = await ctx.send(embed=embed)
 
         await msg.add_reaction("🔙")
@@ -536,9 +526,9 @@ class Interação:
                                       description="Inicia um novo casal!\n \n**Como usar: $ship <usuário1> <usuário2> (opcional)**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$ship @fulano @sicrano\n$ship @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$shipar, $shipou.``", inline=False)
@@ -562,9 +552,7 @@ class Interação:
                               colour=discord.Colour(0x370c5e))
 
         embed.set_author(name=f"{ctx.message.author}", icon_url=f"{avi}")
-        embed.set_footer(text="Betina Brazilian Bot", icon_url='https://images.discordapp'
-                                                               '.net/avatars/527565353199337474/40042c09'
-                                                               'bb354a396928cb91e0288384.png?size=256')
+        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
         embed.add_field(name="**Regras do jogo:**",
                         value="```Clique na arma para participar. Quando tivermos 6 participantes começarei o jogo!```")
         message = await ctx.send(embed=embed)
@@ -591,8 +579,7 @@ class Interação:
                                       description="{}".format(msg1))
                 embed.set_image(url="{}".format(gif1))
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/"
-                                          "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 msg = await ctx.send(embed=embed)
                 await asyncio.sleep(5)
 
@@ -602,8 +589,7 @@ class Interação:
                                   description="{}".format(msg2))
             embed.set_image(url="{}".format(gif2))
             embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             msg = await ctx.send(embed=embed)
             await ctx.invoke(self.client.get_command('apaga'), 7)
 
@@ -624,8 +610,7 @@ class Interação:
         embed = discord.Embed(title="**Shipados!**", colour=discord.Colour(0x370c5e), description="{}".format(ataca2))
         embed.set_image(url="{}".format(gif))
         embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
         msg = await ctx.send(embed=embed)
 
         await msg.add_reaction("🔙")
@@ -650,9 +635,9 @@ class Interação:
                                       description="Bate na mão do usuário!\n \n**Como usar: $highfive <usuário1>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$highfive @fulano\n$highfive @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$hf, $batemao.``", inline=False)
