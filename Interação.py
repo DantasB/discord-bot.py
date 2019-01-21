@@ -316,7 +316,7 @@ class Interação:
 
         person = random.choice(list(ctx.guild.members))
 
-        tnc1 = '{} mandou {} tomar no cu!'.format(ctx.author.mention, person.mention)
+        tnc1 = '{} mandou {} tomar no cuelinho!'.format(ctx.author.mention, person.mention)
 
         embed = discord.Embed(title="**Raiva!**", colour=discord.Colour(0x370c5e), description="{}".format(tnc1))
         embed.set_image(url="{}".format(gif2))
