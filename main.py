@@ -62,24 +62,23 @@ async def on_ready():
     print('ID do Bot: ' + str(client.user.id))
     print('Versao do Discord: ' + discord.__version__)
     print('--------------BD--------------')
-    game = discord.Game("sua mãe da sacada")
+    game = discord.Game("$ajuda")
     await client.change_presence(status=discord.Status.online, activity=game)
 
 
 @client.event
 async def on_member_join(member):
-    guild = member.guild.get_channel(531136627351748610)
+    guild = member.guild.get_channel() #logs channel
     fmt = 'Bem vindo ao servidor {1.name}, {0.mention}, aproveita e segue o baile.'
     await guild.send(fmt.format(member, member.guild), delete_after=15)
-    role = discord.utils.get(member.guild.roles, name='Baby boy')
+    role = discord.utils.get(member.guild.roles, name='Iniciados')
     await member.add_roles(role)
-    print((("Cargo '" + role.name) + "' adicionado para ") + member.name)
 
 
 @client.event
 async def on_member_remove(member):
-    guild = member.guild.get_channel(531136627351748610)
-    fmt = '{0.mention} ficou putinha e saiu do servidor'
+    guild = member.guild.get_channel() #logs channel
+    fmt = '{0.mention} ficou bolado e saiu do servidor'
     await guild.send(fmt.format(member), delete_after=15)
 
 
@@ -92,15 +91,12 @@ async def on_guild_join(guild):
                                               "ajudar ao meu criador ```\nSim, eu sou um bot e não vou roubar seus "
                                               "dados...```")
             embed.set_image(
-                url="https://images.discordapp.net/avatars/"
-                    "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                url=betina_icon)
             embed.set_thumbnail(
-                url="https://images.discordapp.net/avatars/527565353199337474/"
-                    "40042c09bb354a396928cb91e0288384.png?size=256")
+                url=betina_icon)
             embed.set_author(name="Betina")
             embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/"
-                                      "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
 
             embed.add_field(name="Precisa de ajuda?🤔", value="para usar meus comandos utilize o $help")
             embed.add_field(name="Teve alguma ideia boa ? 😱: ",
@@ -125,12 +121,6 @@ async def on_message(message):
         user = list(message.guild.members)[x]
         fquote = listas.replace('[nome]', user.name)
         await message.channel.send(fquote)
-
-    if message.content.lower().startswith('$cargo'):
-        role = get(message.guild.roles, name='Iniciado')
-        await message.author.add_roles(role)
-        await message.author.remove_roles(get(message.guild.roles, name='Baby boy'))
-
 
     guild_id = str(message.guild.id)
     author_id = str(message.author.id)
@@ -165,7 +155,7 @@ async def on_message(message):
 
                                 embed.set_author(name=f"{message.author.name}", icon_url=avi)
                                 embed.set_footer(text="Betina Brazilian Bot ",
-                                         icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256g")
+                                         icon_url=betina_icon)
                                 await message.channel.send(embed=embed)
         else:
             mentions = message.mentions
@@ -182,7 +172,7 @@ async def on_message(message):
 
                     embed.set_author(name=f"{message.author.name}", icon_url=avi)
                     embed.set_footer(text="Betina Brazilian Bot ",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256g")
+                                 icon_url=betina_icon)
                     await message.channel.send(embed=embed)
     else:
         if guild_id in afklist:
@@ -199,6 +189,28 @@ async def on_message(message):
 
     await client.process_commands(message)
 
+
+@client.event
+async def on_raw_reaction_add(payload):
+    if not payload.guild_id:
+        return
+    if payload.message_id != #messageid:
+        return
+    guild = client.get_guild(payload.guild_id)
+    member = guild.get_member(payload.user_id)
+    if client.user.id == member.id:
+        return
+
+    if str(payload.emoji) == '✅':
+        role = discord.utils.get(guild.roles, name="Usuários")
+
+    else:
+        return
+
+    await member.add_roles(role)
+    await member.remove_roles(get(guild.roles, name='Iniciados'))
+
+
 @commands.guild_only()
 @client.command()
 async def help(ctx):
@@ -209,8 +221,7 @@ async def help(ctx):
                                       " meu suporte, escolha abaixo uma das categorias"
                                       " para obter mais informações sobre minhas utilidades ```")
     embed.set_footer(text="Betina Brazilian Bot",
-                     icon_url="https://images.discordapp.net/avatars/"
-                              "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                     icon_url=betina_icon)
 
     embed.add_field(name="😂 **Diversão**", value="``$moeda, $ppt, $rola ...``", inline=False)
     embed.add_field(name="💰 **Cobrança**", value="``$devemais, $devemenos, $deve...``", inline=False)
@@ -239,11 +250,9 @@ async def help(ctx):
                               description="*Bem vindo a categoria Cobrança:\nAqui você encontrará"
                                           " comandos que ajudará você a ter noção de finanças.*")
         embed.set_thumbnail(
-            url="https://images.discordapp.net/avatars/527565353199337474"
-                "/40042c09bb354a396928cb91e0288384.png?size=256")
+            url=betina_icon)
         embed.set_footer(text="Betina Brazilian Bot",
-                         icon_url="https://images.discordapp.net/avatars/527565353199337474/"
-                                  "40042c09bb354a396928cb91e0288384.png?size=256")
+                         icon_url=betina_icon)
         embed.add_field(name="**$devemais <usuário> <quantidade>**", value="``Você aumentará o quanto um"
                                                                            " usuário te deve!``", inline=False)
         embed.add_field(name="**$devemenos**", value="``Você diminuirá o quanto um usuário te deve!``",
@@ -275,11 +284,9 @@ async def help(ctx):
                               description="*Bem vindo a categoria diversão:\n"
                                           "Aqui você encontrará comandos que trará alegria a todos no servidor.*")
         embed.set_thumbnail(
-            url="https://images.discordapp.net/avatars/527565353199337474/"
-                "40042c09bb354a396928cb91e0288384.png?size=256")
+            url=betina_icon)
         embed.set_footer(text="Betina Brazilian Bot",
-                         icon_url="https://images.discordapp.net/avatars/"
-                                  "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                         icon_url=betina_icon)
 
         embed.add_field(name="**$moeda**", value="``Jogarei uma moeda. Poderá cair cara ou coroa!``",
                         inline=False)
@@ -314,11 +321,9 @@ async def help(ctx):
                                           " comandos que ajudará você a ouvir música enquanto faz suas atividades"
                                           " no discord.*")
         embed.set_thumbnail(
-            url="https://images.discordapp.net/avatars/527565353199337474"
-                "/40042c09bb354a396928cb91e0288384.png?size=256")
+            url=betina_icon)
         embed.set_footer(text="Betina Brazilian Bot",
-                         icon_url="https://images.discordapp.net/avatars/527565353199337474/"
-                                  "40042c09bb354a396928cb91e0288384.png?size=256")
+                         icon_url=betina_icon)
 
         embed.add_field(name="**$play <música>**",
                         value="``Busco pela música ou toco a música de link específico!``",
@@ -358,11 +363,9 @@ async def help(ctx):
                               description="*Bem vindo a categoria Interação:\nAqui você encontrará"
                                           " comandos que ajudará você a interagir com outros membros do seu servidor*")
         embed.set_thumbnail(
-            url="https://images.discordapp.net/avatars/527565353199337474"
-                "/40042c09bb354a396928cb91e0288384.png?size=256")
+            url=betina_icon)
         embed.set_footer(text="Betina Brazilian Bot",
-                         icon_url="https://images.discordapp.net/avatars/527565353199337474/"
-                                  "40042c09bb354a396928cb91e0288384.png?size=256")
+                         icon_url=betina_icon)
 
         embed.add_field(name="**$treta **", value="``Diz coisas assustadoras sobre as pessoas do servidor!``",
                         inline=False)
@@ -404,11 +407,9 @@ async def help(ctx):
                               description="*Bem vindo a categoria Administração:\nAqui você encontrará"
                                           " comandos que ajudará você a ajudar a controlar seu servidor.*")
         embed.set_thumbnail(
-            url="https://images.discordapp.net/avatars/527565353199337474"
-                "/40042c09bb354a396928cb91e0288384.png?size=256")
+            url=betina_icon)
         embed.set_footer(text="Betina Brazilian Bot",
-                         icon_url="https://images.discordapp.net/avatars/527565353199337474/"
-                                  "40042c09bb354a396928cb91e0288384.png?size=256")
+                         icon_url=betina_icon)
         embed.add_field(name="**$apaga <quantidade>**", value="``Eu apagarei uma"
                                                               " quantidade de mensagens!``", inline=False)
         embed.add_field(name="**$ping**", value="``Retornarei o ping do usuário``", inline=False)
@@ -468,9 +469,9 @@ async def afk_handler(ctx, error):
                                               "\n \n**Como usar: $afk <motivo> (opcional)**")
 
         embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
         embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
         embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Gerenciar as mensagens`` *para utilizar este comando!*",
@@ -499,9 +500,9 @@ async def addtreta_handler(ctx, error):
                                             "do nome do usuário, deve-se colocar [nome]!**")
 
         embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
         embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
         embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Administrador`` *para utilizar este comando!*",
@@ -521,9 +522,9 @@ async def addtreta_handler(ctx, error):
                                               "do nome do usuário, deve-se colocar [nome]!**")
 
             embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Administrador`` *para utilizar este comando!*",
