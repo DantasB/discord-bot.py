@@ -11,40 +11,10 @@ from dhooks import Webhook
 from discord.utils import get
 from discord.ext.commands import has_permissions, MissingPermissions
 
-banhammer = ['https://media.giphy.com/media/fe4dDMD2cAU5RfEaCU/giphy.gif',
-             'https://media.giphy.com/media/qPD4yGsrc0pdm/giphy.gif',
-             'https://media.giphy.com/media/e3WNjAUKGNGoM/giphy.gif',
-             'https://media.giphy.com/media/xT5LMDzs9xYtHXeItG/giphy.gif',
-             'https://media.giphy.com/media/HXcALJVPgaR4A/giphy.gif',
-             'https://media.giphy.com/media/3o751XbGLXpORSxtQY/giphy.gif',
-             'https://media.giphy.com/media/uC9e2ojJn1ZXW/giphy.gif',
-             'https://media.giphy.com/media/qpqgxqebabVjq/giphy.gif']
-omg = ['https://media.giphy.com/media/5VKbvrjxpVJCM/giphy.gif',
-       'https://media.giphy.com/media/ygCJ5Bul73NArGOSFN/giphy.gif',
-       'https://media.giphy.com/media/oYtVHSxngR3lC/giphy.gif',
-       'https://media.giphy.com/media/1ykTax6hrAKpTQ0Mnb/giphy.gif',
-       'https://media.giphy.com/media/PUBxelwT57jsQ/giphy.gif',
-       'https://media.giphy.com/media/6b9DUG33FIF74J9H2O/giphy.gif',
-       'https://media.giphy.com/media/sR2YaENch4sog/giphy.gif',
-       'https://media.giphy.com/media/bGPTxLislwm3u/giphy.gif',
-       'https://media.giphy.com/media/WuGSL4LFUMQU/giphy.gif',
-       'https://media.giphy.com/media/3ohzdMk3uz9WSpdTvW/giphy.gif',
-       'https://media.giphy.com/media/vQqeT3AYg8S5O/giphy.gif',
-       'https://media.giphy.com/media/57ZvMMkuBIVMlU88Yh/giphy.gif',
-       'https://media.giphy.com/media/MuTenSRsJ7TQQ/giphy.gif',
-       'https://media.giphy.com/media/fpXxIjftmkk9y/giphy.gif',
-       'https://media.giphy.com/media/3o72F8t9TDi2xVnxOE/giphy.gif',
-       'https://media.giphy.com/media/1yMQuIU3lQLPpXCK7t/giphy.gif',
-       'https://media.giphy.com/media/5p2wQFyu8GsFO/giphy.gif',
-       'https://media.giphy.com/media/xT9IgAmXNP23ftHIsM/giphy.gif',
-       'https://media.giphy.com/media/QjrrSbYaqgi1q/giphy.gif',
-       'https://media.giphy.com/media/26xBC0xYwcSWzTL2g/giphy.gif',
-       'https://media.giphy.com/media/m48e80jhv4Kk/giphy.gif',
-       'https://media.giphy.com/media/l1J9EBp9Dcd6jtsbu/giphy.gif',
-       'https://media.giphy.com/media/hPUm88VMjUIM0/giphy.gif',
-       'https://media.giphy.com/media/vmGJdiqLTG4lq/giphy.gif',
-       'https://media.giphy.com/media/OzHKDlB6CqwZG/giphy.gif']
+banhammer = [] #banhammer giphy gifs
+omg = [] #omg giphy gifs
 
+betina_icon = " " #bot icon
 
 with open('reports.json', encoding='utf-8') as f:
     try:
@@ -91,9 +61,7 @@ class Administração:
                               colour=discord.Colour(0x370c5e))
 
         embed.set_author(name=f"{ctx.message.author}", icon_url=f"{avi}")
-        embed.set_footer(text="Betina Brazilian Bot", icon_url='https://images.discordapp'
-                                                               '.net/avatars/527565353199337474/40042c09'
-                                                               'bb354a396928cb91e0288384.png?size=256')
+        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
 
         await ctx.send(embed=embed, delete_after=10)
 
@@ -104,9 +72,9 @@ class Administração:
                                   description="Apaga n+1 linhas acima da ultima mensagem\n \n**Como usar: $apaga <linhas>**")
 
             embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Gerenciar Mensagens, Ler o histórico de "
@@ -124,9 +92,9 @@ class Administração:
                                       description="Apaga n+1 linhas acima da ultima mensagem\n \n**Como usar: $apaga <linhas>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Gerenciar Mensagens, Ler o histórico de "
@@ -148,9 +116,9 @@ class Administração:
                                               "\n \n**Como usar: $bane <usuário> <motivo> (opcional)**")
 
             embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e o bot precisam "
                                                             "ter a permissão de* ``"
                                                             "Banir membros e estar no topo dos cargos`` *para utilizar este comando!*",
@@ -179,21 +147,18 @@ class Administração:
                                       description="{}".format(msg1))
                 embed.set_image(url="{}".format(gif2))
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/"
-                                          "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 await ctx.channel.send(embed=embed)
                 return
             else:
                 embed = discord.Embed(title="**BAN!**", colour=discord.Colour(0x370c5e), description="{}".format(msg2))
                 embed.set_image(url="{}".format(gif1))
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/"
-                                          "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 mbd = discord.Embed(title="**BAN!**", colour=discord.Colour(0x370c5e), description="{}".format(msg3))
                 mbd.set_image(url="{}".format(gif1))
                 mbd.set_footer(text="Betina Brazilian Bot",
-                               icon_url="https://images.discordapp.net/avatars/"
-                                        "527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                               icon_url=betina_icon)
 
                 if not member.bot:
                     await member.send(embed=mbd)
@@ -211,9 +176,9 @@ class Administração:
                                               "\n \n**Como usar: $bane <usuário> <motivo> (opcional)**")
 
             embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos"
                                                             "ter a permissão de* ``"
                                                             "Banir membros e estar no topo dos cargos`` *para utilizar este comando!*",
@@ -233,9 +198,9 @@ class Administração:
                                                   "\n \n**Como usar: $bane <usuário> <motivo> (opcional)**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Banir membros e estar no topo dos cargos`` *para utilizar este comando!*",
@@ -253,9 +218,9 @@ class Administração:
                                               "\n \n**Como usar: $bane <usuário> <motivo> (opcional)**")
 
             embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Banir membros e estar no topo dos cargos`` *para utilizar este comando!*",
@@ -267,11 +232,6 @@ class Administração:
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
-    @commands.guild_only()
-    @commands.command(name='cargo', aliases=['CARGO'
-        , 'Cargo', 'CArgo', 'CARgo', 'CARGo', 'cARGO', 'caRGO', 'carGO', 'cargO'])
-    async def cargo(self, ctx):
-        pass
 
     @commands.guild_only()
     @commands.command()
@@ -305,7 +265,7 @@ class Administração:
         embed.add_field(name='📃 Status:', value='{}'.format(member.status), inline=True)
         embed.add_field(name='🎌 Cargos:', value='{}'.format(roles), inline=True)
         embed.set_thumbnail(url=avi)
-        if ctx.message.author.id == ctx.message.guild.owner.id:
+        if member.id == ctx.message.guild.owner.id:
             if str(member.status) == 'online':
                 embed.set_author(name='👑 ✅ {}'.format(member))
             elif str(member.status) == 'dnd':
@@ -333,9 +293,9 @@ class Administração:
                                               "\n \n**Como usar: $membro <usuário>**")
 
             embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Gerenciar Cargos`` *para utilizar este comando!*",
@@ -355,9 +315,9 @@ class Administração:
                                                   "\n \n**Como usar: $membro <usuário>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Gerenciar Cargos`` *para utilizar este comando!*",
@@ -405,9 +365,9 @@ class Administração:
                                               "\n \n**Como usar: $servidor**")
 
             embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Administrador`` *para utilizar este comando!*",
@@ -440,9 +400,7 @@ class Administração:
                                       colour=discord.Colour(0x370c5e), description=f"Pelo seguinte motivo: {reason}")
 
                 embed.set_author(name=f"{ctx.message.author}", icon_url=f"{avi}")
-                embed.set_footer(text="Betina Brazilian Bot", icon_url='https://images.discordapp'
-                                                                       '.net/avatars/527565353199337474/40042c09'
-                                                                       'bb354a396928cb91e0288384.png?size=256')
+                embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
 
                 await ctx.send(embed=embed, delete_after=10)
                 break
@@ -460,9 +418,7 @@ class Administração:
                                   colour=discord.Colour(0x370c5e), description=f"Pelo seguinte motivo: {reason}")
 
             embed.set_author(name=f"{ctx.message.author}", icon_url=f"{avi}")
-            embed.set_footer(text="Betina Brazilian Bot", icon_url='https://images.discordapp'
-                                                                   '.net/avatars/527565353199337474/40042c09'
-                                                                   'bb354a396928cb91e0288384.png?size=256')
+            embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
 
             await ctx.send(embed=embed, delete_after=10)
         with open('reports.json', 'w+') as f:
@@ -477,9 +433,9 @@ class Administração:
                                               "\n \n**Como usar: $warn <usuário> <motivo> (opcional)**")
 
             embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Banir membros e Expulsar membros`` *para utilizar este comando!*",
@@ -497,9 +453,9 @@ class Administração:
                                                   "\n \n**Como usar: $warn <usuário> <motivo> (opcional)**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Banir membros e Expulsar membros`` *para utilizar este comando!*",
@@ -521,9 +477,9 @@ class Administração:
                                               "\n \n**Como usar: $warnings <usuário>**")
 
             embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Banir membros e Expulsar membros`` *para utilizar este comando!*",
@@ -555,9 +511,9 @@ class Administração:
                                               "\n \n**Como usar: $warnings <usuário>**")
 
             embed.set_author(name="Betina#9182",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                             icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Banir membros e Expulsar membros`` *para utilizar este comando!*",
@@ -575,9 +531,9 @@ class Administração:
                                                   "\n \n**Como usar: $warnings <usuário>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Banir membros e Expulsar membros`` *para utilizar este comando!*",
@@ -592,3 +548,4 @@ class Administração:
 
 def setup(client):
     client.add_cog(Administração(client))
+
