@@ -24,6 +24,13 @@ with open('reports.json', encoding='utf-8') as f:
         report['users'] = []
 
 
+with open('mutados.json', 'r') as file:
+    try:
+        cargos_dos_mutados = json.load(file)
+    except ValueError:
+        cargos_dos_mutados = {}
+
+
 class Administração:
     def __init__(self, client):
         self.client = client
@@ -381,7 +388,7 @@ class Administração:
 
     @commands.guild_only()
     @commands.command(pass_context=True, name='warn', aliases=['aviso', 'wrn'])
-    @has_permissions(kick_members=True, ban_members=True)
+    @has_permissions(kick_members=True)
     async def warn(self, ctx, user: discord.User, *, arg: str = None):
         if arg == None:
             reason = 'Sem motivos específicados'
@@ -438,7 +445,7 @@ class Administração:
                              icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
-                                                            "Banir membros e Expulsar membros`` *para utilizar este comando!*",
+                                                            "Expulsar membros`` *para utilizar este comando!*",
                             inline=False)
             embed.add_field(name="📖**Exemplos:**", value="$warn @fulano xingou o moderador", inline=False)
             embed.add_field(name="🔀**Outros Comandos**", value="``$aviso, $wrn.``", inline=False)
@@ -458,7 +465,7 @@ class Administração:
                                  icon_url=betina_icon)
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
-                                                                "Banir membros e Expulsar membros`` *para utilizar este comando!*",
+                                                                "Expulsar membros`` *para utilizar este comando!*",
                                 inline=False)
                 embed.add_field(name="📖**Exemplos:**", value="$warn @fulano xingou o moderador", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$aviso, $wrn.``", inline=False)
@@ -469,7 +476,7 @@ class Administração:
 
     @commands.guild_only()
     @commands.command(pass_context=True, name='warnings', aliases=['avisos', 'wrns'])
-    @has_permissions(kick_members=True, ban_members=True)
+    @has_permissions(kick_members=True)
     async def warnings(self, ctx, user: discord.User):
         if user == None:
             embed = discord.Embed(title="Comando $warnings:", colour=discord.Colour(0x370c5e),
@@ -482,7 +489,7 @@ class Administração:
                              icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
-                                                            "Banir membros e Expulsar membros`` *para utilizar este comando!*",
+                                                            "Expulsar membros`` *para utilizar este comando!*",
                             inline=False)
             embed.add_field(name="📖**Exemplos:**", value="$warnings @fulano\n$warnings @sicrano", inline=False)
             embed.add_field(name="🔀**Outros Comandos**", value="``$avisos, $wrns.``", inline=False)
@@ -516,7 +523,7 @@ class Administração:
                              icon_url=betina_icon)
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
-                                                            "Banir membros e Expulsar membros`` *para utilizar este comando!*",
+                                                            "Expulsar membros`` *para utilizar este comando!*",
                             inline=False)
             embed.add_field(name="📖**Exemplos:**", value="$warnings @fulano\n$warnings @sicrano", inline=False)
             embed.add_field(name="🔀**Outros Comandos**", value="``$avisos, $wrns.``", inline=False)
@@ -536,7 +543,7 @@ class Administração:
                                  icon_url=betina_icon)
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
-                                                                "Banir membros e Expulsar membros`` *para utilizar este comando!*",
+                                                                "Expulsar membros`` *para utilizar este comando!*",
                                 inline=False)
                 embed.add_field(name="📖**Exemplos:**", value="$warnings @fulano\n$warnings @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$avisos, $wrns.``", inline=False)
@@ -545,7 +552,176 @@ class Administração:
                 await msg.add_reaction("❓")
 
 
+    @commands.guild_only()
+    @commands.command(name='mute', aliases=['mutar', 'silenciar'])
+    @has_permissions(kick_members=True, manage_roles=True)
+    async def mute(self, ctx, member: discord.Member, time: int = 1):
+        await ctx.message.delete()
+        roles = [cargos.name for cargos in member.roles if cargos.name != "@everyone"]
+        cargos_dos_mutados[str(member.id)] = roles
+        for cargos in roles:
+            atirar = discord.utils.get(ctx.guild.roles, name=str(cargos))
+            await member.remove_roles(atirar)
+
+        role = discord.utils.get(ctx.guild.roles, name='Mutado')
+        if role not in ctx.guild.roles:
+            await ctx.guild.create_role(name='Mutado', colour=discord.Colour(0x36393F), reason='Foi criado para mutar os usuários')
+            await member.add_roles(role)
+
+        await member.add_roles(role)
+
+        with open('mutados.json', 'w') as file:
+            json.dump(cargos_dos_mutados, file)
+
+    @mute.error
+    async def mute_handler(self, ctx, error):
+        if isinstance(error, MissingPermissions):
+            embed = discord.Embed(title="Comando $mute:", colour=discord.Colour(0x370c5e),
+                                  description="Muta o usuário"
+                                              "\n \n**Como usar: $mute <usuário>**")
+
+            embed.set_author(name="Betina#9182",
+                             icon_url=betina_icon)
+            embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url=betina_icon)
+            embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                            "ter a permissão de* ``"
+                                                            "Expulsar membros e Gerenciar cargos"
+                                                            "`` *para utilizar este comando!\n"
+                                                            "Eu também preciso de estar com o cargo acima do usuário"
+                                                            " a ser mutado!*",
+                            inline=False)
+            embed.add_field(name="📖**Exemplos:**", value="$mute @fulano\n$mute @sicrano", inline=False)
+            embed.add_field(name="🔀**Outros Comandos**", value="``$mutar, $silenciar.``", inline=False)
+
+            msg = await ctx.send(embed=embed)
+            await msg.add_reaction("❓")
+
+        elif isinstance(error, commands.MissingRequiredArgument):
+            if error.param.name == 'member':
+                embed = discord.Embed(title="Comando $mute:", colour=discord.Colour(0x370c5e),
+                                      description="Muta o usuário"
+                                                  "\n \n**Como usar: $mute <usuário>**")
+
+                embed.set_author(name="Betina#9182",
+                                 icon_url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+                embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                                "ter a permissão de* ``"
+                                                                "Expulsar membros e Gerenciar cargos"
+                                                                "`` *para utilizar este comando!\n"
+                                                                "Eu também preciso de estar com o cargo acima do usuário"
+                                                                " a ser mutado!*",
+                                inline=False)
+                embed.add_field(name="📖**Exemplos:**", value="$mute @fulano\n$mute @sicrano", inline=False)
+                embed.add_field(name="🔀**Outros Comandos**", value="``$mutar, $silenciar.``", inline=False)
+
+                msg = await ctx.send(embed=embed)
+                await msg.add_reaction("❓")
+
+
+    @commands.guild_only()
+    @commands.command(name='unmute', aliases=['desmutar', 'semsilenciar'])
+    @has_permissions(kick_members=True, manage_roles=True)
+    async def unmute(self, ctx, member: discord.Member, time: int = 1):
+        await ctx.message.delete()
+        if str(member.id) not in cargos_dos_mutados:
+            return
+        for cargos in cargos_dos_mutados[str(member.id)]:
+            adicionar = discord.utils.get(ctx.guild.roles, name=str(cargos))
+            await member.add_roles(adicionar)
+        mute = discord.utils.get(ctx.guild.roles, name='Mutado')
+        await member.remove_roles(mute)
+        del cargos_dos_mutados[str(member.id)]
+        with open('mutados.json', 'w') as file:
+            json.dump(cargos_dos_mutados, file)
+
+    @unmute.error
+    async def mute_handler(self, ctx, error):
+        if isinstance(error, MissingPermissions):
+            embed = discord.Embed(title="Comando $unmute:", colour=discord.Colour(0x370c5e),
+                                  description="Tira o mute do usuário"
+                                              "\n \n**Como usar: $unmute <usuário>**\n \n"
+                                              "Para utilizar corretamente, redefina as permissões do cargo ``everyone``"
+                                              " para nenhuma permissão.")
+
+            embed.set_author(name="Betina#9182",
+                             icon_url=betina_icon)
+            embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url=betina_icon)
+            embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                            "ter a permissão de* ``"
+                                                            "Expulsar membros e Gerenciar"
+                                                            " cargos`` *para utilizar este comando!*",
+                            inline=False)
+            embed.add_field(name="📖**Exemplos:**", value="$unmute @fulano\n$unmute @sicrano", inline=False)
+            embed.add_field(name="🔀**Outros Comandos**", value="``$desmutar, $semsilenciar.``", inline=False)
+
+            msg = await ctx.send(embed=embed)
+            await msg.add_reaction("❓")
+
+        elif isinstance(error, commands.MissingRequiredArgument):
+            if error.param.name == 'member':
+                embed = discord.Embed(title="Comando $unmute:", colour=discord.Colour(0x370c5e),
+                                      description="Tira o mute do usuário"
+                                                  "\n \n**Como usar: $unmute <usuário>**\n \n"
+                                                  "Para utilizar corretamente, redefina as permissões do cargo ``everyone``"
+                                                  " para nenhuma permissão.")
+
+                embed.set_author(name="Betina#9182",
+                                 icon_url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+                embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                                "ter a permissão de* ``"
+                                                                "Expulsar membros e Gerenciar"
+                                                                " cargos`` *para utilizar este comando!*",
+                                inline=False)
+                embed.add_field(name="📖**Exemplos:**", value="$unmute @fulano\n$unmute @sicrano", inline=False)
+                embed.add_field(name="🔀**Outros Comandos**", value="``$desmutar, $semsilenciar.``", inline=False)
+
+                msg = await ctx.send(embed=embed)
+                await msg.add_reaction("❓")
+
+
+    @commands.guild_only()
+    @commands.command(name='sugestão', aliases=['suggestion', 'sug'])
+    async def suggestion(self, ctx, *, arg: str):
+        if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+            avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+        else:
+            avi = ctx.message.author.avatar_url_as(static_format='png')
+
+        await ctx.message.delete()
+        embed = discord.Embed(title="Sugestão: ", colour=discord.Colour(0x370c5e),
+                              description=f"{arg}")
+        embed.set_footer(text="{}".format(ctx.message.author), icon_url=avi)
+        mensagem = await ctx.send(embed=embed)
+        await mensagem.add_reaction('✅')
+        await mensagem.add_reaction('❌')
+
+
+    @suggestion.error
+    async def suggestion_handler(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            if error.param.name == 'arg':
+                embed = discord.Embed(title="Comando $sugestão:", colour=discord.Colour(0x370c5e),
+                                      description="Começa a votação sobre uma sugestão!"
+                                                  "\n \n**Como usar: $sugestão <mensagem>**")
+
+                embed.set_author(name="Betina#9182",
+                                 icon_url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+
+                embed.add_field(name="📖**Exemplos:**", value="$sugestão que tal adicionar uma função e sugestão"
+                                                              "\n$sugestão criar um canal de jogos", inline=False)
+                embed.add_field(name="🔀**Outros Comandos**", value="``$sug, $suggestion.``", inline=False)
+
+                msg = await ctx.send(embed=embed)
+                await msg.add_reaction("❓")
+
 
 def setup(client):
     client.add_cog(Administração(client))
-
