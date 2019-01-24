@@ -294,6 +294,184 @@ async def on_raw_reaction_remove(payload):
     await servidor.send(fmt.format(member))
 
 
+with open('digitlogs.json', 'r') as file:
+    try:
+        digit_log = json.load(file)
+    except ValueError:
+        digit_log = {}
+
+
+@client.event
+async def on_ready():
+    print('--------------BD--------------')
+    print('BOT ONLINE')
+    print('Nome do Bot: ' + client.user.name)
+    print('ID do Bot: ' + str(client.user.id))
+    print('Versao do Discord: ' + discord.__version__)
+    print('--------------BD--------------')
+    game = discord.Game("$ajuda")
+    await client.change_presence(status=discord.Status.online, activity=game)
+
+
+@client.event
+async def on_member_join(member):
+    if str(member.guild.id) not in join_list:
+        return
+    guild = member.guild.get_channel(int(join_list[str(member.guild.id)][0]))
+    fmt = '{0.name} ' + join_list[str(member.guild.id)][1]
+    await guild.send(fmt.format(member))
+    await guild.send(f'Agora temos exatamente: {len(member.guild.members)} membros no servidor!')
+    if str(member.guild.id) not in initial_role:
+        return
+    role = discord.utils.get(member.guild.roles, name=initial_role[str(member.guild.id)])
+    await member.add_roles(role)
+
+
+@client.event
+async def on_member_remove(member):
+    if str(member.guild.id) in leave_list:
+        guild = member.guild.get_channel(int(leave_list[str(member.guild.id)][0]))
+        fmt = f'{member.name} ' + leave_list[str(member.guild.id)][1]
+        await guild.send(fmt)
+        await guild.send(f'Agora temos exatamente: {len(member.guild.members)} membros no servidor!')
+    else:
+        return
+
+
+@client.event
+async def on_guild_join(guild):
+    for membro in guild.members:
+        if membro.guild_permissions.administrator and membro != client.user:
+            embed = discord.Embed(title="Bem vindo ao meu Suporte", colour=discord.Colour(0x370c5e),
+                                  description="Olá, eu sou a Betina: \n esse suporte está aqui para te ajudar e "
+                                              "ajudar ao meu criador ```\nSim, eu sou um bot e não vou roubar seus "
+                                              "dados...```")
+            embed.set_image(
+                url=betina_icon)
+            embed.set_thumbnail(
+                url=betina_icon)
+            embed.set_author(name="Betina")
+            embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url=betina_icon)
+
+            embed.add_field(name="Precisa de ajuda?🤔", value="para usar meus comandos utilize o $help")
+            embed.add_field(name="Teve alguma ideia boa ? 😱: ",
+                            value="fale com o meu criador, ele poderá implementar!")
+            embed.add_field(name="Teve algum problema com o bot ?🙄",
+                            value="não se preocupe, alguns problemas são comuns"
+                                  " considerando o fato do bot estar em construção,"
+                                  " mas, de qualquer forma,  fale com o meu criador.")
+            embed.add_field(name="Criador do bot:", value="DantasB#7096", inline=True)
+            embed.add_field(name="Maiores informações:", value="github.com/DantasB", inline=True)
+
+            await membro.send(embed=embed)
+
+
+@client.event
+async def on_message(message):
+    print('Logs:\n', message.author, message.content)
+    if message.content.lower().startswith('$treta'):
+        i = random.randrange(len(lista))
+        listas = lista[i]
+        x = random.randrange(len(message.guild.members))
+        user = list(message.guild.members)[x]
+        fquote = listas.replace('[nome]', user.name)
+        await message.channel.send(fquote)
+
+
+
+    if len(message.mentions) > 0:
+
+        if not message.guild:
+            return
+        guild_id = str(message.guild.id)
+        author_id = str(message.author.id)
+        afk_users = []
+
+        if guild_id in afklist:
+            if author_id in afklist[guild_id]:
+                del afklist[guild_id][author_id]
+                embed = discord.Embed(colour=discord.Colour(0x370c5e),
+                                      description=f" Bem vindo de volta {message.author.name}")
+                await message.channel.send(embed=embed, delete_after=10)
+            else:
+                mentions = message.mentions
+                for member in mentions:
+                    if guild_id in afklist:
+                        if str(member.id) in afklist[guild_id]:
+                            embed = discord.Embed(colour=discord.Colour(0x370c5e),
+                                              description=f"{member.name} está **AFK**: *{afklist[str(guild_id)][str(member.id)]}*")
+                            await message.channel.send(embed=embed, delete_after=10)
+
+    else:
+        if not message.guild:
+            return
+        guild_id = str(message.guild.id)
+        author_id = str(message.author.id)
+        afk_users = []
+        if guild_id in afklist:
+            if author_id in afklist[guild_id]:
+                del afklist[guild_id][author_id]
+                embed = discord.Embed(colour=discord.Colour(0x370c5e),
+                                  description=f" Bem vindo de volta {message.author.name}")
+                await message.channel.send(embed=embed, delete_after=10)
+
+
+    with open('afks.json', 'w') as file:
+        json.dump(afklist, file)
+
+
+    await client.process_commands(message)
+
+
+@client.event
+async def on_raw_reaction_add(payload):
+    if not payload.guild_id:
+        return
+    if str(payload.message_id) not in reactions_list:
+        return
+
+    guild = client.get_guild(payload.guild_id)
+    member = guild.get_member(payload.user_id)
+
+    if client.user.id == member.id:
+        return
+
+    if str(payload.emoji) == reactions_list[str(payload.message_id)][1]:
+        role = discord.utils.get(guild.roles, name=reactions_list[str(payload.message_id)][0])
+
+    else:
+        return
+    await member.add_roles(role)
+    if str(payload.guild_id) not in reactions_logs_in:
+        return
+    servidor = member.guild.get_channel(int(reactions_logs_in[str(payload.guild_id)][0]))
+    fmt = '{0.mention} ' + str(reactions_logs_in[str(payload.guild_id)][1])
+    await servidor.send(fmt.format(member))
+
+
+@client.event
+async def on_raw_reaction_remove(payload):
+    if not payload.guild_id:
+        return
+    if str(payload.message_id) not in reactions_list:
+        return
+    guild = client.get_guild(payload.guild_id)
+    member = guild.get_member(payload.user_id)
+    if client.user.id == member.id:
+        return
+    if str(payload.emoji) == reactions_list[str(payload.message_id)][1]:
+        role = discord.utils.get(guild.roles, name=reactions_list[str(payload.message_id)][0])
+    else:
+        return
+    await member.remove_roles(role)
+    if str(payload.guild_id) not in reactions_logs_out:
+        return
+    servidor = member.guild.get_channel(int(reactions_logs_out[str(payload.guild_id)][0]))
+    fmt = '{0.mention} ' + str(reactions_logs_out[str(payload.guild_id)][1])
+    await servidor.send(fmt.format(member))
+
+
 @commands.guild_only()
 @client.command()
 async def help(ctx):
@@ -312,7 +490,7 @@ async def help(ctx):
     embed.add_field(name="🗣 **Interação**", value="``$bate, $abraça, $treta...``", inline=False)
     embed.add_field(name="👮 **Administração**", value="``$apaga, $ping, $pong...``", inline=False)
     embed.add_field(name="⚙ **Configuração**", value="``$joinlogs, $leavelogs, $autorole...``", inline=False)
-    message = await author.send(embed=embed, delete_after=60)
+    message = await author.send(embed=embed, delete_after=120)
 
     reaction_list = ["😂", "💰", "🎵", "🗣", "👮", "⚙"]
 
@@ -341,12 +519,12 @@ async def help(ctx):
         embed.add_field(name="**$devemenos <usuário> <quantidade>**", value="``Você "
                                                                             "diminuirá o quanto um usuário te deve!``",
                         inline=False)
-        embed.add_field(name="**$deve <usuário>**", value="``Mostra uma lista de todas as pessoas que um usuário"
+        embed.add_field(name="**$deve <usuário>**", value="``Mostrarei uma lista de todas as pessoas que um usuário"
                                                 " deve!``", inline=False)
         embed.add_field(name="**$conversor <moeda1> <moeda2>"
-                             "**", value="``Diz a cotação da moeda 1 em relação a moeda 2``",
+                             "**", value="``Direi a cotação da moeda 1 em relação a moeda 2``",
                         inline=False)
-        msg = await author.send(embed=embed, delete_after=40)
+        msg = await author.send(embed=embed, delete_after=80)
         await msg.add_reaction("🔙")
 
         def check(reaction, user):
@@ -373,16 +551,17 @@ async def help(ctx):
 
         embed.add_field(name="**$moeda**", value="``Jogarei uma moeda. Poderá cair cara ou coroa!``",
                         inline=False)
-        embed.add_field(name="**$rola <numero>**", value="``Rolarei um dado de até 20 lados!``", inline=False)
+        embed.add_field(name="**$rola <número>**", value="``Rolarei um dado de até 20 lados!``", inline=False)
         embed.add_field(name="**$ppt <Pedra, Papel ou Tesoura>**", value="``Começarei um jogo de pedra, papel"
                                                                          " ou tesoura contra você!``",
                         inline=False)
-        embed.add_field(name="**$bolsonaro**", value="``O Bolsonaro aparece?``",
+        embed.add_field(name="**$bolsonaro**", value="``O Bolsonaro aparece!``",
                         inline=False)
-        embed.add_field(name="**$faustao**", value="``O Faustão aparece!!``", inline=False)
+        embed.add_field(name="**$faustao**", value="``O Faustão aparece!``", inline=False)
         embed.add_field(name="**$miranha**", value="``O Miranha aparece!``", inline=False)
-
-        msg = await author.send(embed=embed, delete_after=40)
+        embed.add_field(name="**$hungergames <número>**", value="``Iniciarei um jogo de Hunger Games!``",
+                        inline=False)
+        msg = await author.send(embed=embed, delete_after=80)
         await msg.add_reaction("🔙")
 
         def check(reaction, user):
@@ -425,7 +604,7 @@ async def help(ctx):
         embed.add_field(name="**$tocando**", value="``Direi a música que está tocando a música atualmente``",
                         inline=False)
         embed.add_field(name="**$sai**", value="``Sairei do canal de voz!``", inline=False)
-        msg = await author.send(embed=embed, delete_after=40)
+        msg = await author.send(embed=embed, delete_after=80)
         await msg.add_reaction("🔙")
 
         def check(reaction, user):
@@ -450,7 +629,7 @@ async def help(ctx):
         embed.set_footer(text="Betina Brazilian Bot",
                          icon_url=betina_icon)
 
-        embed.add_field(name="**$treta **", value="``Diz coisas assustadoras sobre as pessoas do servidor!``",
+        embed.add_field(name="**$treta **", value="``Direi coisas assustadoras sobre as pessoas do servidor!``",
                         inline=False)
         embed.add_field(name="**$abraça <usuário>**", value="``Abraça o usuário!``",
                         inline=False)
@@ -468,9 +647,12 @@ async def help(ctx):
                         inline=False)
         embed.add_field(name="**$roletarussa**", value="``Brincarei de roleta russa com você "
                                                        "e mais 4 pessoas!``", inline=False)
+        embed.add_field(name="**$mencionar <Id da mensagem> <texto> (opcional)**", value="``Transformarei a frase"
+                                                                              " do usuário em uma citação"
+                                                                              "!``", inline=False)
 
 
-        msg = await author.send(embed=embed, delete_after=40)
+        msg = await author.send(embed=embed, delete_after=80)
         await msg.add_reaction("🔙")
 
         def check(reaction, user):
@@ -489,7 +671,7 @@ async def help(ctx):
         await message.delete()
         embed = discord.Embed(title="Administração", colour=discord.Colour(0x370c5e),
                               description="*Bem vindo a categoria Administração:\nAqui você encontrará"
-                                          " comandos que ajudará você a ajudar a controlar seu servidor.\n"
+                                          " comandos que ajudará você a controlar seu servidor.\n"
                                           "OBS: Você precisará de algumas permissões para utilizar esses comandos!*")
         embed.set_thumbnail(
             url=betina_icon)
@@ -499,15 +681,17 @@ async def help(ctx):
                                                               " quantidade de mensagens!``", inline=False)
         embed.add_field(name="**$ping**", value="``Retornarei o ping do usuário``", inline=False)
         embed.add_field(name="**$pong**", value="``oiráusu od gnip o ieranroter``", inline=False)
-        embed.add_field(name="**$userinfo <usuário>**", value="``Retorna informações sobre o usuário!``", inline=False)
-        embed.add_field(name="**$serverinfo**", value="``Retorna informações sobre o servidor!``", inline=False)
-        embed.add_field(name="**$afk <motivo> (opcional)**", value="``Define o usuário como afk!``", inline=False)
-        embed.add_field(name="**$warn <usuário> <motivo> (opcional)**", value="``Dá um Warn no usuário!``", inline=False)
-        embed.add_field(name="**$mute <usuário>**", value="``Deixa o usuário no estado de mute!``", inline=False)
-        embed.add_field(name="**$unmute <usuário>**", value="``Tira o usuário do estado de mute!``", inline=False)
-        embed.add_field(name="**$ban <motivo> (opcional)**", value="``Bane o usuário do servidor!``", inline=False)
+        embed.add_field(name="**$userinfo <usuário>**", value="``Retornarei informações sobre o usuário!``", inline=False)
+        embed.add_field(name="**$serverinfo**", value="``Retornarei informações sobre o servidor!``", inline=False)
+        embed.add_field(name="**$afk <motivo> (opcional)**", value="``Definirei o usuário como afk!``", inline=False)
+        embed.add_field(name="**$warn <usuário> <motivo> (opcional)**", value="``Darei um Warn no usuário!``", inline=False)
+        embed.add_field(name="**$mute <usuário>**", value="``Deixarei o usuário no estado de mute!``", inline=False)
+        embed.add_field(name="**$unmute <usuário>**", value="``Tirarei o usuário do estado de mute!``", inline=False)
+        embed.add_field(name="**$ban <motivo> (opcional)**", value="``Banirei o usuário do servidor!``", inline=False)
+        embed.add_field(name="**$clearlastwarn <usuário>**", value="``Tirarei o ultimo warn do usuário!``", inline=False)
+        embed.add_field(name="**$geraconvite **", value="``Gerarei um convite para o seu servidor!``", inline=False)
 
-        msg = await author.send(embed=embed, delete_after=40)
+        msg = await author.send(embed=embed, delete_after=80)
         await msg.add_reaction("🔙")
 
         def check(reaction, user):
@@ -550,17 +734,22 @@ async def help(ctx):
                                                                    " toda vez que um usuário"
                                                                    " deixar de reagir no sistema de"
                                                                                           " autorole``", inline=False)
-        embed.add_field(name="**$autorole <@Cargo> <Reação> <Mensagem>**", value="``Criarei uma mensagem que"
+        embed.add_field(name="**$autorole <@Cargo> <Reação> <Mensagem> (opcional)**", value="``Criarei uma mensagem que"
                                                                                  " ao reagir com a Reação"
                                                                              " definida adiciona o Cargo"
                                                                              " definido!``", inline=False)
-        embed.add_field(name="**$addtreta <treta>**", value="``Ddicionarei uma treta a listra de tretas!``", inline=False)
+        embed.add_field(name="**$addtreta <treta>**", value="``Adicionarei uma treta a listra de tretas!``", inline=False)
         embed.add_field(name="**$sugestão <mensagem>**", value="``Adicionarei uma sugestão que você "
                                                                "requisitar``", inline=False)
-        embed.add_field(name="**$cargoinicial <@cargo>**", value="``Adiciona um cargo inicial a todos"
+        embed.add_field(name="**$cargoinicial <@cargo>**", value="``Adicionarei um cargo inicial a todos"
                                                                  " aqueles que entrarem no servidor!``", inline=False)
-        embed.add_field(name="**$prefixo <caracter>**", value="``Define um novo prefixo ao bot!``", inline=False)
-        msg = await author.send(embed=embed, delete_after=40)
+        embed.add_field(name="**$prefixo <caracter>**", value="``Definirei um novo prefixo ao bot!``", inline=False)
+        embed.add_field(name="**$digitlogs <#Canal>**", value="``Definirei um canal para receber os logs de "
+                                                              "todos os comandos da administração"
+                                                              " utilizados!``", inline=False)
+        embed.add_field(name="**$invites <usuário>**", value="``Direi todos os invites criados por"
+                                                             " um usuário!``", inline=False)
+        msg = await author.send(embed=embed, delete_after=80)
         await msg.add_reaction("🔙")
 
         def check(reaction, user):
@@ -585,7 +774,7 @@ async def afk(ctx, *, arg: str = None):
         reason = arg
     guild_id = str(ctx.guild.id)
     user_id = str(ctx.author.id)
-
+    await ctx.message.delete()
     if guild_id in afklist:
         afklist[guild_id][user_id] = reason
         embed = discord.Embed(colour=discord.Colour(0x370c5e), description=f"{ctx.author.mention} Está como afk agora! | {reason}")
@@ -627,6 +816,7 @@ async def afk_handler(ctx, error):
 @has_permissions(administrator=True)
 async def addtreta(ctx, *, arg: str):
     lista.append(arg)
+    await ctx.message.delete()
     embed = discord.Embed(title="Treta adicionada: ", colour=discord.Colour(0x370c5e), description=f"{arg}")
     embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
     msg = await ctx.send(embed=embed, delete_after=10)
@@ -681,7 +871,7 @@ async def addtreta_handler(ctx, error):
 @commands.guild_only()
 @client.command(name='cargo', aliases=['cargoauto', 'autorole'])
 @has_permissions(administrator=True)
-async def cargo(ctx, cargo: discord.Role, reaction: str, *, arg: str):
+async def cargo(ctx, cargo: discord.Role, reaction: str, *, arg: str = 'Clique na reação abaixo para selecionar:'):
     await ctx.message.delete()
     embed = discord.Embed(title="Cargo " + str(cargo), colour=discord.Colour(0x370c5e), description=f"{arg}")
     embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
@@ -699,7 +889,7 @@ async def cargo_handler(ctx, error):
     if isinstance(error, MissingPermissions):
         embed = discord.Embed(title="Comando $cargo:", colour=discord.Colour(0x370c5e),
                                 description="Adiciona uma mensagem que ao ser reagida, adiciona um cargo a pessoa"
-                                              "\n \n**Como usar: $cargo <@Cargo> <Reação> <Mensagem>**")
+                                              "\n \n**Como usar: $cargo <@Cargo> <Reação> <Mensagem> (opcional)**")
 
         embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
@@ -710,7 +900,7 @@ async def cargo_handler(ctx, error):
                                                             "Administrador`` *para utilizar este comando!*",
                             inline=False)
         embed.add_field(name="📖**Exemplos:**", value="$cargo @Gamer ❓ Clique para ganhar o cargo Gamer"
-                                                      "\n$cargo @iniciado ✅ Clique para entrar no servidor"
+                                                      "\n$cargo @iniciado ✅ "
                                                       "", inline=False)
         embed.add_field(name="🔀**Outros Comandos**", value="``$cargoauto, $autorole.``", inline=False)
 
@@ -718,31 +908,11 @@ async def cargo_handler(ctx, error):
         await msg.add_reaction("❓")
 
     elif isinstance(error, commands.MissingRequiredArgument):
-        if error.param.name == 'arg':
-            embed = discord.Embed(title="Comando $cargo:", colour=discord.Colour(0x370c5e),
-                                  description="Adiciona uma mensagem que ao ser reagida, adiciona um cargo a pessoa"
-                                              "\n \n**Como usar: $cargo <@Cargo> <Reação> <Mensagem>**")
-
-            embed.set_author(name="Betina#9182",
-                             icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
-            embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
-                                                            "ter a permissão de* ``"
-                                                            "Administrador`` *para utilizar este comando!*",
-                            inline=False)
-            embed.add_field(name="📖**Exemplos:**", value="$cargo @Gamer ❓ Clique para ganhar o cargo Gamer"
-                                                          "\n$cargo @iniciado ✅ Clique para entrar no servidor"
-                                                          "", inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$cargoauto, $autorole.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
 
         if error.param.name == 'reaction':
             embed = discord.Embed(title="Comando $cargo:", colour=discord.Colour(0x370c5e),
                                   description="Adiciona uma mensagem que ao ser reagida, adiciona um cargo a pessoa"
-                                              "\n \n**Como usar: $cargo <@Cargo> <Reação> <Mensagem>**")
+                                              "\n \n**Como usar: $cargo <@Cargo> <Reação> <Mensagem> (opcional)**")
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
@@ -760,10 +930,11 @@ async def cargo_handler(ctx, error):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
-        if error.param.name == 'cargo':
+
+        elif error.param.name == 'cargo':
             embed = discord.Embed(title="Comando $cargo:", colour=discord.Colour(0x370c5e),
                                   description="Adiciona uma mensagem que ao ser reagida, adiciona um cargo a pessoa"
-                                              "\n \n**Como usar: @cargo <#Cargo> <Reação> <Mensagem>**")
+                                              "\n \n**Como usar: $cargo <@Cargo> <Reação> <Mensagem> (opcional)**")
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
@@ -788,6 +959,7 @@ async def cargo_handler(ctx, error):
 async def join_logs(ctx, channel: discord.TextChannel , *, arg: str):
     guild_id = str(ctx.guild.id)
     channel_id = str(channel.id)
+    await ctx.message.delete()
     embed = discord.Embed(title="Canal de logs de entrada definido: " + str(channel), colour=discord.Colour(0x370c5e),
                           description=f"{arg}")
     embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
@@ -872,6 +1044,7 @@ async def joinlogs_handler(ctx, error):
 async def leave_logs(ctx, channel: discord.TextChannel, *, arg: str):
     guild_id = str(ctx.guild.id)
     channel_id = str(channel.id)
+    await ctx.message.delete()
     embed = discord.Embed(title="Canal de logs de saída definido: " + str(channel), colour=discord.Colour(0x370c5e),
                           description=f"{arg}")
     embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
@@ -956,6 +1129,7 @@ async def leave_handler(ctx, error):
 async def reaction_logsin(ctx, channel: discord.TextChannel, *, arg: str = 'Acabou de ganhar o cargo de: '):
     guild_id = str(ctx.guild.id)
     channel_id = str(channel.id)
+    await ctx.message.delete()
     embed = discord.Embed(title="Canal de logs do sistema de reação automático"
                                 " definido: " + str(channel), colour=discord.Colour(0x370c5e))
     embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
@@ -1018,6 +1192,7 @@ async def reaction_logsin_handler(ctx, error):
 @client.command(name='reactionlogsout', aliases=['defreactionlogsout', 'drlogsout'])
 @has_permissions(administrator=True)
 async def reaction_logsout(ctx, channel: discord.TextChannel, *, arg: str = 'Acabou de perder o cargo de: '):
+    await ctx.message.delete()
     guild_id = str(ctx.guild.id)
     channel_id = str(channel.id)
     embed = discord.Embed(title="Canal de logs do sistema de reação automático"
@@ -1083,6 +1258,7 @@ async def reaction_logsout_handler(ctx, error):
 @has_permissions(administrator=True)
 async def cargo_inicial(ctx, role: discord.Role):
     guild_id = str(ctx.guild.id)
+    await ctx.message.delete()
     embed = discord.Embed(title="Cargo inicial definido: " + str(role), colour=discord.Colour(0x370c5e))
     embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
     await ctx.send(embed=embed, delete_after=10)
@@ -1144,6 +1320,7 @@ async def cargo_inicial_handler(ctx, error):
 @client.command(name='prefixo', aliases=['newprefix', 'novoprefixo'])
 @has_permissions(administrator=True)
 async def novo_prefixo(ctx, prefix: str):
+    await ctx.message.delete()
     guild_id = str(ctx.guild.id)
     embed = discord.Embed(title="Novo prefixo definido: " + prefix, colour=discord.Colour(0x370c5e))
     embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
@@ -1206,6 +1383,7 @@ async def novo_prefixo_handler(ctx, error):
 @client.command(name='config', aliases=['configuration', 'definições'])
 @has_permissions(administrator=True)
 async def configuration(ctx):
+    await ctx.message.delete()
     if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
         avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
     else:
@@ -1249,9 +1427,9 @@ async def configuration(ctx):
     embed = discord.Embed(title="⚙ Configurações do servidor:", colour=discord.Colour(0x370c5e),
                           description="Abaixo estarão listadas todas as configurações do bot!\n\n")
     embed.set_thumbnail(url=ctx.message.guild.icon_url)
-    embed.set_author(name=ctx.message.author, icon_url=avi)
+    embed.set_author(name=ctx.message.author.name, icon_url=avi)
     embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
-    embed.add_field(name="💬**Prefixo do bot neste servidor**", value=f"O profixo atual do bot é: " + status6)
+    embed.add_field(name="💬**Prefixo do bot neste servidor**", value=f"O prefixo atual do bot é: " + status6)
     embed.add_field(name="🚪**Join Logs neste servidor:**", value=f"O Id do Canal definido para Join Logs é: " + status5)
     embed.add_field(name="🚪**Leave Logs neste servidor:**", value=f"O Id do Canal definido para Leave Logs é: " + status4)
     embed.add_field(name="🔗**Auto Role neste servidor:**", value=status)
@@ -1282,6 +1460,180 @@ async def configuration_handler(ctx, error):
 
         msg = await ctx.send(embed=embed)
         await msg.add_reaction("❓")
+
+
+@commands.guild_only()
+@client.command(name='digitlogs', aliases=['defdigitlogs', 'ddlogs'])
+@has_permissions(administrator=True)
+async def digilog(ctx, channel: discord.TextChannel):
+    await ctx.message.delete()
+    guild_id = str(ctx.guild.id)
+    channel_id = str(channel.id)
+    embed = discord.Embed(title="Canal de logs do sistema"
+                                " definido: " + str(channel), colour=discord.Colour(0x370c5e))
+    embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+    await ctx.send(embed=embed, delete_after=10)
+    digit_log[guild_id] = channel_id
+
+    with open('digitlogs.json', 'w') as file:
+        json.dump(digit_log, file)
+
+
+@digilog.error
+async def digilog_handler(ctx, error):
+    if isinstance(error, MissingPermissions):
+        embed = discord.Embed(
+            title="Comando $digitlogs: define um canal que irá receber as mensagens dizendo todos"
+                  " os comandos de administracao usado"
+                  "\n \n**Como usar: $digitlogs <#Canal>**", colour=discord.Colour(0x370c5e))
+
+        embed.set_author(name="Betina#9182",
+                         icon_url=betina_icon)
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url=betina_icon)
+        embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                        "ter a permissão de* ``"
+                                                        "Administrador`` *para utilizar este comando!*",
+                        inline=False)
+        embed.add_field(name="📖**Exemplos:**", value="$digitlogs #jogadores"
+                                                      "\n$digitlogs #iniciado"
+                                                      "", inline=False)
+        embed.add_field(name="🔀**Outros Comandos**", value="``$defdigitlogs, $ddlogs.``", inline=False)
+
+        msg = await ctx.send(embed=embed)
+        await msg.add_reaction("❓")
+
+    elif isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'channel':
+            embed = discord.Embed(
+                title="Comando $digitlogs: define um canal que irá receber as mensagens dizendo todos"
+                      " os comandos de administracao usado"
+                      "\n \n**Como usar: $digitlogs <#Canal>**", colour=discord.Colour(0x370c5e))
+
+            embed.set_author(name="Betina#9182",
+                             icon_url=betina_icon)
+            embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url=betina_icon)
+            embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                            "ter a permissão de* ``"
+                                                            "Administrador`` *para utilizar este comando!*",
+                            inline=False)
+            embed.add_field(name="📖**Exemplos:**", value="$digitlogs #jogadores"
+                                                          "\n$digitlogs #iniciado"
+                                                          "", inline=False)
+            embed.add_field(name="🔀**Outros Comandos**", value="``$defdigitlogs, $ddlogs.``", inline=False)
+
+            msg = await ctx.send(embed=embed)
+            await msg.add_reaction("❓")
+
+
+@commands.guild_only()
+@client.command(name='invites', aliases=['userinv', 'uinv'])
+@has_permissions(administrator=True)
+async def invites(ctx, user: discord.Member = None):
+    await ctx.message.delete()
+    total_uses = 0
+    embed = discord.Embed(title='🎟 __Convites criados pelo {}__'.format(user.name), colour=discord.Colour(0x370c5e))
+    invites = await ctx.message.guild.invites()
+    for invite in invites:
+        if invite.inviter == user:
+            total_uses += invite.uses
+            embed.add_field(name='🎟 Convite', value=invite.id)
+            embed.add_field(name='📋 Usos', value=invite.uses)
+            embed.add_field(name='💬 Canal', value=invite.channel)
+            embed.set_footer(text=f'Requisitado por: {ctx.message.author.display_name}',
+                                 icon_url=f'{ctx.message.author.avatar_url}')
+    embed.add_field(name='🖊__Usos Totais__', value=total_uses)
+    await ctx.send(embed=embed)
+
+
+@invites.error
+async def invites_handler(ctx, error):
+    if isinstance(error, MissingPermissions):
+        embed = discord.Embed(
+            title="Comando $invites: diz todos os invites criados por um usuário e suas informações."
+                  "\n \n**Como usar: $invites <usuário>**", colour=discord.Colour(0x370c5e))
+
+        embed.set_author(name="Betina#9182",
+                         icon_url=betina_icon)
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url=betina_icon)
+        embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                        "ter a permissão de* ``"
+                                                        "Administrador`` *para utilizar este comando!*",
+                        inline=False)
+        embed.add_field(name="📖**Exemplos:**", value="$invites @fulano"
+                                                      "\n$invites @sicrano"
+                                                      "", inline=False)
+        embed.add_field(name="🔀**Outros Comandos**", value="``$userinv, $uinv.``", inline=False)
+
+        msg = await ctx.send(embed=embed)
+        await msg.add_reaction("❓")
+
+    elif isinstance(error, commands.MissingRequiredArgument):
+        if error.param.name == 'user':
+            embed = discord.Embed(
+                title="Comando $invites: diz todos os invites criados por um usuário e suas informações."
+                      "\n \n**Como usar: $invites <usuário>**", colour=discord.Colour(0x370c5e))
+
+            embed.set_author(name="Betina#9182",
+                             icon_url=betina_icon)
+            embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url=betina_icon)
+            embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                            "ter a permissão de* ``"
+                                                            "Administrador`` *para utilizar este comando!*",
+                            inline=False)
+            embed.add_field(name="📖**Exemplos:**", value="$invites @fulano"
+                                                          "\n$invites @sicrano"
+                                                          "", inline=False)
+            embed.add_field(name="🔀**Outros Comandos**", value="``$userinv, $uinv.``", inline=False)
+
+            msg = await ctx.send(embed=embed)
+            await msg.add_reaction("❓")
+
+
+@commands.guild_only()
+@client.command(name='geraconvite', aliases=['invitegenerator', 'gerador'])
+@has_permissions(manage_channels=True)
+async def invite(ctx):
+    if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+        avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+    else:
+        avi = ctx.message.author.avatar_url_as(static_format='png')
+
+    channel = ctx.channel
+    invitelinknew = await ctx.channel.create_invite(unique=True, reason='Automatizar a função do usuário!')
+    embedMsg = discord.Embed(color=0x370c5e)
+    embedMsg.add_field(name="Convite criado:", value=invitelinknew)
+    embedMsg.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
+    embedMsg.set_footer(text="Convite do servidor", icon_url=ctx.message.guild.icon_url)
+    await ctx.send(embed=embedMsg)
+
+
+@invites.error
+async def invites_handler(ctx, error):
+    if isinstance(error, MissingPermissions):
+        embed = discord.Embed(
+            title="Comando $geraconvite: Gera um convite para o seu servidor"
+                  "\n \n**Como usar: $geraconvite**", colour=discord.Colour(0x370c5e))
+
+        embed.set_author(name="Betina#9182",
+                         icon_url=betina_icon)
+        embed.set_footer(text="Betina Brazilian Bot",
+                         icon_url=betina_icon)
+        embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                        "ter a permissão de* ``"
+                                                        "Gerenciar canais`` *para utilizar este comando!*",
+                        inline=False)
+        embed.add_field(name="📖**Exemplos:**", value="$gerador"
+                                                      "\n$invitegenerator"
+                                                      "", inline=False)
+        embed.add_field(name="🔀**Outros Comandos**", value="``$gerador, $invitegenerator.``", inline=False)
+
+        msg = await ctx.send(embed=embed)
+        await msg.add_reaction("❓")
+
 
 
 if __name__ == '__main__':
