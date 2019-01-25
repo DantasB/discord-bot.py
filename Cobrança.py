@@ -24,6 +24,7 @@ import time
 import discord
 import datetime
 import aiohttp
+import json
 
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
@@ -36,6 +37,14 @@ from discord.ext.commands import has_permissions, MissingPermissions
 devedores = {}
 devidos = {}
 
+betina_icon = ''
+
+with open('limitador.json', 'r') as file:
+    try:
+        limitador_log = json.load(file)
+    except ValueError:
+        limitador_log = {}
+
 
 class Cobrança:
     def __init__(self, client):
@@ -45,23 +54,54 @@ class Cobrança:
     @commands.command(name='conversor', aliases=['converter', 'converte'])
     async def conversor(self, ctx, moeda1, moeda2, quantidade=None):
         """Vê o valor da moeda 1 em moeda 2"""
-        try:
-            channel = ctx.channel
-            await channel.trigger_typing()
-            c = CurrencyRates()
-            msg = c.get_rate(f'''{moeda1.upper()}''', f'''{moeda2.upper()}''')
-            if quantidade is None:
-                await ctx.send(
-                    'Esse é o valor da cotacao atual do ``{}`` em ``{}``: **{}**'.format(moeda1.upper(), moeda2.upper(),
-                                                                                         msg))
+        guild_id = str(ctx.guild.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                try:
+                    channel = ctx.channel
+                    await channel.trigger_typing()
+                    c = CurrencyRates()
+                    msg = c.get_rate(f'''{moeda1.upper()}''', f'''{moeda2.upper()}''')
+                    if quantidade is None:
+                        await ctx.send(
+                            'Esse é o valor da cotacao atual do ``{}`` em ``{}``: **{}**'.format(moeda1.upper(),
+                                                                                                 moeda2.upper(),
+                                                                                                 msg))
+                    else:
+                        msg = msg * quantidade
+                        await ctx.send(
+                            'Esse é o valor de {} ``{}`` em ``{}``: **{}**'.format(quantidade, moeda1.upper(),
+                                                                                   moeda2.upper(),
+                                                                                   msg))
+                except:
+                    msg = await ctx.send(
+                        'Tente utilizar o codigo de uma moeda existente. **Por exemplo: $conversor usd brl**')
+                    await msg.add_reaction('❤')
             else:
-                msg = msg * quantidade
-                await ctx.send(
-                    'Esse é o valor de {} ``{}`` em ``{}``: **{}**'.format(quantidade, moeda1.upper(), moeda2.upper(),
-                                                                           msg))
-        except:
-            msg = await ctx.send('Tente utilizar o codigo de uma moeda existente. **Por exemplo: $conversor usd brl**')
-            await msg.add_reaction('❤')
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            try:
+                channel = ctx.channel
+                await channel.trigger_typing()
+                c = CurrencyRates()
+                msg = c.get_rate(f'''{moeda1.upper()}''', f'''{moeda2.upper()}''')
+                if quantidade is None:
+                    await ctx.send(
+                        'Esse é o valor da cotacao atual do ``{}`` em ``{}``: **{}**'.format(moeda1.upper(),
+                                                                                             moeda2.upper(),
+                                                                                             msg))
+                else:
+                    msg = msg * quantidade
+                    await ctx.send(
+                        'Esse é o valor de {} ``{}`` em ``{}``: **{}**'.format(quantidade, moeda1.upper(),
+                                                                               moeda2.upper(),
+                                                                               msg))
+            except:
+                msg = await ctx.send(
+                    'Tente utilizar o codigo de uma moeda existente. **Por exemplo: $conversor usd brl**')
+                await msg.add_reaction('❤')
 
     @conversor.error
     async def conversor_handler(self, ctx, error):
@@ -72,9 +112,9 @@ class Cobrança:
                                                   " usar: $converte <moeda1> <moeda2>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$converte usd brl\n$converte eur pln", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$converter, $converte.``", inline=False)
@@ -88,9 +128,9 @@ class Cobrança:
                                                   " usar: $converte <moeda1> <moeda2>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$converte usd brl\n$converte eur pln", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$converter, $converte.``", inline=False)
@@ -102,14 +142,31 @@ class Cobrança:
     @commands.guild_only()
     @commands.command(name='deve', aliases=['rsp', 'owe'])
     async def deve(self, ctx, member: discord.Member):
-        if not (member in devedores):
-            msg = await ctx.send('**{} não deve nada a ninguem!**'.format(member.mention))
-            await msg.add_reaction('😯')
+        guild_id = str(ctx.guild.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                if not (member in devedores):
+                    msg = await ctx.send('**{} não deve nada a ninguem!**'.format(member.mention))
+                    await msg.add_reaction('😯')
+                else:
+                    await ctx.send('**{} deve a tais pessoas: **'.format(member.mention))
+                    for membros in devedores[member]:
+                        if membros.id != member.id:
+                            await ctx.send('**Deve R$ {} ao {}**'.format(devidos[membros], membros.mention))
+
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
         else:
-            await ctx.send('**{} deve a tais pessoas: **'.format(member.mention))
-            for membros in devedores[member]:
-                if membros.id != member.id:
-                    await ctx.send('**Deve R$ {} ao {}**'.format(devidos[membros], membros.mention))
+            if not (member in devedores):
+                msg = await ctx.send('**{} não deve nada a ninguem!**'.format(member.mention))
+                await msg.add_reaction('😯')
+            else:
+                await ctx.send('**{} deve a tais pessoas: **'.format(member.mention))
+                for membros in devedores[member]:
+                    if membros.id != member.id:
+                        await ctx.send('**Deve R$ {} ao {}**'.format(devidos[membros], membros.mention))
 
     @deve.error
     async def deve_handler(self, ctx, error):
@@ -120,9 +177,9 @@ class Cobrança:
                                                   ": $deve <usuário>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$deve @sicrano\n$deve @fulano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$rsp, $owe.``", inline=False)
@@ -134,27 +191,57 @@ class Cobrança:
     @commands.command(name='devemenos', aliases=['dntp', 'naomedeve'])
     async def devemenos(self, ctx, member: discord.Member, a: float):
         """Diminui o credito"""
-        if (member in devedores) and (ctx.author in devidos):
-            devidos[ctx.author] -= a
-            if devidos[ctx.author] < 0:
-                if (ctx.author in devedores) and (member in devidos):
-                    devidos[member] += (- devidos[ctx.author])
-                    devidos[ctx.author] = 0
+        guild_id = str(ctx.guild.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                if (member in devedores) and (ctx.author in devidos):
+                    devidos[ctx.author] -= a
+                    if devidos[ctx.author] < 0:
+                        if (ctx.author in devedores) and (member in devidos):
+                            devidos[member] += (- devidos[ctx.author])
+                            devidos[ctx.author] = 0
+                        else:
+                            devidos[member] = (- devidos[ctx.author])
+                            devidos[ctx.author] = 0
+                            devedores[ctx.author] = devidos
+                        await ctx.send(
+                            '**Agora {} deve R$ {} ao {}**'.format(ctx.author.mention, devidos[member], member.mention))
+                    elif devidos[ctx.author] == 0:
+                        await ctx.send('**{} não deve nada a {}**'.format(ctx.author.mention, member.mention))
+                    else:
+                        await ctx.send(
+                            '**{} deve R$ {} ao {}**'.format(member.mention, devidos[ctx.author], ctx.author.mention))
                 else:
-                    devidos[member] = (- devidos[ctx.author])
-                    devidos[ctx.author] = 0
                     devedores[ctx.author] = devidos
-                await ctx.send(
-                    '**Agora {} deve R$ {} ao {}**'.format(ctx.author.mention, devidos[member], member.mention))
-            elif devidos[ctx.author] == 0:
-                await ctx.send('**{} não deve nada a {}**'.format(ctx.author.mention, member.mention))
+                    devidos[member] = a
+                    await ctx.send(
+                        '**{} deve R$ {} ao {}**'.format(ctx.author.mention, devidos[member], member.mention))
             else:
-                await ctx.send(
-                    '**{} deve R$ {} ao {}**'.format(member.mention, devidos[ctx.author], ctx.author.mention))
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
         else:
-            devedores[ctx.author] = devidos
-            devidos[member] = a
-            await ctx.send('**{} deve R$ {} ao {}**'.format(ctx.author.mention, devidos[member], member.mention))
+            if (member in devedores) and (ctx.author in devidos):
+                devidos[ctx.author] -= a
+                if devidos[ctx.author] < 0:
+                    if (ctx.author in devedores) and (member in devidos):
+                        devidos[member] += (- devidos[ctx.author])
+                        devidos[ctx.author] = 0
+                    else:
+                        devidos[member] = (- devidos[ctx.author])
+                        devidos[ctx.author] = 0
+                        devedores[ctx.author] = devidos
+                    await ctx.send(
+                        '**Agora {} deve R$ {} ao {}**'.format(ctx.author.mention, devidos[member], member.mention))
+                elif devidos[ctx.author] == 0:
+                    await ctx.send('**{} não deve nada a {}**'.format(ctx.author.mention, member.mention))
+                else:
+                    await ctx.send(
+                        '**{} deve R$ {} ao {}**'.format(member.mention, devidos[ctx.author], ctx.author.mention))
+            else:
+                devedores[ctx.author] = devidos
+                devidos[member] = a
+                await ctx.send('**{} deve R$ {} ao {}**'.format(ctx.author.mention, devidos[member], member.mention))
 
     @devemenos.error
     async def devemenos_handler(self, ctx, error):
@@ -165,9 +252,9 @@ class Cobrança:
                                                   " usar: $devemenos <usuário> <valor>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$devemenos @sicrano 500\n$devemenos @fulano 10",
                                 inline=False)
@@ -182,9 +269,9 @@ class Cobrança:
                                                   " usar: $devemenos <usuário> <valor>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$devemenos @sicrano 500\n$devemenos @fulano 10",
                                 inline=False)
@@ -197,12 +284,26 @@ class Cobrança:
     @commands.command(name='devemais', aliases=['ntp', 'medeve', 'pay'])
     async def devemais(self, ctx, member: discord.Member, a: float):
         """Adiciona o credito"""
-        if (member in devedores) and (ctx.author in devidos):
-            devidos[ctx.author] += a
+        guild_id = str(ctx.guild.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                if (member in devedores) and (ctx.author in devidos):
+                    devidos[ctx.author] += a
+                else:
+                    devidos[ctx.author] = a
+                    devedores[member] = devidos
+                await ctx.send('**{} deve R$ {} ao {}**'.format(member.mention, devidos[ctx.author], ctx.author.mention))
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
         else:
-            devidos[ctx.author] = a
-            devedores[member] = devidos
-        await ctx.send('**{} deve R$ {} ao {}**'.format(member.mention, devidos[ctx.author], ctx.author.mention))
+            if (member in devedores) and (ctx.author in devidos):
+                devidos[ctx.author] += a
+            else:
+                devidos[ctx.author] = a
+                devedores[member] = devidos
+            await ctx.send('**{} deve R$ {} ao {}**'.format(member.mention, devidos[ctx.author], ctx.author.mention))
 
     @devemais.error
     async def devemais_handler(self, ctx, error):
@@ -213,9 +314,9 @@ class Cobrança:
                                                   " usar: $devemais <usuário> <valor>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$devemais @sicrano 500\n$devemais @fulano 10",
                                 inline=False)
@@ -230,9 +331,9 @@ class Cobrança:
                                                   " usar: $devemais <usuário> <valor>**")
 
                 embed.set_author(name="Betina#9182",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url="https://images.discordapp.net/avatars/527565353199337474/40042c09bb354a396928cb91e0288384.png?size=256")
+                                 icon_url=betina_icon)
 
                 embed.add_field(name="📖**Exemplos:**", value="$devemais @sicrano 500\n$devemais @fulano 10",
                                 inline=False)
