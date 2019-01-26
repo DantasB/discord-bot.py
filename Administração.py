@@ -42,6 +42,7 @@ with open('limitador.json', 'r') as file:
         limitador_log = {}
         
         
+
 class Administração:
     def __init__(self, client):
         self.client = client
@@ -108,29 +109,13 @@ class Administração:
         else:
             avi = ctx.message.author.avatar_url_as(static_format='png')
         await ctx.channel.purge(limit=amount + 1)
-        embed = discord.Embed(title=f"*{amount + 1} mensagens foram apagadas, {ctx.message.author.name}*",
+        embed = discord.Embed(title=f"{amount + 1} mensagens foram apagadas, {ctx.message.author.name}",
                               colour=discord.Colour(0x370c5e))
 
         embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
         embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
 
         await ctx.send(embed=embed, delete_after=10)
-
-        guild_id = str(ctx.guild.id)
-
-        if guild_id not in digit_log:
-
-            return
-
-        guild = ctx.guild.get_channel(int(digit_log[guild_id]))
-
-        embed = discord.Embed(title=f"*{ctx.message.author.name} apagou {amount+1} mensagens no canal #{texto.channel}",
-                              colour=discord.Colour(0x370c5e))
-
-        embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-
-        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
-        await guild.send(embed=embed)
 
     @apaga.error
     async def apaga_handler(self, ctx, error):
