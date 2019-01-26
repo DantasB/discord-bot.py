@@ -127,6 +127,77 @@ async def on_ready():
 
 
 @client.event
+async def on_member_update(before, after):
+    if str(before.guild.id) in digit_log:
+        if before.avatar_url_as(static_format='png')[54:].startswith('a_'):
+            avi = before.avatar_url.rsplit("?", 1)[0]
+        else:
+            avi = before.avatar_url_as(static_format='png')
+        if before.nick == after.nick:
+            return
+        guild = before.guild.get_channel(int(digit_log[str(before.guild.id)]))
+        embed = discord.Embed(title="Apelido alterado:", colour=discord.Colour(0x370c5e))
+        embed.set_thumbnail(url=avi)
+        embed.add_field(name='Usuário:', value=str(before) + ' (' + str(before.name) + ')',
+                        inline=False)
+        if before.nick == None:
+            nick1 = 'Nenhum'
+        else:
+            nick1 = str(before.nick)
+        if after.nick == None:
+            nick = 'Nenhum'
+        else:
+            nick = str(after.nick)
+        embed.add_field(name='Apelido Anterior:', value=f'{nick1}', inline=False)
+        embed.add_field(name='Apelido Posterior:', value=f'{nick}', inline=False)
+        embed.add_field(name='Horário:', value=str(before.created_at.strftime("%H:%M:%S - %d/%m/%y")), inline=False)
+        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+        await guild.send(embed=embed)
+
+
+@client.event
+async def on_message_edit(before, after):
+    if str(before.guild.id) in digit_log:
+        if before.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+            avi = before.author.avatar_url.rsplit("?", 1)[0]
+        else:
+            avi = before.author.avatar_url_as(static_format='png')
+        if before.content == after.content:
+            return
+        guild = before.author.guild.get_channel(int(digit_log[str(before.guild.id)]))
+        embed = discord.Embed(title="Mensagem alterada:", colour=discord.Colour(0x370c5e))
+        embed.set_thumbnail(url=avi)
+        embed.add_field(name='Usuário:', value=str(before.author) + ' (' + str(before.author.name) + ')',
+                        inline=False)
+        embed.add_field(name='Mensagem Anterior:', value=str(before.content), inline=False)
+        embed.add_field(name='Mensagem Posterior:', value=str(after.content), inline=False)
+        embed.add_field(name='Canal', value='#' + str(after.channel), inline=True)
+        embed.add_field(name='Horário:', value=str(before.created_at.strftime("%H:%M:%S - %d/%m/%y")), inline=False)
+        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+        await guild.send(embed=embed)
+
+
+@client.event
+async def on_message_delete(message):
+    if str(message.guild.id) in digit_log:
+        if message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+            avi = message.author.avatar_url.rsplit("?", 1)[0]
+        else:
+            avi = message.author.avatar_url_as(static_format='png')
+        if message.author.bot:
+            return
+        guild = message.author.guild.get_channel(int(digit_log[str(message.guild.id)]))
+        embed = discord.Embed(title="Mensagem apagada:", colour=discord.Colour(0x370c5e))
+        embed.set_thumbnail(url=avi)
+        embed.add_field(name='Usuário:', value=str(message.author) + ' (' + str(message.author.name) + ')', inline=False)
+        embed.add_field(name='Horário:', value=str(message.created_at.strftime("%H:%M:%S - %d/%m/%y")), inline=True)
+        embed.add_field(name='Mensagem:', value=str(message.content), inline=False)
+        embed.add_field(name='Canal', value='#' + str(message.channel), inline=True)
+        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+        await guild.send(embed=embed)
+
+
+@client.event
 async def on_member_join(member):
     if str(member.guild.id) not in join_list:
         return
@@ -191,8 +262,6 @@ async def on_message(message):
         fquote = listas.replace('[nome]', user.name)
         await message.channel.send(fquote)
 
-
-
     if len(message.mentions) > 0:
 
         if not message.guild:
@@ -213,7 +282,8 @@ async def on_message(message):
                     if guild_id in afklist:
                         if str(member.id) in afklist[guild_id]:
                             embed = discord.Embed(colour=discord.Colour(0x370c5e),
-                                              description=f"{member.name} está **AFK**: *{afklist[str(guild_id)][str(member.id)]}*")
+                                              description=f"{member.name} está"
+                                              f" **AFK**: *{afklist[str(guild_id)][str(member.id)]}*")
                             await message.channel.send(embed=embed, delete_after=10)
 
     else:
@@ -314,271 +384,191 @@ async def help(ctx):
         return user == author and str(reaction.emoji) in reaction_list
 
     try:
-        reaction, user = await client.wait_for('reaction_add', check=check)
+        while True:
+            reaction, user = await client.wait_for('reaction_add', check=check)
+            if str(reaction.emoji) == "💰":
+                embed = discord.Embed(title="Cobrança", colour=discord.Colour(0x370c5e),
+                                      description="*Bem vindo a categoria Cobrança:\nAqui você encontrará"
+                                                  " comandos que ajudará você a ter noção de finanças.*")
+                embed.set_thumbnail(
+                    url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+                embed.add_field(name="**$devemais <usuário> <quantidade>**", value="``Você aumentará o quanto um"
+                                                                                   " usuário te deve!``", inline=False)
+                embed.add_field(name="**$devemenos <usuário> <quantidade>**", value="``Você "
+                                                                                    "diminuirá o quanto um usuário te deve!``",
+                                inline=False)
+                embed.add_field(name="**$deve <usuário>**", value="``Mostrarei uma lista de todas as pessoas que um usuário"
+                                                        " deve!``", inline=False)
+                embed.add_field(name="**$conversor <moeda1> <moeda2>"
+                                     "**", value="``Direi a cotação da moeda 1 em relação a moeda 2``",
+                                inline=False)
+                msg = await message.edit(embed=embed)
+
+            elif str(reaction.emoji) == "😂":
+                embed = discord.Embed(title="Diversão", colour=discord.Colour(0x370c5e),
+                                      description="*Bem vindo a categoria diversão:\n"
+                                                  "Aqui você encontrará comandos que trará alegria a todos no servidor.*")
+                embed.set_thumbnail(
+                    url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+
+                embed.add_field(name="**$moeda**", value="``Jogarei uma moeda. Poderá cair cara ou coroa!``",
+                                inline=False)
+                embed.add_field(name="**$rola <número>**", value="``Rolarei um dado de até 20 lados!``", inline=False)
+                embed.add_field(name="**$ppt <Pedra, Papel ou Tesoura>**", value="``Começarei um jogo de pedra, papel"
+                                                                                 " ou tesoura contra você!``",
+                                inline=False)
+                embed.add_field(name="**$bolsonaro**", value="``O Bolsonaro aparece!``",
+                                inline=False)
+                embed.add_field(name="**$faustao**", value="``O Faustão aparece!``", inline=False)
+                embed.add_field(name="**$miranha**", value="``O Miranha aparece!``", inline=False)
+                embed.add_field(name="**$hungergames <número>**", value="``Iniciarei um jogo de Hunger Games!``",
+                                inline=False)
+                msg = await message.edit(embed=embed)
+
+            elif str(reaction.emoji) == "🎵":
+                embed = discord.Embed(title="Música", colour=discord.Colour(0x370c5e),
+                                      description="*Bem vindo a categoria Música:\nAqui você encontrará"
+                                                  " comandos que ajudará você a ouvir música enquanto faz suas atividades"
+                                                  " no discord.*")
+                embed.set_thumbnail(
+                    url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+
+                embed.add_field(name="**$play <música>**",
+                                value="``Busco pela música ou toco a música de link específico!``",
+                                inline=False)
+                embed.add_field(name="**$pause**", value="``Pauso a música que está tocando atualmente!``",
+                                inline=False)
+                embed.add_field(name="**$stop**", value="``Paro de tocar a música e saio do canal de voz!``",
+                                inline=False)
+                embed.add_field(name="**$skip **", value="``Pularei a música que está tocando atualmente!``",
+                                inline=False)
+                embed.add_field(name="**$volume <quantidade>**",
+                                value="``Mudarei o volume que está tocando a música!``",
+                                inline=False)
+                embed.add_field(name="**$fila **", value="``Mostrarei todas as músicas que estão na fila!``",
+                                inline=False)
+                embed.add_field(name="**$tocando**", value="``Direi a música que está tocando a música atualmente``",
+                                inline=False)
+                embed.add_field(name="**$sai**", value="``Sairei do canal de voz!``", inline=False)
+                msg = await message.edit(embed=embed)
+
+            elif str(reaction.emoji) == "🗣":
+                embed = discord.Embed(title="Interação", colour=discord.Colour(0x370c5e),
+                                      description="*Bem vindo a categoria Interação:\nAqui você encontrará"
+                                                  " comandos que ajudará você a interagir com outros membros do seu servidor*")
+                embed.set_thumbnail(
+                    url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+
+                embed.add_field(name="**$treta **", value="``Direi coisas assustadoras sobre as pessoas do servidor!``",
+                                inline=False)
+                embed.add_field(name="**$fala <#canal> (opcional) <mensagem> **", value="``Olha, eu sei falar sua mensagem!``",
+                                inline=False)
+                embed.add_field(name="**$abraça <usuário>**", value="``Abraça o usuário!``",
+                                inline=False)
+                embed.add_field(name="**$beija <usuário>**", value="``Beija o usuário!``", inline=False)
+                embed.add_field(name="**$bate <usuário> **", value="``Bate no usuário!``", inline=False)
+                embed.add_field(name="**$dança <usuário> **", value="``Dança com o usuário!``", inline=False)
+                embed.add_field(name="**$ataca <usuário> **", value="``Dá um ataque no usuário!``", inline=False)
+                embed.add_field(name="**$emputece <usuário> **", value="``Deixa o usuário puto!``", inline=False)
+                embed.add_field(name="**$voltapracaverna <usuário> **", value="``Manda o usuário voltar "
+                                                                              "pro seu lugar de origem!``", inline=False)
+                embed.add_field(name="**$ship <usuário1> <usuário2> (opcional)**", value="``Forma um novo casal!``", inline=False)
+                embed.add_field(name="**$tnc **", value="``Manda alguem do servidor tomar no você sabe onde!``",
+                                inline=False)
+                embed.add_field(name="**$highfive <usuário>**", value="``Bate na mão do usuário!``",
+                                inline=False)
+                embed.add_field(name="**$roletarussa**", value="``Brincarei de roleta russa com você "
+                                                               "e mais 4 pessoas!``", inline=False)
+                embed.add_field(name="**$mencionar <Id da mensagem> <texto> (opcional)**", value="``Transformarei a frase"
+                                                                                      " do usuário em uma citação"
+                                                                                      "!``", inline=False)
+
+
+                msg = await message.edit(embed=embed)
+
+            elif str(reaction.emoji) == "👮":
+                embed = discord.Embed(title="Administração", colour=discord.Colour(0x370c5e),
+                                      description="*Bem vindo a categoria Administração:\nAqui você encontrará"
+                                                  " comandos que ajudará você a controlar seu servidor.\n"
+                                                  "OBS: Você precisará de algumas permissões para utilizar esses comandos!*")
+                embed.set_thumbnail(
+                    url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+                embed.add_field(name="**$apaga <quantidade>**", value="``Eu apagarei uma"
+                                                                      " quantidade de mensagens!``", inline=False)
+                embed.add_field(name="**$ping**", value="``Retornarei o ping do usuário``", inline=False)
+                embed.add_field(name="**$pong**", value="``oiráusu od gnip o ieranroter``", inline=False)
+                embed.add_field(name="**$userinfo <usuário>**", value="``Retornarei informações sobre o usuário!``", inline=False)
+                embed.add_field(name="**$serverinfo**", value="``Retornarei informações sobre o servidor!``", inline=False)
+                embed.add_field(name="**$afk <motivo> (opcional)**", value="``Definirei o usuário como afk!``", inline=False)
+                embed.add_field(name="**$warn <usuário> <motivo> (opcional)**", value="``Darei um Warn no usuário!``", inline=False)
+                embed.add_field(name="**$mute <usuário>**", value="``Deixarei o usuário no estado de mute!``", inline=False)
+                embed.add_field(name="**$unmute <usuário>**", value="``Tirarei o usuário do estado de mute!``", inline=False)
+                embed.add_field(name="**$ban <motivo> (opcional)**", value="``Banirei o usuário do servidor!``", inline=False)
+                embed.add_field(name="**$clearlastwarn <usuário>**", value="``Tirarei o ultimo warn do usuário!``", inline=False)
+                embed.add_field(name="**$geraconvite **", value="``Gerarei um convite para o seu servidor!``", inline=False)
+
+                msg = await message.edit(embed=embed)
+
+            elif str(reaction.emoji) == "⚙":
+                embed = discord.Embed(title="Configuração", colour=discord.Colour(0x370c5e),
+                                      description="*Bem vindo a categoria Configuração:\nAqui você encontrará"
+                                                  " comandos que ajudará você a configurar algumas de minhas funções.\n"
+                                                  "OBS: Você precisa da permissão de administrador!*")
+                embed.set_thumbnail(
+                    url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+                embed.add_field(name="**$config**", value="``Mostra todas as configurações do bot!``", inline=False)
+                embed.add_field(name="**$joinlogs <#canal> <mensagem>**", value="``Definirei um canal para enviar uma mensagem"
+                                                                                " toda vez que um usuário"
+                                                                                " entrar no servidor``", inline=False)
+                embed.add_field(name="**$leavelogs <#canal> <mensagem> **", value="``Definirei um canal para enviar uma mensagem"
+                                                                                " toda vez que um usuário"
+                                                                                " sair do servidor``", inline=False)
+                embed.add_field(name="**$reactionlogsin <#canal> <mensagem> (opcional)**", value="``Definirei um"
+                                                                                                 " canal para enviar"
+                                                                                                 " uma mensagem"
+                                                                                " toda vez que um usuário"
+                                                                                " reagir no sistema de auto"
+                                                                                                 "role``", inline=False)
+                embed.add_field(name="**$reactionlogsout <#canal> <mensagem> (opcional)**", value="``Definirei um canal para"
+                                                                                                  " enviar uma mensagem"
+                                                                           " toda vez que um usuário"
+                                                                           " deixar de reagir no sistema de"
+                                                                                                  " autorole``", inline=False)
+                embed.add_field(name="**$autorole <@Cargo> <Reação> <Mensagem> (opcional)**", value="``Criarei uma mensagem que"
+                                                                                         " ao reagir com a Reação"
+                                                                                     " definida adiciona o Cargo"
+                                                                                     " definido!``", inline=False)
+                embed.add_field(name="**$addtreta <treta>**", value="``Adicionarei uma treta a listra de tretas!``", inline=False)
+                embed.add_field(name="**$sugestão <mensagem>**", value="``Adicionarei uma sugestão que você "
+                                                                       "requisitar``", inline=False)
+                embed.add_field(name="**$cargoinicial <@cargo>**", value="``Adicionarei um cargo inicial a todos"
+                                                                         " aqueles que entrarem no servidor!``", inline=False)
+                embed.add_field(name="**$prefixo <caracter>**", value="``Definirei um novo prefixo ao bot!``", inline=False)
+                embed.add_field(name="**$digitlogs <#Canal>**", value="``Definirei um canal para receber os logs de "
+                                                                      "todos os comandos da administração"
+                                                                      " utilizados!``", inline=False)
+                embed.add_field(name="**$invites <usuário>**", value="``Direi todos os invites criados por"
+                                                                     " um usuário!``", inline=False)
+                embed.add_field(name="**$botchannel <#Canal>**", value="``Define um canal para poder"
+                                                                       " utilizar os meus comandos``", inline=False)
+                embed.add_field(name="**$tirabotchannel **", value="``Tira o canal definido para"
+                                                                   " poder utilizar os comandos.``", inline=False)
+                msg = await message.edit(embed=embed)
+
     except:
         return
-
-    if str(reaction.emoji) == "💰":
-        await message.delete()
-        embed = discord.Embed(title="Cobrança", colour=discord.Colour(0x370c5e),
-                              description="*Bem vindo a categoria Cobrança:\nAqui você encontrará"
-                                          " comandos que ajudará você a ter noção de finanças.*")
-        embed.set_thumbnail(
-            url=betina_icon)
-        embed.set_footer(text="Betina Brazilian Bot",
-                         icon_url=betina_icon)
-        embed.add_field(name="**$devemais <usuário> <quantidade>**", value="``Você aumentará o quanto um"
-                                                                           " usuário te deve!``", inline=False)
-        embed.add_field(name="**$devemenos <usuário> <quantidade>**", value="``Você "
-                                                                            "diminuirá o quanto um usuário te deve!``",
-                        inline=False)
-        embed.add_field(name="**$deve <usuário>**", value="``Mostrarei uma lista de todas as pessoas que um usuário"
-                                                " deve!``", inline=False)
-        embed.add_field(name="**$conversor <moeda1> <moeda2>"
-                             "**", value="``Direi a cotação da moeda 1 em relação a moeda 2``",
-                        inline=False)
-        msg = await author.send(embed=embed)
-        await msg.add_reaction("🔙")
-
-        def check(reaction, user):
-            return user == author and str(reaction.emoji) == "🔙"
-
-        try:
-            reaction, user = await client.wait_for('reaction_add', check=check)
-        except:
-            return
-        else:
-            await msg.delete()
-            await ctx.invoke(client.get_command("help"))
-
-
-    elif str(reaction.emoji) == "😂":
-        await message.delete()
-        embed = discord.Embed(title="Diversão", colour=discord.Colour(0x370c5e),
-                              description="*Bem vindo a categoria diversão:\n"
-                                          "Aqui você encontrará comandos que trará alegria a todos no servidor.*")
-        embed.set_thumbnail(
-            url=betina_icon)
-        embed.set_footer(text="Betina Brazilian Bot",
-                         icon_url=betina_icon)
-
-        embed.add_field(name="**$moeda**", value="``Jogarei uma moeda. Poderá cair cara ou coroa!``",
-                        inline=False)
-        embed.add_field(name="**$rola <número>**", value="``Rolarei um dado de até 20 lados!``", inline=False)
-        embed.add_field(name="**$ppt <Pedra, Papel ou Tesoura>**", value="``Começarei um jogo de pedra, papel"
-                                                                         " ou tesoura contra você!``",
-                        inline=False)
-        embed.add_field(name="**$bolsonaro**", value="``O Bolsonaro aparece!``",
-                        inline=False)
-        embed.add_field(name="**$faustao**", value="``O Faustão aparece!``", inline=False)
-        embed.add_field(name="**$miranha**", value="``O Miranha aparece!``", inline=False)
-        embed.add_field(name="**$hungergames <número>**", value="``Iniciarei um jogo de Hunger Games!``",
-                        inline=False)
-        msg = await author.send(embed=embed)
-        await msg.add_reaction("🔙")
-
-        def check(reaction, user):
-            return user == author and str(reaction.emoji) == "🔙"
-
-        try:
-            reaction, user = await client.wait_for('reaction_add', check=check)
-        except:
-            return
-        else:
-            await msg.delete()
-            await ctx.invoke(client.get_command("help"))
-
-
-    elif str(reaction.emoji) == "🎵":
-        await message.delete()
-        embed = discord.Embed(title="Música", colour=discord.Colour(0x370c5e),
-                              description="*Bem vindo a categoria Música:\nAqui você encontrará"
-                                          " comandos que ajudará você a ouvir música enquanto faz suas atividades"
-                                          " no discord.*")
-        embed.set_thumbnail(
-            url=betina_icon)
-        embed.set_footer(text="Betina Brazilian Bot",
-                         icon_url=betina_icon)
-
-        embed.add_field(name="**$play <música>**",
-                        value="``Busco pela música ou toco a música de link específico!``",
-                        inline=False)
-        embed.add_field(name="**$pause**", value="``Pauso a música que está tocando atualmente!``",
-                        inline=False)
-        embed.add_field(name="**$stop**", value="``Paro de tocar a música e saio do canal de voz!``",
-                        inline=False)
-        embed.add_field(name="**$skip **", value="``Pularei a música que está tocando atualmente!``",
-                        inline=False)
-        embed.add_field(name="**$volume <quantidade>**",
-                        value="``Mudarei o volume que está tocando a música!``",
-                        inline=False)
-        embed.add_field(name="**$fila **", value="``Mostrarei todas as músicas que estão na fila!``",
-                        inline=False)
-        embed.add_field(name="**$tocando**", value="``Direi a música que está tocando a música atualmente``",
-                        inline=False)
-        embed.add_field(name="**$sai**", value="``Sairei do canal de voz!``", inline=False)
-        msg = await author.send(embed=embed)
-        await msg.add_reaction("🔙")
-
-        def check(reaction, user):
-            return user == author and str(reaction.emoji) == "🔙"
-
-        try:
-            reaction, user = await client.wait_for('reaction_add', check=check)
-        except:
-            return
-        else:
-            await msg.delete()
-            await ctx.invoke(client.get_command("help"))
-
-
-    elif str(reaction.emoji) == "🗣":
-        await message.delete()
-        embed = discord.Embed(title="Interação", colour=discord.Colour(0x370c5e),
-                              description="*Bem vindo a categoria Interação:\nAqui você encontrará"
-                                          " comandos que ajudará você a interagir com outros membros do seu servidor*")
-        embed.set_thumbnail(
-            url=betina_icon)
-        embed.set_footer(text="Betina Brazilian Bot",
-                         icon_url=betina_icon)
-
-        embed.add_field(name="**$treta **", value="``Direi coisas assustadoras sobre as pessoas do servidor!``",
-                        inline=False)
-        embed.add_field(name="**$abraça <usuário>**", value="``Abraça o usuário!``",
-                        inline=False)
-        embed.add_field(name="**$beija <usuário>**", value="``Beija o usuário!``", inline=False)
-        embed.add_field(name="**$bate <usuário> **", value="``Bate no usuário!``", inline=False)
-        embed.add_field(name="**$dança <usuário> **", value="``Dança com o usuário!``", inline=False)
-        embed.add_field(name="**$ataca <usuário> **", value="``Dá um ataque no usuário!``", inline=False)
-        embed.add_field(name="**$emputece <usuário> **", value="``Deixa o usuário puto!``", inline=False)
-        embed.add_field(name="**$voltapracaverna <usuário> **", value="``Manda o usuário voltar "
-                                                                      "pro seu lugar de origem!``", inline=False)
-        embed.add_field(name="**$ship <usuário1> <usuário2> (opcional)**", value="``Forma um novo casal!``", inline=False)
-        embed.add_field(name="**$tnc **", value="``Manda alguem do servidor tomar no você sabe onde!``",
-                        inline=False)
-        embed.add_field(name="**$highfive <usuário>**", value="``Bate na mão do usuário!``",
-                        inline=False)
-        embed.add_field(name="**$roletarussa**", value="``Brincarei de roleta russa com você "
-                                                       "e mais 4 pessoas!``", inline=False)
-        embed.add_field(name="**$mencionar <Id da mensagem> <texto> (opcional)**", value="``Transformarei a frase"
-                                                                              " do usuário em uma citação"
-                                                                              "!``", inline=False)
-
-
-        msg = await author.send(embed=embed)
-        await msg.add_reaction("🔙")
-
-        def check(reaction, user):
-            return user == author and str(reaction.emoji) == "🔙"
-
-        try:
-            reaction, user = await client.wait_for('reaction_add', check=check)
-        except:
-            return
-        else:
-            await msg.delete()
-            await ctx.invoke(client.get_command("help"))
-
-
-    elif str(reaction.emoji) == "👮":
-        await message.delete()
-        embed = discord.Embed(title="Administração", colour=discord.Colour(0x370c5e),
-                              description="*Bem vindo a categoria Administração:\nAqui você encontrará"
-                                          " comandos que ajudará você a controlar seu servidor.\n"
-                                          "OBS: Você precisará de algumas permissões para utilizar esses comandos!*")
-        embed.set_thumbnail(
-            url=betina_icon)
-        embed.set_footer(text="Betina Brazilian Bot",
-                         icon_url=betina_icon)
-        embed.add_field(name="**$apaga <quantidade>**", value="``Eu apagarei uma"
-                                                              " quantidade de mensagens!``", inline=False)
-        embed.add_field(name="**$ping**", value="``Retornarei o ping do usuário``", inline=False)
-        embed.add_field(name="**$pong**", value="``oiráusu od gnip o ieranroter``", inline=False)
-        embed.add_field(name="**$userinfo <usuário>**", value="``Retornarei informações sobre o usuário!``", inline=False)
-        embed.add_field(name="**$serverinfo**", value="``Retornarei informações sobre o servidor!``", inline=False)
-        embed.add_field(name="**$afk <motivo> (opcional)**", value="``Definirei o usuário como afk!``", inline=False)
-        embed.add_field(name="**$warn <usuário> <motivo> (opcional)**", value="``Darei um Warn no usuário!``", inline=False)
-        embed.add_field(name="**$mute <usuário>**", value="``Deixarei o usuário no estado de mute!``", inline=False)
-        embed.add_field(name="**$unmute <usuário>**", value="``Tirarei o usuário do estado de mute!``", inline=False)
-        embed.add_field(name="**$ban <motivo> (opcional)**", value="``Banirei o usuário do servidor!``", inline=False)
-        embed.add_field(name="**$clearlastwarn <usuário>**", value="``Tirarei o ultimo warn do usuário!``", inline=False)
-        embed.add_field(name="**$geraconvite **", value="``Gerarei um convite para o seu servidor!``", inline=False)
-
-        msg = await author.send(embed=embed)
-        await msg.add_reaction("🔙")
-
-        def check(reaction, user):
-            return user == author and str(reaction.emoji) == "🔙"
-
-        try:
-            reaction, user = await client.wait_for('reaction_add', check=check)
-        except:
-            return
-        else:
-            await msg.delete()
-            await ctx.invoke(client.get_command("help"))
-
-
-    elif str(reaction.emoji) == "⚙":
-        await message.delete()
-        embed = discord.Embed(title="Configuração", colour=discord.Colour(0x370c5e),
-                              description="*Bem vindo a categoria Configuração:\nAqui você encontrará"
-                                          " comandos que ajudará você a configurar algumas de minhas funções.\n"
-                                          "OBS: Você precisa da permissão de administrador!*")
-        embed.set_thumbnail(
-            url=betina_icon)
-        embed.set_footer(text="Betina Brazilian Bot",
-                         icon_url=betina_icon)
-        embed.add_field(name="**$config**", value="``Mostra todas as configurações do bot!``", inline=False)
-        embed.add_field(name="**$joinlogs <#canal> <mensagem>**", value="``Definirei um canal para enviar uma mensagem"
-                                                                        " toda vez que um usuário"
-                                                                        " entrar no servidor``", inline=False)
-        embed.add_field(name="**$leavelogs <#canal> <mensagem> **", value="``Definirei um canal para enviar uma mensagem"
-                                                                        " toda vez que um usuário"
-                                                                        " sair do servidor``", inline=False)
-        embed.add_field(name="**$reactionlogsin <#canal> <mensagem> (opcional)**", value="``Definirei um"
-                                                                                         " canal para enviar"
-                                                                                         " uma mensagem"
-                                                                        " toda vez que um usuário"
-                                                                        " reagir no sistema de auto"
-                                                                                         "role``", inline=False)
-        embed.add_field(name="**$reactionlogsout <#canal> <mensagem> (opcional)**", value="``Definirei um canal para"
-                                                                                          " enviar uma mensagem"
-                                                                   " toda vez que um usuário"
-                                                                   " deixar de reagir no sistema de"
-                                                                                          " autorole``", inline=False)
-        embed.add_field(name="**$autorole <@Cargo> <Reação> <Mensagem> (opcional)**", value="``Criarei uma mensagem que"
-                                                                                 " ao reagir com a Reação"
-                                                                             " definida adiciona o Cargo"
-                                                                             " definido!``", inline=False)
-        embed.add_field(name="**$addtreta <treta>**", value="``Adicionarei uma treta a listra de tretas!``", inline=False)
-        embed.add_field(name="**$sugestão <mensagem>**", value="``Adicionarei uma sugestão que você "
-                                                               "requisitar``", inline=False)
-        embed.add_field(name="**$cargoinicial <@cargo>**", value="``Adicionarei um cargo inicial a todos"
-                                                                 " aqueles que entrarem no servidor!``", inline=False)
-        embed.add_field(name="**$prefixo <caracter>**", value="``Definirei um novo prefixo ao bot!``", inline=False)
-        embed.add_field(name="**$digitlogs <#Canal>**", value="``Definirei um canal para receber os logs de "
-                                                              "todos os comandos da administração"
-                                                              " utilizados!``", inline=False)
-        embed.add_field(name="**$invites <usuário>**", value="``Direi todos os invites criados por"
-                                                             " um usuário!``", inline=False)
-        embed.add_field(name="**$botchannel <#Canal>**", value="``Define um canal para poder"
-                                                               " utilizar os meus comandos``", inline=False)
-        embed.add_field(name="**$tirabotchannel **", value="``Tira o canal definido para"
-                                                           " poder utilizar os comandos.``", inline=False)
-        msg = await author.send(embed=embed)
-        await msg.add_reaction("🔙")
-
-        def check(reaction, user):
-            return user == author and str(reaction.emoji) == "🔙"
-
-        try:
-            reaction, user = await client.wait_for('reaction_add', check=check)
-        except:
-            return
-        else:
-            await msg.delete()
-            await ctx.invoke(client.get_command("help"))
 
 
 @commands.guild_only()
@@ -1221,7 +1211,6 @@ async def novo_prefixo_handler(ctx, error):
 @client.command(name='config', aliases=['configuration', 'definições'])
 @has_permissions(administrator=True)
 async def configuration(ctx):
-    await ctx.message.delete()
     if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
         avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
     else:
@@ -1235,12 +1224,14 @@ async def configuration(ctx):
     if guild_id not in reactions_logs_in:
         status1 = 'Não tem canal definido!'
     else:
-        status1 = reactions_logs_in[guild_id][0]
+        guild = ctx.guild.get_channel(int(reactions_logs_in[guild_id][0]))
+        status1 = guild
 
     if guild_id not in reactions_logs_out:
         status2 = 'Não tem canal definido!'
     else:
-        status2 = reactions_logs_out[guild_id][0]
+        guild = ctx.guild.get_channel(int(reactions_logs_out[guild_id][0]))
+        status2 = guild
 
     if guild_id not in initial_role:
         status3 = 'Não tem cargo definido!'
@@ -1250,12 +1241,14 @@ async def configuration(ctx):
     if guild_id not in leave_list:
         status4 = 'Não tem canal definido!'
     else:
-        status4 = leave_list[guild_id][0]
+        guild = ctx.guild.get_channel(int(leave_list[guild_id][0]))
+        status4 = guild
 
     if guild_id not in join_list:
         status5 = 'Não tem canal definido!'
     else:
-        status5 = join_list[guild_id][0]
+        guild = ctx.guild.get_channel(int(join_list[guild_id][0]))
+        status5 = guild
 
     if guild_id not in bot_prefix:
         status6 = '$'
@@ -1265,21 +1258,29 @@ async def configuration(ctx):
     if guild_id not in digit_log:
         status7 = 'Não tem canal definido!'
     else:
-        status7 = digit_log[guild_id]
+        guild = ctx.guild.get_channel(int(digit_log[guild_id]))
+        status7 = guild
+
+    if guild_id not in limitador_log:
+        status8 = 'Desligado!'
+    else:
+        status8 = 'Ligado!'
+    await ctx.message.delete()
     embed = discord.Embed(title="⚙ Configurações do servidor:", colour=discord.Colour(0x370c5e),
                           description="Abaixo estarão listadas todas as configurações do bot!\n\n")
     embed.set_thumbnail(url=ctx.message.guild.icon_url)
     embed.set_author(name=ctx.message.author.name, icon_url=avi)
     embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
-    embed.add_field(name="💬**Prefixo do bot neste servidor**", value=f"O prefixo atual do bot é: " + status6)
-    embed.add_field(name="🚪**Join Logs neste servidor:**", value=f"O Id do Canal definido para Join Logs é: " + status5)
-    embed.add_field(name="🚪**Leave Logs neste servidor:**", value=f"O Id do Canal definido para Leave Logs é: " + status4)
-    embed.add_field(name="🔗**Auto Role neste servidor:**", value=status)
-    embed.add_field(name="🚪**Reaction Logs In neste servidor:**", value=f"O Id do Canal definido para Reaction Logs In é: " + status1)
-    embed.add_field(name="🚪**Reaction Logs Out neste servidor:**", value=f"O Id do Canal definido para Reaction Logs Out é: " + status2)
-    embed.add_field(name="🎌 **Cargo Inicial neste servidor:**", value=f"O cargo definido neste servidor é: " + status3)
-    embed.add_field(name="🎌 **Digit Logs neste servidor::**", value=f"O Id do Canal definido para Digit Logs é: " + status7)
-
+    embed.add_field(name="💬**Prefixo do bot neste servidor**", value=f"O prefixo atual do bot é: " + f'{status6}', inline=False)
+    embed.add_field(name="🚪**Join Logs neste servidor:**", value=f"O nome do Canal definido para Join Logs é: " + f'{status5}')
+    embed.add_field(name="🚪**Leave Logs neste servidor:**", value=f"O nome do Canal definido para Leave Logs é: " + f'{status4}', inline=False)
+    embed.add_field(name="🔗**Auto Role neste servidor:**", value=f'O status do auto role é ' + f'{status}', inline=False)
+    embed.add_field(name="🚪**Reaction Logs In neste servidor:**", value=f"O nome do Canal definido para Reaction Logs In é: " + f'{status1}')
+    embed.add_field(name="🚪**Reaction Logs Out neste servidor:**", value=f"O nome do Canal definido para Reaction Logs Out é: " + f'{status2}', inline=False)
+    embed.add_field(name="🎌 **Cargo Inicial neste servidor:**", value=f"O cargo definido neste servidor é: " + f'{status3}')
+    embed.add_field(name="🚪 **Digit Logs neste servidor::**", value=f"O nome do Canal definido para Digit Logs é: " + f'{status7}', inline=False)
+    embed.add_field(name="💬 **Bot Channel neste servidor::**",
+                    value=f"O Status do bot channel é: " + f'{status8}')
     await ctx.send(embed=embed)
 
 
