@@ -24,13 +24,16 @@ import time
 import discord
 import datetime
 import aiohttp
+import asyncio
 import json
+import requests
 
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
 from dhooks import Webhook
 from discord.utils import get
 from discord.ext.commands import has_permissions, MissingPermissions
+from PIL import Image, ImageDraw, ImageFont
 
 dead = [] #dead giphy gifs
 alive = [] #alive giphy gifs
@@ -56,7 +59,7 @@ class Diversão:
         user_id = str(ctx.author.id)
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
-                await ctx.message.delete()
+
                 resultado = random.randint(1, 2)
                 if resultado == 1:
                     await ctx.send('😃')
@@ -67,7 +70,7 @@ class Diversão:
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
                 return
         else:
-            await ctx.message.delete()
+
             resultado = random.randint(1, 2)
             if resultado == 1:
                 await ctx.send('😃')
@@ -86,7 +89,7 @@ class Diversão:
         user_id = str(ctx.author.id)
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
-                await ctx.message.delete()
+
                 await ctx.send('``Você escolheu {}{}``'.format(player[:1].upper(), player[1:]))
                 await ctx.channel.trigger_typing()
                 if player == computer:
@@ -109,12 +112,12 @@ class Diversão:
                 else:
                     await ctx.send('``Escreve direito, por favor!``')
             else:
-                await ctx.message.delete()
+
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
                 return
         else:
-            await ctx.message.delete()
+
             await ctx.send('``Você escolheu {}{}``'.format(player[:1].upper(), player[1:]))
             await ctx.channel.trigger_typing()
             if player == computer:
@@ -166,7 +169,7 @@ class Diversão:
         user_id = str(ctx.author.id)
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
-                await ctx.message.delete()
+
                 if a > 20:
                     msg = await ctx.send("Nunca vi um dado com mais de ``20`` lados!")
                     await msg.add_reaction("🤔")
@@ -177,12 +180,12 @@ class Diversão:
                     argumento = random.randint(1, int(a))
                     await ctx.send("Você está rolando um ``d{}`` e tirou ``{}``".format(a, argumento))
             else:
-                await ctx.message.delete()
+
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
                 return
         else:
-            await ctx.message.delete()
+
             if a > 20:
                 msg = await ctx.send("Nunca vi um dado com mais de ``20`` lados!")
                 await msg.add_reaction("🤔")
@@ -219,7 +222,7 @@ class Diversão:
         user_id = str(ctx.author.id)
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
-                await ctx.message.delete()
+
                 if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
                     avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
                 else:
@@ -280,12 +283,12 @@ class Diversão:
                                      icon_url=betina_icon)
                     msg = await ctx.send(embed=embed)
             else:
-                await ctx.message.delete()
+
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
                 return
         else:
-            await ctx.message.delete()
+
             if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
                 avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
             else:
@@ -371,7 +374,7 @@ class Diversão:
         user_id = str(ctx.author.id)
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
-                await ctx.message.delete()
+
                 with open("faustop.png", "rb") as imageFile:
                     file = bytearray(imageFile.read())
                 channel = ctx.channel
@@ -386,7 +389,7 @@ class Diversão:
                 return
 
         else:
-            await ctx.message.delete()
+
             with open("faustop.png", "rb") as imageFile:
                 file = bytearray(imageFile.read())
             channel = ctx.channel
@@ -398,12 +401,12 @@ class Diversão:
         
     @commands.guild_only()
     @commands.command()
-    async def bolsonaro(self, ctx):
+    async def taokei(self, ctx):
         guild_id = str(ctx.guild.id)
         user_id = str(ctx.author.id)
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
-                await ctx.message.delete()
+
                 with open("bolsoboy.png", "rb") as imageFile:
                     file = bytearray(imageFile.read())
                 channel = ctx.channel
@@ -417,7 +420,7 @@ class Diversão:
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
                 return
         else:
-            await ctx.message.delete()
+
             with open("bolsoboy.png", "rb") as imageFile:
                 file = bytearray(imageFile.read())
             channel = ctx.channel
@@ -434,7 +437,7 @@ class Diversão:
         user_id = str(ctx.author.id)
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
-                await ctx.message.delete()
+
                 with open("miranha.png", "rb") as imageFile:
                     file = bytearray(imageFile.read())
                 channel = ctx.channel
@@ -448,7 +451,7 @@ class Diversão:
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
                 return
         else:
-            await ctx.message.delete()
+            
             with open("miranha.png", "rb") as imageFile:
                 file = bytearray(imageFile.read())
             channel = ctx.channel
@@ -457,6 +460,60 @@ class Diversão:
 
             await webhook.send("EU SOU O MIRANHA!")
             await webhook.delete()
+
+    @commands.guild_only()
+    @commands.command()
+    async def ata(self, ctx, *, texto= 'ATA'):
+        if len(texto) >= 20:
+            return await ctx.send('Tente colocar um texto com menos de 20 letras!')
+        if texto == 'ATA' or texto =='Ata' or texto == 'ata':
+            img = Image.open('monica.png')
+            fonte = ImageFont.truetype('BEBAS.ttf', 60)
+            escrever = ImageDraw.Draw(img)
+            escrever.text(xy=(400, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+            img.save('mnc.png')
+            await ctx.channel.send(file=discord.File('mnc.png'))
+        elif len(texto) <= 15:
+            img = Image.open('monica.png')
+            fonte = ImageFont.truetype('BEBAS.ttf', 30)
+            escrever = ImageDraw.Draw(img)
+            escrever.text(xy=(380, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+            img.save('mnc.png')
+            await ctx.channel.send(file=discord.File('mnc.png'))
+        else:
+            img = Image.open('monica.png')
+            fonte = ImageFont.truetype('BEBAS.ttf', 30)
+            escrever = ImageDraw.Draw(img)
+            escrever.text(xy=(340, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+            img.save('mnc.png')
+            await ctx.channel.send(file=discord.File('mnc.png'))
+
+
+    @commands.guild_only()
+    @commands.command()
+    async def tias(self, ctx):
+        await ctx.channel.send(file=discord.File('tias.png'))
+
+
+    @commands.guild_only()
+    @commands.command()
+    async def bolsonaro(self, ctx, *, texto='Tudo comunista!'):
+        if len(texto) >= 35:
+            return await ctx.send('Tente colocar um texto com menos de 20 letras!')
+        if len(texto) <= 25:
+            img = Image.open('bolsonaro.png')
+            fonte = ImageFont.truetype('BEBAS.ttf', 20)
+            escrever = ImageDraw.Draw(img)
+            escrever.text(xy=(170, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+            img.save('blsnr.png')
+            await ctx.channel.send(file=discord.File('blsnr.png'))
+        else:
+            img = Image.open('bolsonaro.png')
+            fonte = ImageFont.truetype('BEBAS.ttf', 20)
+            escrever = ImageDraw.Draw(img)
+            escrever.text(xy=(120, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+            img.save('blsnr.png')
+            await ctx.channel.send(file=discord.File('blsnr.png'))
 
 
 def setup(client):
