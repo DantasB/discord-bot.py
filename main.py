@@ -368,7 +368,7 @@ async def help(ctx):
                      icon_url=betina_icon)
 
     embed.add_field(name="😂 **Diversão**", value="``$moeda, $ppt, $rola ...``", inline=False)
-    embed.add_field(name="💰 **Cobrança**", value="``$devemais, $devemenos, $deve...``", inline=False)
+    embed.add_field(name="💰 **Utilidades**", value="``$devemais, $devemenos, $deve...``", inline=False)
     embed.add_field(name="🎵 **Música**", value="``$play, $resume, $stop, $fila...``", inline=False)
     embed.add_field(name="🗣 **Interação**", value="``$bate, $abraça, $treta...``", inline=False)
     embed.add_field(name="👮 **Administração**", value="``$apaga, $ping, $pong...``", inline=False)
@@ -387,9 +387,10 @@ async def help(ctx):
         while True:
             reaction, user = await client.wait_for('reaction_add', check=check)
             if str(reaction.emoji) == "💰":
-                embed = discord.Embed(title="Cobrança", colour=discord.Colour(0x370c5e),
-                                      description="*Bem vindo a categoria Cobrança:\nAqui você encontrará"
-                                                  " comandos que ajudará você a ter noção de finanças.*")
+                embed = discord.Embed(title="Utilidades", colour=discord.Colour(0x370c5e),
+                                      description="*Bem vindo a categoria Utilidades:\nAqui você encontrará"
+                                                  " comandos que ajudará você a ter noção"
+                                                  " de finanças, tempo e outras coisas.*")
                 embed.set_thumbnail(
                     url=betina_icon)
                 embed.set_footer(text="Betina Brazilian Bot",
@@ -403,6 +404,12 @@ async def help(ctx):
                                                         " deve!``", inline=False)
                 embed.add_field(name="**$conversor <moeda1> <moeda2>"
                                      "**", value="``Direi a cotação da moeda 1 em relação a moeda 2``",
+                                inline=False)
+                embed.add_field(name="**$clima <local>"
+                                     "**", value="``Direi o clima do local.``",
+                                inline=False)
+                embed.add_field(name="**$picture <usuário> (opcional)"
+                                     "**", value="``Darei a foto do usuário em questão.``",
                                 inline=False)
                 msg = await message.edit(embed=embed)
 
@@ -421,10 +428,13 @@ async def help(ctx):
                 embed.add_field(name="**$ppt <Pedra, Papel ou Tesoura>**", value="``Começarei um jogo de pedra, papel"
                                                                                  " ou tesoura contra você!``",
                                 inline=False)
-                embed.add_field(name="**$bolsonaro**", value="``O Bolsonaro aparece!``",
+                embed.add_field(name="**$bolsonaro** <texto> (opcional)", value="``O Bolsonaro aparece!``",
+                                inline=False)
+                embed.add_field(name="**$taokei**", value="``O Bolsonaro aparece!``",
                                 inline=False)
                 embed.add_field(name="**$faustao**", value="``O Faustão aparece!``", inline=False)
                 embed.add_field(name="**$miranha**", value="``O Miranha aparece!``", inline=False)
+                embed.add_field(name="**$ata <texto> (opcional)**", value="``Ata!``", inline=False)
                 embed.add_field(name="**$hungergames <número>**", value="``Iniciarei um jogo de Hunger Games!``",
                                 inline=False)
                 msg = await message.edit(embed=embed)
@@ -569,6 +579,7 @@ async def help(ctx):
 
     except:
         return
+
 
 
 @commands.guild_only()
