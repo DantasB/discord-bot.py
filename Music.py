@@ -300,7 +300,7 @@ class Music:
 
         vc.pause()
         msg = await ctx.send(f'**`{ctx.author}`**: Pausou a música')
-        msg.add_reaction("⏸")
+        await msg.add_reaction("⏸")
 
 
     @commands.command(name='resume')
@@ -402,6 +402,29 @@ class Music:
             await msg.add_reaction("🔉")
         else:
             await msg.add_reaction("🔈")
+
+    @commands.guild_only()
+    @commands.command()
+    async def entra(self, ctx):
+        """O bot entra no chat de voz!"""
+        try:
+            canal = ctx.author.voice.voice_channel
+            await client.join_voice_channel(canal)
+        except discord.errors.InvalidArgument:
+            msg = await ctx.channel.send('Você precisa estar conectado a um canal de voz!')
+            await msg.add_reaction('🤦')
+
+    @commands.guild_only()
+    @commands.command()
+    async def sai(self, ctx):
+        """O bot sai do chat de voz!"""
+        try:
+            canaldevoz = self.bot.voice_client_in(ctx.guild)
+            await canaldevoz.disconnect()
+        except AttributeError:
+            msg = await ctx.channel.send('O bot nao esta conectado em nenhum canal de voz!')
+            await msg.add_reaction('🤦')
+
 
     @commands.command(name='stop')
     async def stop(self, ctx):
