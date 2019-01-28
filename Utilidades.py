@@ -24,22 +24,25 @@ import time
 import discord
 import datetime
 import aiohttp
+import re
 import json
 import requests
 import secrets
+import pycep_correios
+
 
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
 from dhooks import Webhook
 from discord.utils import get
 from discord.ext.commands import has_permissions, MissingPermissions
-
+from googletrans import Translator
 
 # devemais e devemenos
 devedores = {}
 devidos = {}
 
-betina_icon = ''
+betina_icon = ""
 
 with open('limitador.json', 'r') as file:
     try:
@@ -501,6 +504,145 @@ class Utilidades:
 
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
+
+    @commands.guild_only()
+    @commands.command(name='tradutor', aliases=['translate', 'traduz'])
+    async def traduz(self, ctx, *, arg):
+        if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+            avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+        else:
+            avi = ctx.message.author.avatar_url_as(static_format='png')
+
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        translator = Translator()
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                embedMsg = discord.Embed(color=0x370c5e)
+                mensagem = translator.translate(f'{arg}', dest='pt')
+                embedMsg.add_field(name="➡ Mensagem enviada:", value=arg, inline=False)
+                embedMsg.add_field(name="🔙 Mensagem traduzida:", value=mensagem.text, inline=False)
+                embedMsg.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
+                embedMsg.set_footer(text="Google Translate 2019")
+                await ctx.send(embed=embedMsg)
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            embedMsg = discord.Embed(color=0x370c5e)
+            mensagem = translator.translate(f'{arg}', dest='pt')
+            embedMsg.add_field(name="➡ Mensagem enviada:", value=arg, inline=False)
+            embedMsg.add_field(name="🔙 Mensagem traduzida:", value=mensagem.text, inline=False)
+            embedMsg.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
+            embedMsg.set_footer(text="Google Translate 2019")
+            await ctx.send(embed=embedMsg)
+
+    @traduz.error
+    async def traduz_handler(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            if error.param.name == 'arg':
+                embed = discord.Embed(title="Comando $traduz:", colour=discord.Colour(0x370c5e),
+                                      description="Traduz uma frase\n \n**Como"
+                                                  " usar: $traduz <texto>**")
+
+                embed.set_author(name="Betina#9182",
+                                 icon_url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+
+                embed.add_field(name="📖**Exemplos:**", value="$traduz como se dize esto\n$traduz knowledge",
+                                inline=False)
+                embed.add_field(name="🔀**Outros Comandos**", value="``$translate, $traduzir.``", inline=False)
+
+                msg = await ctx.send(embed=embed)
+                await msg.add_reaction("❓")
+
+    @commands.guild_only()
+    @commands.command(name='buscacep')
+    async def cep(self, ctx, buscar):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                if buscar is None:
+                    await ctx.send(f"Olá {ctx.author.mention}, digite um cep.")
+                    return
+                endereco = pycep_correios.consultar_cep(f'{buscar}')
+                embed = discord.Embed(title=f"Cep procurado {buscar}:", color=0x370c5e)
+                embed.add_field(name="Bairro", value=endereco['bairro'])
+                embed.add_field(name="Cep", value=endereco['cep'], inline=True)
+                embed.add_field(name="Cidade", value=endereco['cidade'], inline=True)
+                embed.add_field(name="uf", value=endereco['uf'], inline=True)
+                embed.set_thumbnail(url='https://warehouse-camo.cmh1.psfhosted.org/84cd'
+                                        '73e1f12421aca2cc6ae603ecdb96d312f663/68747470733a2f'
+                                        '2f7261772e67697468756275736572636f6e74656e742e636f6d2'
+                                        'f6d7374757474676172742f70796365702d636f727265696f732f6465'
+                                        '76656c6f702f646f63732f5f7374617469632f6c6f676f2e6a7067')
+                embed.set_footer(text="Correios 2019")
+                await ctx.send(embed=embed)
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            if buscar is None:
+                await ctx.send(f"Olá {ctx.author.mention}, digite um cep.")
+                return
+            endereco = pycep_correios.consultar_cep(f'{buscar}')
+            embed = discord.Embed(title=f"Cep procurado {buscar}:", color=0x370c5e)
+            embed.add_field(name="Bairro", value=endereco['bairro'])
+            embed.add_field(name="Cep", value=endereco['cep'], inline=True)
+            embed.add_field(name="Cidade", value=endereco['cidade'], inline=True)
+            embed.add_field(name="uf", value=endereco['uf'], inline=True)
+            embed.set_thumbnail(url='https://warehouse-camo.cmh1.psfhosted.org/84cd'
+                                    '73e1f12421aca2cc6ae603ecdb96d312f663/68747470733a2f'
+                                    '2f7261772e67697468756275736572636f6e74656e742e636f6d2'
+                                    'f6d7374757474676172742f70796365702d636f727265696f732f6465'
+                                    '76656c6f702f646f63732f5f7374617469632f6c6f676f2e6a7067')
+            embed.set_footer(text="Correios 2019")
+            await ctx.send(embed=embed)
+
+    @commands.guild_only()
+    @commands.command(name='cor', aliases=['randomcolour', 'geracor'])
+    async def cor(self, ctx):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                color = "%06x" % random.randint(0, 0xFFFFFF)
+                if re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', color):
+                    color = discord.Color(int(color, 16))
+                else:
+                    await ctx.send('cor não encontrada')
+
+                if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                    avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+                else:
+                    avi = ctx.message.author.avatar_url_as(static_format='png')
+                embed = discord.Embed(title=f"<:gay:539489743067545622> Cor gerada: {color}",
+                                      colour=color)
+                embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                await ctx.send(embed=embed)
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            color = "%06x" % random.randint(0, 0xFFFFFF)
+            if re.search(r'^(?:[0-9a-fA-F]{3}){1,2}$', color):
+                color = discord.Color(int(color, 16))
+            else:
+                await ctx.send('cor não encontrada')
+
+            if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+            else:
+                avi = ctx.message.author.avatar_url_as(static_format='png')
+            embed = discord.Embed(title=f"<:gay:539489743067545622> Cor gerada: {color}",
+                                  colour=color)
+            embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+            await ctx.send(embed=embed)
 
 
 def setup(client):
