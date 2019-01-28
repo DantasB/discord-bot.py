@@ -461,60 +461,149 @@ class Diversão:
             await webhook.send("EU SOU O MIRANHA!")
             await webhook.delete()
 
-    @commands.guild_only()
+        @commands.guild_only()
     @commands.command()
-    async def ata(self, ctx, *, texto= 'ATA'):
-        if len(texto) >= 20:
-            return await ctx.send('Tente colocar um texto com menos de 20 letras!')
-        if texto == 'ATA' or texto =='Ata' or texto == 'ata':
-            img = Image.open('monica.png')
-            fonte = ImageFont.truetype('BEBAS.ttf', 60)
-            escrever = ImageDraw.Draw(img)
-            escrever.text(xy=(400, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
-            img.save('mnc.png')
-            await ctx.channel.send(file=discord.File('mnc.png'))
-        elif len(texto) <= 15:
-            img = Image.open('monica.png')
-            fonte = ImageFont.truetype('BEBAS.ttf', 30)
-            escrever = ImageDraw.Draw(img)
-            escrever.text(xy=(380, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
-            img.save('mnc.png')
-            await ctx.channel.send(file=discord.File('mnc.png'))
+    async def ata(self, ctx, *, texto='ATA'):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                if len(texto) >= 20:
+                    return await ctx.send('Tente colocar um texto com menos de 20 letras!')
+                if texto == 'ATA' or texto == 'Ata' or texto == 'ata':
+                    img = Image.open('monica.png')
+                    fonte = ImageFont.truetype('BEBAS.ttf', 60)
+                    escrever = ImageDraw.Draw(img)
+                    escrever.text(xy=(400, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                    img.save('mnc.png')
+                    await ctx.channel.send(file=discord.File('mnc.png'))
+                elif len(texto) <= 15:
+                    img = Image.open('monica.png')
+                    fonte = ImageFont.truetype('BEBAS.ttf', 30)
+                    escrever = ImageDraw.Draw(img)
+                    escrever.text(xy=(380, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                    img.save('mnc.png')
+                    await ctx.channel.send(file=discord.File('mnc.png'))
+                else:
+                    img = Image.open('monica.png')
+                    fonte = ImageFont.truetype('BEBAS.ttf', 30)
+                    escrever = ImageDraw.Draw(img)
+                    escrever.text(xy=(340, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                    img.save('mnc.png')
+                    await ctx.channel.send(file=discord.File('mnc.png'))
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
         else:
-            img = Image.open('monica.png')
-            fonte = ImageFont.truetype('BEBAS.ttf', 30)
-            escrever = ImageDraw.Draw(img)
-            escrever.text(xy=(340, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
-            img.save('mnc.png')
-            await ctx.channel.send(file=discord.File('mnc.png'))
-
+            if len(texto) >= 20:
+                return await ctx.send('Tente colocar um texto com menos de 20 letras!')
+            if texto == 'ATA' or texto == 'Ata' or texto == 'ata':
+                img = Image.open('monica.png')
+                fonte = ImageFont.truetype('BEBAS.ttf', 60)
+                escrever = ImageDraw.Draw(img)
+                escrever.text(xy=(400, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                img.save('mnc.png')
+                await ctx.channel.send(file=discord.File('mnc.png'))
+            elif len(texto) <= 15:
+                img = Image.open('monica.png')
+                fonte = ImageFont.truetype('BEBAS.ttf', 30)
+                escrever = ImageDraw.Draw(img)
+                escrever.text(xy=(380, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                img.save('mnc.png')
+                await ctx.channel.send(file=discord.File('mnc.png'))
+            else:
+                img = Image.open('monica.png')
+                fonte = ImageFont.truetype('BEBAS.ttf', 30)
+                escrever = ImageDraw.Draw(img)
+                escrever.text(xy=(340, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                img.save('mnc.png')
+                await ctx.channel.send(file=discord.File('mnc.png'))
 
     @commands.guild_only()
     @commands.command()
     async def tias(self, ctx):
         await ctx.channel.send(file=discord.File('tias.png'))
 
-
     @commands.guild_only()
     @commands.command()
     async def bolsonaro(self, ctx, *, texto='Tudo comunista!'):
-        if len(texto) >= 35:
-            return await ctx.send('Tente colocar um texto com menos de 20 letras!')
-        if len(texto) <= 25:
-            img = Image.open('bolsonaro.png')
-            fonte = ImageFont.truetype('BEBAS.ttf', 20)
-            escrever = ImageDraw.Draw(img)
-            escrever.text(xy=(170, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
-            img.save('blsnr.png')
-            await ctx.channel.send(file=discord.File('blsnr.png'))
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                if len(texto) > 30:
+                    return await ctx.send('Tente colocar um texto com menos de 20 letras!')
+                if len(texto) <= 25:
+                    img = Image.open('bolsonaro.png')
+                    fonte = ImageFont.truetype('BEBAS.ttf', 20)
+                    escrever = ImageDraw.Draw(img)
+                    escrever.text(xy=(170, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                    img.save('blsnr.png')
+                    await ctx.channel.send(file=discord.File('blsnr.png'))
+                else:
+                    img = Image.open('bolsonaro.png')
+                    fonte = ImageFont.truetype('BEBAS.ttf', 20)
+                    escrever = ImageDraw.Draw(img)
+                    escrever.text(xy=(120, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                    img.save('blsnr.png')
+                    await ctx.channel.send(file=discord.File('blsnr.png'))
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
         else:
-            img = Image.open('bolsonaro.png')
-            fonte = ImageFont.truetype('BEBAS.ttf', 20)
-            escrever = ImageDraw.Draw(img)
-            escrever.text(xy=(120, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
-            img.save('blsnr.png')
-            await ctx.channel.send(file=discord.File('blsnr.png'))
+            if len(texto) > 30:
+                return await ctx.send('Tente colocar um texto com menos de 20 letras!')
+            if len(texto) <= 25:
+                img = Image.open('bolsonaro.png')
+                fonte = ImageFont.truetype('BEBAS.ttf', 20)
+                escrever = ImageDraw.Draw(img)
+                escrever.text(xy=(170, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                img.save('blsnr.png')
+                await ctx.channel.send(file=discord.File('blsnr.png'))
+            else:
+                img = Image.open('bolsonaro.png')
+                fonte = ImageFont.truetype('BEBAS.ttf', 20)
+                escrever = ImageDraw.Draw(img)
+                escrever.text(xy=(120, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                img.save('blsnr.png')
+                await ctx.channel.send(file=discord.File('blsnr.png'))
 
+    @commands.guild_only()
+    @commands.command(name='reverse', aliases=['reverte', 'avesso'])
+    async def reverse(self, ctx, *, text: str):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                t_rev = text[::-1].replace("@", "@\u200B").replace("&", "&\u200B")
+                await ctx.send(f"🔁 {t_rev}")
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            t_rev = text[::-1].replace("@", "@\u200B").replace("&", "&\u200B")
+            await ctx.send(f"🔁 {t_rev}")
+
+    @reverse.error
+    async def reverse_handler(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            if error.param.name == 'text':
+                embed = discord.Embed(title="Comando $reverse:", colour=discord.Colour(0x370c5e),
+                                      description="Reverte uma frase\n \n**Como usar"
+                                                  ": $reverse <texto>**")
+
+                embed.set_author(name="Betina#9182",
+                                 icon_url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+                embed.add_field(name="📖**Exemplos:**", value="$reverse 10\n$reverse irreversivel", inline=False)
+                embed.add_field(name="🔀**Outros Comandos**", value="``$reverte, $avesso.``", inline=False)
+
+                msg = await ctx.send(embed=embed)
+                await msg.add_reaction("❓")
 
 def setup(client):
     client.add_cog(Diversão(client))
