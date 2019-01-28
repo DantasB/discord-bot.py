@@ -48,7 +48,7 @@ async def get_pre(client, message):
         return bot_prefix[guild_id]
     return '$'
 
-startup_extensions = ['Music', 'Diversao', 'Interacao', 'Cobranca', 'Utilidades', 'Error']
+startup_extensions = ['Music', 'Diversao', 'Interacao', 'Utilidades', 'Error', 'Administracao']
 prefix = get_pre
 client = commands.Bot(command_prefix=prefix)
 TOKEN = 'Seu discord bot token'
