@@ -26,12 +26,10 @@ class Error:
                 avi = ctx.message.author.avatar_url_as(static_format='png')
 
             embed = discord.Embed(title=f"*Não consegui encontrar esse comando, {ctx.message.author}. "
-            f"Tente utilizar o comando $ajuda para quais são os meus comandos.*", colour=discord.Colour(0x370c5e))
+            f"Tente utilizar o comando $ajuda para saber quais são os meus comandos.*", colour=discord.Colour(0x370c5e))
 
             embed.set_author(name=f"{ctx.message.author}", icon_url=f"{avi}")
-            embed.set_footer(text="Betina Brazilian Bot", icon_url='https://images.discordapp'
-                                                                   '.net/avatars/527565353199337474/40042c09'
-                                                                   'bb354a396928cb91e0288384.png?size=256')
+            embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
             return await ctx.send(embed=embed, delete_after=10)
 
         # For this error example we check to see where it came from...
@@ -41,9 +39,7 @@ class Error:
                 f"Tente checar se utilizou o nome correto!*", colour=discord.Colour(0x370c5e))
 
                 embed.set_author(name=f"{ctx.message.author}", icon_url=f"{avi}")
-                embed.set_footer(text="Betina Brazilian Bot", icon_url='https://images.discordapp'
-                                                                       '.net/avatars/527565353199337474/40042c09'
-                                                                       'bb354a396928cb91e0288384.png?size=256')
+                embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
                 return await ctx.send(embed=embed, delete_after=10)
 
 
@@ -54,4 +50,5 @@ class Error:
 
 def setup(client):
     client.add_cog(Error(client))
+
 
