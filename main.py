@@ -295,35 +295,76 @@ async def on_guild_join(guild):
 async def on_message(message):
     print('Logs:\n', message.author, message.content)
     if message.content.startswith('<@527565353199337474>'):
-        embed = discord.Embed(colour=discord.Colour(0x370c5e), description="**Digite: `$help ou $ajuda` para ver meus comandos**")
-        embed.set_footer(text="Betina Brazilian Bot")
-        await message.channel.send(embed=embed)
-        print(message.content[-1])
+        if not message.guild:
+            return
+        guild_id = str(message.guild.id)
+        author_id = str(message.author.id)
+        if guild_id in limitador_log:
+            if str(message.channel.id) == limitador_log[guild_id]:
+                embed = discord.Embed(colour=discord.Colour(0x370c5e), description="**Digite: `$help ou $ajuda` para ver meus comandos**")
+                embed.set_footer(text="Betina Brazilian Bot")
+                await message.channel.send(embed=embed)
+            else:
+                return
+        else:
+            embed = discord.Embed(colour=discord.Colour(0x370c5e),
+                                  description="**Digite: `$help ou $ajuda` para ver meus comandos**")
+            embed.set_footer(text="Betina Brazilian Bot")
+            await message.channel.send(embed=embed)
 
 
     if message.content.lower().startswith('$treta'):
         if not message.guild:
             return
-        i = random.randrange(len(lista))
-        listas = lista[i]
-        x = random.randrange(len(message.guild.members))
-        user = list(message.guild.members)[x]
-        fquote = listas.replace('[nome]', user.name)
-        await message.channel.send(fquote)
+        guild_id = str(message.guild.id)
+        author_id = str(message.author.id)
+        if guild_id in limitador_log:
+            if str(message.channel.id) == limitador_log[guild_id]:
+                i = random.randrange(len(lista))
+                listas = lista[i]
+                x = random.randrange(len(message.guild.members))
+                user = list(message.guild.members)[x]
+                fquote = listas.replace('[nome]', user.name)
+                await message.channel.send(fquote)
+            else:
+                return
+        else:
+            i = random.randrange(len(lista))
+            listas = lista[i]
+            x = random.randrange(len(message.guild.members))
+            user = list(message.guild.members)[x]
+            fquote = listas.replace('[nome]', user.name)
+            await message.channel.send(fquote)
 
     try:
         if not message.guild:
             return
         if message.content[-1] == '?':
-            resposta = random.choice(['Não respondo a isso', 'Sim',
+            guild_id = str(message.guild.id)
+            author_id = str(message.author.id)
+            if guild_id in limitador_log:
+                if str(message.channel.id) == limitador_log[guild_id]:
+                    resposta = random.choice(['Não respondo a isso', 'Sim',
+                                                  'As vezes', 'Não', 'Claro', 'NUNCA!',
+                                                  'Um dia talvez', 'A resposta está dentro de você'
+                                                     , 'Mais ou menos', 'Uma Bosta', 'Podia ser pior', 'Não sei',
+                                              'Não tenho certeza', 'Sua mãe deve saber',
+                                              'Pergunta pra sua webnamorada', 'Eu não tenho cara de Yoda',
+                                              'Se eu fosse você desistiria de perguntar isso', 'Talvez'])
+                    await message.channel.send(resposta)
+                    return
+                else:
+                    return
+            else:
+                resposta = random.choice(['Não respondo a isso', 'Sim',
                                           'As vezes', 'Não', 'Claro', 'NUNCA!',
                                           'Um dia talvez', 'A resposta está dentro de você'
                                              , 'Mais ou menos', 'Uma Bosta', 'Podia ser pior', 'Não sei',
-                                      'Não tenho certeza', 'Sua mãe deve saber',
-                                      'Pergunta pra sua webnamorada', 'Eu não tenho cara de Yoda',
-                                      'Se eu fosse você desistiria de perguntar isso', 'Talvez'])
-            await message.channel.send(resposta)
-            return
+                                          'Não tenho certeza', 'Sua mãe deve saber',
+                                          'Pergunta pra sua webnamorada', 'Eu não tenho cara de Yoda',
+                                          'Se eu fosse você desistiria de perguntar isso', 'Talvez'])
+                await message.channel.send(resposta)
+                return
     except:
         pass
     if len(message.mentions) > 0:
