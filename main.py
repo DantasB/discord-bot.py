@@ -25,6 +25,8 @@ import discord
 import datetime
 import aiohttp
 import json
+import psutil
+import logging
 
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
@@ -51,6 +53,8 @@ prefix = get_pre
 client = commands.Bot(command_prefix=prefix)
 TOKEN = 'Seu discord bot token'
 client.remove_command('help')
+
+logging.basicConfig(level=logging.WARNING)
 
 # Musica
 players = {}
@@ -339,7 +343,7 @@ async def on_message(message):
     try:
         if not message.guild:
             return
-        if message.content[-1] == '?':
+        if message.content[-1] == '?' and message.content[-2] == '?':
             guild_id = str(message.guild.id)
             author_id = str(message.author.id)
             if guild_id in limitador_log:
@@ -520,6 +524,8 @@ async def help(ctx):
                                      "**", value="``Gerarei uma senha aleatória com o tamanho do número.``",
                                 inline=False)
                 embed.add_field(name="**$geraconvite **", value="``Gerarei um convite para o seu servidor!``", inline=False)
+                embed.add_field(name="**$buscacep <cep> **", value="``Darei as informações sobre o cep requisitado!``",
+                                inline=False)
                 msg = await message.edit(embed=embed)
 
             elif str(reaction.emoji) == "😂":
@@ -694,7 +700,6 @@ async def help(ctx):
 
 @commands.guild_only()
 @client.command(name='afk', aliases=['away', 'ausente'])
-@has_permissions(manage_messages=True)
 async def afk(ctx, *, arg: str = None):
     if arg == None:
         reason = 'Sem motivos específicados!'
@@ -736,28 +741,6 @@ async def afk(ctx, *, arg: str = None):
 
     with open("afks.json", "w") as file:
         json.dump(afklist, file)
-
-
-@afk.error
-async def afk_handler(ctx, error):
-    if isinstance(error, MissingPermissions):
-        embed = discord.Embed(title="Comando $afk:", colour=discord.Colour(0x370c5e),
-                                description="Dá o status de afk ao usuário"
-                                              "\n \n**Como usar: $afk <motivo> (opcional)**")
-
-        embed.set_author(name="Betina#9182",
-                             icon_url=betina_icon)
-        embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
-        embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
-                                                            "ter a permissão de* ``"
-                                                            "Gerenciar as mensagens`` *para utilizar este comando!*",
-                            inline=False)
-        embed.add_field(name="📖**Exemplos:**", value="$afk fui a praia\n$afk ", inline=False)
-        embed.add_field(name="🔀**Outros Comandos**", value="``$away, $ausente.``", inline=False)
-
-        msg = await ctx.send(embed=embed)
-        await msg.add_reaction("❓")
 
 
 @commands.guild_only()
@@ -1687,8 +1670,8 @@ async def betinainfo(ctx):
             t1 = time.perf_counter()
             async with ctx.message.channel.typing():
                 t2 = time.perf_counter()
-                embed = discord.Embed(colour=discord.Colour(0x370c5e), description='**Informações da Betina:**')
-                criador = '\n**Bot:** BDantas#7096'
+                embed = discord.Embed(colour=discord.Colour(0x370c5e), description='<a:carregando:509840579316940800>**Informações da Betina:**')
+                criador = '\n 🤴 BDantas#7096'
                 nome = 'Betina'
                 id = str(client.user.id)
                 tag = str(client.user)
@@ -1700,16 +1683,16 @@ async def betinainfo(ctx):
                 avatar = f"[Icone]({betina_icon})"
                 program = "Python 3.6.6"
                 hospedagem = 'Raspberry Pi'
-                uptime = "{} horas {} minutos ".format(hours, minutes)
+                uptime = "{} horas {} minutos ".format(0, 0)
                 commandos2 = '60'
                 cpu = "{} % ".format(str(psutil.cpu_percent(interval=1)))
                 invite = '[[Me adicione]](https://discordapp.com/oauth2/authorize?&client_id=527565353199337474&scope=bot&permissions=8)'
                 suporte = '[[Peça ajuda]](https://discord.gg/eZrzDfs)'
-                aa = "\n**Nome:** " + nome + "\n**ID:** " + id + "\n**Tag:** " + tag + "\n**Fundado em:** " + fundado + "\n**Ping:** " + ping
-                bb = "\n**Servidores:** " + servers + "\n**Usuários:** " + users + "\n**Canais:** " + canais
-                cc = "\n**Totais:** " + commandos2
-                ee = "\n**Programação:** " + program + "\n**Hospedagem:** " + hospedagem + "\n**Tempo Online:** " + uptime + "\n**Cpu Usado:** " + cpu
-                gg = "\n**Avatar:** " + avatar + "\n**Invite:** " + invite + "\n**Suporte:** " + suporte
+                aa = "\n<:bot:510893968414867468> **Nome:** " + nome + "\n💻 **ID:** " + id + "\n📛 **Tag:** " + tag + "\n⭐ **Fundado em:** " + fundado + "\n<a:ping:512065320320761867>**Ping:** " + ping
+                bb = "\n<a:cursor:507925560333434890> **Servidores:** " + servers + "\n<a:happy:515518973618683910> **Usuários:** " + users + "\n📇 **Canais:** " + canais
+                cc = "\n<a:faps:515518909521330176> **Totais:** " + commandos2
+                ee = "\n<:python:507486258184978443> **Programação:** " + program + "\n<:download:316264057659326464> **Hospedagem:** " + hospedagem + "\n🕒 **Tempo Online:** " + uptime + "\n💽 **Cpu Usado:** " + cpu
+                gg = "\n🖼️ **Avatar:** " + avatar + "\n✉ **Invite:** " + invite + "\n**<:DiscordDev:507925579245551616> Suporte:** " + suporte
                 ff = criador
                 embed.add_field(name="`📑 | Informações:`", value=aa, inline=False)
                 embed.set_thumbnail(url=f"{betina_icon}")
@@ -1728,8 +1711,8 @@ async def betinainfo(ctx):
         t1 = time.perf_counter()
         async with ctx.message.channel.typing():
             t2 = time.perf_counter()
-            embed = discord.Embed(colour=discord.Colour(0x370c5e), description='**Informações da Betina:**')
-            criador = '\n BDantas#7096'
+            embed = discord.Embed(colour=discord.Colour(0x370c5e), description='**<a:carregando:509840579316940800> Informações da Betina:**')
+            criador = '\n 🤴 BDantas#7096'
             nome = 'Betina'
             id = str(client.user.id)
             tag = str(client.user)
@@ -1741,16 +1724,16 @@ async def betinainfo(ctx):
             avatar = f"[Icone]({betina_icon})"
             program = "Python 3.6.6"
             hospedagem = 'Raspberry Pi'
-            uptime = "{} horas {} minutos ".format(hours, minutes)
+            uptime = "{} horas {} minutos ".format(0, 0)
             commandos2 = '60'
             cpu = "{} % ".format(str(psutil.cpu_percent(interval=1)))
             invite = '[[Me adicione]](https://discordapp.com/oauth2/authorize?&client_id=527565353199337474&scope=bot&permissions=8)'
             suporte = '[[Peça ajuda]](https://discord.gg/eZrzDfs)'
-            aa = "\n**Nome:** " + nome + "\n**ID:** " + id + "\n**Tag:** " + tag + "\n**Fundado em:** " + fundado + "\n**Ping:** " + ping
-            bb = "\n**Servidores:** " + servers + "\n**Usuários:** " + users + "\n**Canais:** " + canais
-            cc = "\n**Totais:** " + commandos2
-            ee = "\n**Programação:** " + program + "\n**Hospedagem:** " + hospedagem + "\n**Tempo Online:** " + uptime + "\n**Cpu Usado:** " + cpu
-            gg = "\n**Avatar:** " + avatar + "\n**Invite:** " + invite + "\n**Suporte:** " + suporte
+            aa = "\n<:bot:510893968414867468> **Nome:** " + nome + "\n💻 **ID:** " + id + "\n📛 **Tag:** " + tag + "\n⭐ **Fundado em:** " + fundado + "\n<a:ping:512065320320761867>**Ping:** " + ping
+            bb = "\n🌐 **Servidores:** " + servers + "\n<a:happy:515518973618683910> **Usuários:** " + users + "\n📇 **Canais:** " + canais
+            cc = "\n<a:faps:515518909521330176> **Totais:** " + commandos2
+            ee = "\n<:python:507486258184978443> **Programação:** " + program + "\n<a:cursor:507925560333434890> **Hospedagem:** " + hospedagem + "\n🕒 **Tempo Online:** " + uptime + "\n💽 **Cpu Usado:** " + cpu
+            gg = "\n🖼️ **Avatar:** " + avatar + "\n✉ **Invite:** " + invite + "\n**<:DiscordDev:507925579245551616> Suporte:** " + suporte
             ff = criador
             embed.add_field(name="`📑 | Informações:`", value=aa, inline=False)
             embed.set_thumbnail(url=f"{betina_icon}")
@@ -1772,4 +1755,3 @@ if __name__ == '__main__':
             print('Falha ao carregar a extensão {}\n{}'.format(extension, exc))
 
 client.run(TOKEN)
-
