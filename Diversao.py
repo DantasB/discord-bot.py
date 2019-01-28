@@ -382,6 +382,7 @@ class Diversão:
                     webhook = await channel.create_webhook(name='Faustão', avatar=file)
 
                 await webhook.send("Esta Fera Bicho!")
+                await ctx.invoke(self.client.get_command('play'), 'https://www.youtube.com/watch?v=bLB6WIwXhTw')
                 await webhook.delete()
             else:
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
@@ -461,7 +462,7 @@ class Diversão:
             await webhook.send("EU SOU O MIRANHA!")
             await webhook.delete()
 
-        @commands.guild_only()
+    @commands.guild_only()
     @commands.command()
     async def ata(self, ctx, *, texto='ATA'):
         guild_id = str(ctx.guild.id)
@@ -533,7 +534,7 @@ class Diversão:
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
                 if len(texto) > 30:
-                    return await ctx.send('Tente colocar um texto com menos de 20 letras!')
+                    return await ctx.send('Tente colocar um texto com menos de 30 letras!')
                 if len(texto) <= 25:
                     img = Image.open('bolsonaro.png')
                     fonte = ImageFont.truetype('BEBAS.ttf', 20)
@@ -554,12 +555,12 @@ class Diversão:
                 return
         else:
             if len(texto) > 30:
-                return await ctx.send('Tente colocar um texto com menos de 20 letras!')
+                return await ctx.send('Tente colocar um texto com menos de 30 letras!')
             if len(texto) <= 25:
                 img = Image.open('bolsonaro.png')
                 fonte = ImageFont.truetype('BEBAS.ttf', 20)
                 escrever = ImageDraw.Draw(img)
-                escrever.text(xy=(170, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                escrever.text(xy=(170, 0), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                 img.save('blsnr.png')
                 await ctx.channel.send(file=discord.File('blsnr.png'))
             else:
@@ -604,6 +605,38 @@ class Diversão:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+
+    @commands.guild_only()
+    @commands.command()
+    async def facebook(self, ctx, *, texto='Mark Zuckerberg: um androide!'):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                if len(texto) >= 50:
+                    return await ctx.send('Tente colocar um texto com menos de 40 letras!')
+                else:
+                    img = Image.open('face.png')
+                    fonte = ImageFont.truetype('Tahoma.ttf', 20)
+                    escrever = ImageDraw.Draw(img)
+                    escrever.text(xy=(15, 60), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                    img.save('fc.png')
+                    await ctx.channel.send(file=discord.File('fc.png'))
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            if len(texto) >= 50:
+                return await ctx.send('Tente colocar um texto com menos de 40 letras!')
+            else:
+                img = Image.open('face.png')
+                fonte = ImageFont.truetype('Tahoma.ttf', 20)
+                escrever = ImageDraw.Draw(img)
+                escrever.text(xy=(15, 60), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                img.save('fc.png')
+                await ctx.channel.send(file=discord.File('fc.png'))
+
 
 def setup(client):
     client.add_cog(Diversão(client))
