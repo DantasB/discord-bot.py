@@ -4,6 +4,7 @@ import discord
 import datetime
 import aiohttp
 import json
+import asyncio
 
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
@@ -57,9 +58,9 @@ class Administração:
             avi = ctx.message.author.avatar_url_as(static_format='png')
         channel = ctx.channel
         t1 = time.perf_counter()
-        await channel.trigger_typing()
-        t2 = time.perf_counter()
-        await ctx.send('Pong! Isso me levou {}µs.'.format(round(1000 * (t2 - t1))))
+        async with ctx.message.channel.typing():
+            t2 = time.perf_counter()
+            await ctx.send('<a:ping:512065320320761867> Pong! Isso me levou {}ms.'.format(round((t2 - t1) * 1000)))
         guild_id = str(ctx.guild.id)
 
         if guild_id not in digit_log:
@@ -83,9 +84,10 @@ class Administração:
 
         channel = ctx.channel
         t1 = time.perf_counter()
-        await channel.trigger_typing()
-        t2 = time.perf_counter()
-        await ctx.send('Ping! Uovel em ossI {} sµ.'.format(round(1000 * (t2 - t1))))
+        async with ctx.message.channel.typing():
+            t2 = time.perf_counter()
+            await ctx.send('<a:ping:512065320320761867> !ginP ossI em uoveL {} sm'.format(round((t2 - t1) * 1000)))
+
         guild_id = str(ctx.guild.id)
 
         if guild_id not in digit_log:
@@ -891,7 +893,6 @@ class Administração:
         else:
             avi = ctx.message.author.avatar_url_as(static_format='png')
 
-        await ctx.message.delete()
         roles = [cargos.name for cargos in member.roles if cargos.name != "@everyone"]
         cargos_dos_mutados[str(member.id)] = roles
         for cargos in roles:
@@ -982,7 +983,6 @@ class Administração:
             avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
         else:
             avi = ctx.message.author.avatar_url_as(static_format='png')
-        await ctx.message.delete()
         if str(member.id) not in cargos_dos_mutados:
             return
         for cargos in cargos_dos_mutados[str(member.id)]:
@@ -1069,7 +1069,6 @@ class Administração:
         else:
             avi = ctx.message.author.avatar_url_as(static_format='png')
 
-        await ctx.message.delete()
         embed = discord.Embed(title="Sugestão: ", colour=discord.Colour(0x370c5e),
                               description=f"{arg}")
         embed.set_footer(text="{}".format(ctx.message.author.name), icon_url=avi)
