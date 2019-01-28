@@ -25,6 +25,8 @@ import discord
 import datetime
 import aiohttp
 import json
+import requests
+import secrets
 
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
@@ -46,7 +48,7 @@ with open('limitador.json', 'r') as file:
         limitador_log = {}
 
 
-class Cobrança:
+class Utilidades:
     def __init__(self, client):
         self.client = client
 
@@ -342,6 +344,164 @@ class Cobrança:
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
 
+    @commands.guild_only()
+    @commands.command()
+    async def clima(self, ctx, *, buscar=None):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                if buscar is None:
+                    await ctx.send(f"Olá {ctx.author.mention}, você precisa digitar uma cidade ou país.")
+                    return
+
+                busca = str(buscar).replace(" ", "%20")
+                r = requests.get(f'http://api.apixu.com/v1/current.json?key=6a0d3673a1ec4ceb8f5152802182112&q={busca}')
+                if r.status_code == 200:
+                    js = r.json()
+
+                embed = discord.Embed(title="Clima do dia:", color=0x370c5e)
+                embed.add_field(name="Nome", value=str(js['location']['name']), inline=False)
+                embed.add_field(name="Região", value=str(js['location']['region']), inline=True)
+                embed.add_field(name="País", value=str(js['location']['country']), inline=True)
+                local = str(js['location']['lat']) + "/" + str(js['location']['lon'])
+                embed.add_field(name="Lat & Lon", value=str(local), inline=True)
+                temp = str(js['current']['temp_c']) + "/" + str(js['current']['temp_f'])
+                embed.add_field(name="c° & f°", value=str(temp), inline=True)
+                url = "https:" + str(js['current']['condition']["icon"])
+                embed.set_thumbnail(url=url)
+                embed.set_footer(text="Climatempo 2019")
+                await ctx.send(embed=embed)
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            if buscar is None:
+                await ctx.send(f"Olá {ctx.author.mention}, você precisa digitar uma cidade ou país.")
+                return
+
+            busca = str(buscar).replace(" ", "%20")
+            r = requests.get(f'http://api.apixu.com/v1/current.json?key=6a0d3673a1ec4ceb8f5152802182112&q={busca}')
+            if r.status_code == 200:
+                js = r.json()
+
+            embed = discord.Embed(title="Clima do dia:", color=0x370c5e)
+            embed.add_field(name="Nome", value=str(js['location']['name']), inline=False)
+            embed.add_field(name="Região", value=str(js['location']['region']), inline=True)
+            embed.add_field(name="País", value=str(js['location']['country']), inline=True)
+            local = str(js['location']['lat']) + "/" + str(js['location']['lon'])
+            embed.add_field(name="Lat & Lon", value=str(local), inline=True)
+            temp = str(js['current']['temp_c']) + "/" + str(js['current']['temp_f'])
+            embed.add_field(name="c° & f°", value=str(temp), inline=True)
+            url = "https:" + str(js['current']['condition']["icon"])
+            embed.set_thumbnail(url=url)
+            embed.set_footer(text="Climatempo 2019")
+            await ctx.send(embed=embed)
+
+    @commands.guild_only()
+    @commands.command()
+    async def picture(self, ctx, *, user: discord.Member = None):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                if user is None:
+                    usuario = ctx.author.avatar_url
+                    texto = f"Olá {ctx.author.name}, está é sua imagem de perfil."
+                else:
+                    usuario = user.avatar_url
+                    texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name}"
+
+                embed = discord.Embed(title=texto, color=0x370c5e)
+                embed.set_image(url=usuario)
+                embed.set_footer(text=self.client.user.name + " Brazilian Bot.")
+
+                await ctx.send(embed=embed)
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            if user is None:
+                usuario = ctx.author.avatar_url
+                texto = f"Olá {ctx.author.name}, está é sua imagem de perfil."
+            else:
+                usuario = user.avatar_url
+                texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name}"
+
+            embed = discord.Embed(title=texto, color=0x370c5e)
+            embed.set_image(url=usuario)
+            embed.set_footer(text=self.client.user.name + " Brazilian Bot.", icon_url=betina_icon)
+
+            await ctx.send(embed=embed)
+
+    @commands.guild_only()
+    @commands.command()
+    async def gerasenha(self, ctx, nbytes: int = 18):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                if nbytes not in range(3, 1401):
+                    return await ctx.send("Só aceito números entre 3 e 1400!")
+                if hasattr(ctx, 'guild') and ctx.guild is not None:
+                    await ctx.send(f"Estou enviando uma mensagem direta para você contendo a sua senha, **{ctx.author.name}**")
+
+                await ctx.author.send(f"🎁 **Aqui está sua senha:**\n{secrets.token_urlsafe(nbytes)}")
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            if nbytes not in range(3, 1401):
+                return await ctx.send("Só aceito números entre 3 e 1400!")
+            if hasattr(ctx, 'guild') and ctx.guild is not None:
+                await ctx.send(
+                    f"Estou enviando uma mensagem direta para você contendo a sua senha, **{ctx.author.name}**")
+
+            await ctx.author.send(f"🎁 **Aqui está sua senha:**\n{secrets.token_urlsafe(nbytes)}")
+
+    @commands.guild_only()
+    @commands.command(name='geraconvite', aliases=['invitegenerator', 'gerador'])
+    @has_permissions(manage_channels=True)
+    async def invite(self, ctx):
+        if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+            avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+        else:
+            avi = ctx.message.author.avatar_url_as(static_format='png')
+
+        channel = ctx.channel
+        invitelinknew = await ctx.channel.create_invite(unique=True, reason='Automatizar a função do usuário!')
+        embedMsg = discord.Embed(color=0x370c5e)
+        embedMsg.add_field(name="Convite criado:", value=invitelinknew)
+        embedMsg.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
+        embedMsg.set_footer(text="Convite do servidor", icon_url=ctx.message.guild.icon_url)
+        await ctx.send(embed=embedMsg)
+
+    @invite.error
+    async def invite_handler(self, ctx, error):
+        if isinstance(error, MissingPermissions):
+            embed = discord.Embed(
+                title="Comando $geraconvite: Gera um convite para o seu servidor"
+                      "\n \n**Como usar: $geraconvite**", colour=discord.Colour(0x370c5e))
+
+            embed.set_author(name="Betina#9182",
+                             icon_url=betina_icon)
+            embed.set_footer(text="Betina Brazilian Bot",
+                             icon_url=betina_icon)
+            embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
+                                                            "ter a permissão de* ``"
+                                                            "Gerenciar canais`` *para utilizar este comando!*",
+                            inline=False)
+            embed.add_field(name="📖**Exemplos:**", value="$gerador"
+                                                          "\n$invitegenerator"
+                                                          "", inline=False)
+            embed.add_field(name="🔀**Outros Comandos**", value="``$gerador, $invitegenerator.``", inline=False)
+
+            msg = await ctx.send(embed=embed)
+            await msg.add_reaction("❓")
+
 
 def setup(client):
-    client.add_cog(Cobrança(client))
+    client.add_cog(Utilidades(client))
