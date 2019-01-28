@@ -476,12 +476,12 @@ async def help(ctx):
     embed.set_footer(text="Betina Brazilian Bot",
                      icon_url=betina_icon)
 
-    embed.add_field(name="😂 **Diversão**", value="``$moeda, $ppt, $rola ...``", inline=False)
-    embed.add_field(name="💰 **Utilidades**", value="``$devemais, $devemenos, $deve...``", inline=False)
-    embed.add_field(name="🎵 **Música**", value="``$play, $resume, $stop, $fila...``", inline=False)
-    embed.add_field(name="🗣 **Interação**", value="``$bate, $abraça, $treta...``", inline=False)
-    embed.add_field(name="👮 **Administração**", value="``$apaga, $ping, $pong...``", inline=False)
-    embed.add_field(name="⚙ **Configuração**", value="``$joinlogs, $leavelogs, $autorole...``", inline=False)
+    embed.add_field(name="😂 **Diversão (11)**", value="``$moeda, $ppt, $rola ...``", inline=False)
+    embed.add_field(name="💰 **Utilidades (13)**", value="``$devemais, $devemenos, $deve...``", inline=False)
+    embed.add_field(name="🎵 **Música (8)**", value="``$play, $resume, $stop, $fila...``", inline=False)
+    embed.add_field(name="🗣 **Interação (14)**", value="``$bate, $abraça, $treta...``", inline=False)
+    embed.add_field(name="👮 **Administração (11)**", value="``$apaga, $ping, $pong...``", inline=False)
+    embed.add_field(name="⚙ **Configuração (15)**", value="``$joinlogs, $leavelogs, $autorole...``", inline=False)
     message = await author.send(embed=embed)
 
     reaction_list = ["😂", "💰", "🎵", "🗣", "👮", "⚙"]
@@ -520,11 +520,22 @@ async def help(ctx):
                 embed.add_field(name="**$picture <usuário> (opcional)"
                                      "**", value="``Darei a foto do usuário em questão.``",
                                 inline=False)
+                embed.add_field(name="**$pb <usuário> (opcional)"
+                                     "**", value="``Darei a foto do usuário marcado em preto e branco.``",
+                                inline=False)
+                embed.add_field(name="**$pontilhado <usuário> (opcional)"
+                                     "**", value="``Darei a foto do usuário marcado na forma pontilhada.``",
+                                inline=False)
+                embed.add_field(name="**$primario <usuário> (opcional)"
+                                     "**", value="``Darei a foto do usuário marcado nas cores primárias.``",
+                                inline=False)
                 embed.add_field(name="**$gerasenha <número> (opcional)"
                                      "**", value="``Gerarei uma senha aleatória com o tamanho do número.``",
                                 inline=False)
                 embed.add_field(name="**$geraconvite **", value="``Gerarei um convite para o seu servidor!``", inline=False)
                 embed.add_field(name="**$buscacep <cep> **", value="``Darei as informações sobre o cep requisitado!``",
+                                inline=False)
+                embed.add_field(name="**$geracor **", value="``Gera uma cor aleatória para o discord!``",
                                 inline=False)
                 msg = await message.edit(embed=embed)
 
@@ -550,6 +561,9 @@ async def help(ctx):
                 embed.add_field(name="**$faustao**", value="``O Faustão aparece!``", inline=False)
                 embed.add_field(name="**$miranha**", value="``O Miranha aparece!``", inline=False)
                 embed.add_field(name="**$ata <texto> (opcional)**", value="``Ata!``", inline=False)
+                embed.add_field(name="**$facebook <texto> (opcional)**", value="``Cria um post "
+                                                                               "do facebook com o "
+                                                                               "seu texto!``", inline=False)
                 embed.add_field(name="**$hungergames <número>**", value="``Iniciarei um jogo de Hunger Games!``",
                                 inline=False)
                 embed.add_field(name="**$reverse <texto>**", value="``Reverte o texto!``",
@@ -1717,7 +1731,7 @@ async def betinainfo(ctx):
             id = str(client.user.id)
             tag = str(client.user)
             ping = '{}ms'.format(round((t2 - t1) * 1000))
-            users = str(len(set(client.get_all_members())))
+            users = str(len(set(client.users)))
             servers = str(len(client.guilds))
             canais = str(len(set(client.get_all_channels())))
             fundado = '02/01/2019'
@@ -1725,7 +1739,7 @@ async def betinainfo(ctx):
             program = "Python 3.6.6"
             hospedagem = 'Raspberry Pi'
             uptime = "{} horas {} minutos ".format(0, 0)
-            commandos2 = '60'
+            commandos2 = '71'
             cpu = "{} % ".format(str(psutil.cpu_percent(interval=1)))
             invite = '[[Me adicione]](https://discordapp.com/oauth2/authorize?&client_id=527565353199337474&scope=bot&permissions=8)'
             suporte = '[[Peça ajuda]](https://discord.gg/eZrzDfs)'
@@ -1755,3 +1769,4 @@ if __name__ == '__main__':
             print('Falha ao carregar a extensão {}\n{}'.format(extension, exc))
 
 client.run(TOKEN)
+
