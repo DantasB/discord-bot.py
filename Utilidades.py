@@ -37,7 +37,60 @@ from dhooks import Webhook
 from discord.utils import get
 from discord.ext.commands import has_permissions, MissingPermissions
 from googletrans import Translator
+from PIL import Image, ImageDraw, ImageFont
+from io import BytesIO
 
+
+def open_image(path):
+    newImage = Image.open(path)
+    return newImage
+
+
+# Save Image
+def save_image(image, path):
+    image.save(path, 'png')
+
+
+# Create a new image with the given size
+def create_image(i, j):
+    image = Image.new("RGB", (i, j), "white")
+    return image
+
+
+# Get the pixel from the given image
+def get_pixel(image, i, j):
+    # Inside image bounds?
+    width, height = image.size
+    if i > width or j > height:
+        return None
+
+    # Get Pixel
+    pixel = image.getpixel((i, j))
+    return pixel
+
+
+def get_saturation(value, quadrant):
+    if value > 223:
+        return 255
+    elif value > 159:
+        if quadrant != 1:
+            return 255
+
+        return 0
+    elif value > 95:
+        if quadrant == 0 or quadrant == 3:
+            return 255
+
+        return 0
+    elif value > 32:
+        if quadrant == 1:
+            return 255
+
+        return 0
+    else:
+        return 0
+    
+  
 # devemais e devemenos
 devedores = {}
 devidos = {}
@@ -142,7 +195,6 @@ class Utilidades:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-
 
     @commands.guild_only()
     @commands.command(name='deve', aliases=['rsp', 'owe'])
@@ -297,7 +349,8 @@ class Utilidades:
                 else:
                     devidos[ctx.author] = a
                     devedores[member] = devidos
-                await ctx.send('**{} deve R$ {} ao {}**'.format(member.mention, devidos[ctx.author], ctx.author.mention))
+                await ctx.send(
+                    '**{} deve R$ {} ao {}**'.format(member.mention, devidos[ctx.author], ctx.author.mention))
             else:
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
@@ -410,10 +463,10 @@ class Utilidades:
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
                 if user is None:
-                    usuario = ctx.author.avatar_url
+                    usuario = ctx.author.avatar_url_as(size=256)
                     texto = f"Olá {ctx.author.name}, está é sua imagem de perfil."
                 else:
-                    usuario = user.avatar_url
+                    usuario = user.avatar_url_as(size=256)
                     texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name}"
 
                 embed = discord.Embed(title=texto, color=0x370c5e)
@@ -427,10 +480,10 @@ class Utilidades:
                 return
         else:
             if user is None:
-                usuario = ctx.author.avatar_url
+                usuario = ctx.author.avatar_url_as(size=256)
                 texto = f"Olá {ctx.author.name}, está é sua imagem de perfil."
             else:
-                usuario = user.avatar_url
+                usuario = user.avatar_url_as(size=256)
                 texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name}"
 
             embed = discord.Embed(title=texto, color=0x370c5e)
@@ -449,7 +502,8 @@ class Utilidades:
                 if nbytes not in range(3, 1401):
                     return await ctx.send("Só aceito números entre 3 e 1400!")
                 if hasattr(ctx, 'guild') and ctx.guild is not None:
-                    await ctx.send(f"Estou enviando uma mensagem direta para você contendo a sua senha, **{ctx.author.name}**")
+                    await ctx.send(
+                        f"Estou enviando uma mensagem direta para você contendo a sua senha, **{ctx.author.name}**")
 
                 await ctx.author.send(f"🎁 **Aqui está sua senha:**\n{secrets.token_urlsafe(nbytes)}")
             else:
@@ -568,19 +622,35 @@ class Utilidades:
                 if buscar is None:
                     await ctx.send(f"Olá {ctx.author.mention}, digite um cep.")
                     return
-                endereco = pycep_correios.consultar_cep(f'{buscar}')
-                embed = discord.Embed(title=f"Cep procurado {buscar}:", color=0x370c5e)
-                embed.add_field(name="Bairro", value=endereco['bairro'])
-                embed.add_field(name="Cep", value=endereco['cep'], inline=True)
-                embed.add_field(name="Cidade", value=endereco['cidade'], inline=True)
-                embed.add_field(name="uf", value=endereco['uf'], inline=True)
-                embed.set_thumbnail(url='https://warehouse-camo.cmh1.psfhosted.org/84cd'
-                                        '73e1f12421aca2cc6ae603ecdb96d312f663/68747470733a2f'
-                                        '2f7261772e67697468756275736572636f6e74656e742e636f6d2'
-                                        'f6d7374757474676172742f70796365702d636f727265696f732f6465'
-                                        '76656c6f702f646f63732f5f7374617469632f6c6f676f2e6a7067')
-                embed.set_footer(text="Correios 2019")
-                await ctx.send(embed=embed)
+                try:
+                    endereco = pycep_correios.consultar_cep(f'{buscar}')
+                    embed = discord.Embed(title=f"Cep procurado {buscar}:", color=0x370c5e)
+                    embed.add_field(name="Bairro", value=endereco['bairro'])
+                    embed.add_field(name="Cep", value=endereco['cep'], inline=True)
+                    embed.add_field(name="Cidade", value=endereco['cidade'], inline=True)
+                    embed.add_field(name="Uf", value=endereco['uf'], inline=True)
+                    embed.add_field(name="Rua", value=endereco['end'], inline=True)
+                    embed.add_field(name="Bairro", value=endereco['bairro'], inline=True)
+                    embed.set_thumbnail(url='https://warehouse-camo.cmh1.psfhosted.org/84cd'
+                                            '73e1f12421aca2cc6ae603ecdb96d312f663/68747470733a2f'
+                                            '2f7261772e67697468756275736572636f6e74656e742e636f6d2'
+                                            'f6d7374757474676172742f70796365702d636f727265696f732f6465'
+                                            '76656c6f702f646f63732f5f7374617469632f6c6f676f2e6a7067')
+                    embed.set_footer(text="Correios 2019")
+                    await ctx.send(embed=embed)
+                except ExcecaoPyCEPCorreios as exc:
+                    embed = discord.Embed(title="Comando $buscacep:", colour=discord.Colour(0x370c5e),
+                                          description="Busca um cep\n \n**Como"
+                                                      " usar: $busca <cep>**")
+
+                    embed.set_author(name="Betina#9182",
+                                     icon_url=betina_icon)
+                    embed.set_footer(text="Betina Brazilian Bot",
+                                     icon_url=betina_icon)
+                    embed.add_field(name="❗**Atenção:**", value="Utilize um cep existente!", inline=False)
+                    msg = await ctx.send(embed=embed)
+                    await msg.add_reaction("❓")
+                    return
             else:
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
@@ -589,19 +659,35 @@ class Utilidades:
             if buscar is None:
                 await ctx.send(f"Olá {ctx.author.mention}, digite um cep.")
                 return
-            endereco = pycep_correios.consultar_cep(f'{buscar}')
-            embed = discord.Embed(title=f"Cep procurado {buscar}:", color=0x370c5e)
-            embed.add_field(name="Bairro", value=endereco['bairro'])
-            embed.add_field(name="Cep", value=endereco['cep'], inline=True)
-            embed.add_field(name="Cidade", value=endereco['cidade'], inline=True)
-            embed.add_field(name="uf", value=endereco['uf'], inline=True)
-            embed.set_thumbnail(url='https://warehouse-camo.cmh1.psfhosted.org/84cd'
-                                    '73e1f12421aca2cc6ae603ecdb96d312f663/68747470733a2f'
-                                    '2f7261772e67697468756275736572636f6e74656e742e636f6d2'
-                                    'f6d7374757474676172742f70796365702d636f727265696f732f6465'
-                                    '76656c6f702f646f63732f5f7374617469632f6c6f676f2e6a7067')
-            embed.set_footer(text="Correios 2019")
-            await ctx.send(embed=embed)
+            try:
+                endereco = pycep_correios.consultar_cep(f'{buscar}')
+                embed = discord.Embed(title=f"Cep procurado {buscar}:", color=0x370c5e)
+                embed.add_field(name="Bairro", value=endereco['bairro'])
+                embed.add_field(name="Cep", value=endereco['cep'], inline=True)
+                embed.add_field(name="Cidade", value=endereco['cidade'], inline=True)
+                embed.add_field(name="Uf", value=endereco['uf'], inline=True)
+                embed.add_field(name="Rua", value=endereco['end'], inline=True)
+                embed.add_field(name="Bairro", value=endereco['bairro'], inline=True)
+                embed.set_thumbnail(url='https://warehouse-camo.cmh1.psfhosted.org/84cd'
+                                        '73e1f12421aca2cc6ae603ecdb96d312f663/68747470733a2f'
+                                        '2f7261772e67697468756275736572636f6e74656e742e636f6d2'
+                                        'f6d7374757474676172742f70796365702d636f727265696f732f6465'
+                                        '76656c6f702f646f63732f5f7374617469632f6c6f676f2e6a7067')
+                embed.set_footer(text="Correios 2019")
+                await ctx.send(embed=embed)
+            except ExcecaoPyCEPCorreios as exc:
+                embed = discord.Embed(title="Comando $buscacep:", colour=discord.Colour(0x370c5e),
+                                      description="Busca um cep\n \n**Como"
+                                                  " usar: $busca <cep>**")
+
+                embed.set_author(name="Betina#9182",
+                                 icon_url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+                embed.add_field(name="❗**Atenção:**", value="Utilize um cep existente!", inline=False)
+                msg = await ctx.send(embed=embed)
+                await msg.add_reaction("❓")
+                return
 
     @commands.guild_only()
     @commands.command(name='cor', aliases=['randomcolour', 'geracor'])
@@ -643,6 +729,447 @@ class Utilidades:
                                   colour=color)
             embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
             await ctx.send(embed=embed)
+
+    @commands.guild_only()
+    @commands.command(name='pb', aliases=['bw'])
+    async def preto_e_branco(self, ctx, user: discord.Member = None):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                try:
+                    if user is None:
+                        imagem = ctx.author.avatar_url_as(size=256)
+                        response = requests.get(imagem)
+                        image = Image.open(BytesIO(response.content))
+                        texto = f"Olá {ctx.author.name}, está é sua imagem de perfil em preto e branco."
+                        width, height = image.size
+
+                        new = create_image(width, height)
+                        pixels = new.load()
+
+                        for i in range(width):
+                            for j in range(height):
+                                pixel = get_pixel(image, i, j)
+
+                                red = pixel[0]
+                                green = pixel[1]
+                                blue = pixel[2]
+
+                                gray = (red * 0.299) + (green * 0.587) + (blue * 0.114)
+
+                                pixels[i, j] = (int(gray), int(gray), int(gray))
+                    else:
+                        imagem = user.avatar_url_as(size=256)
+                        response = requests.get(imagem)
+                        image = Image.open(BytesIO(response.content))
+                        texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name} em preto e branco."
+                        width, height = image.size
+
+                        new = create_image(width, height)
+                        pixels = new.load()
+
+                        for i in range(width):
+                            for j in range(height):
+                                pixel = get_pixel(image, i, j)
+
+                                red = pixel[0]
+                                green = pixel[1]
+                                blue = pixel[2]
+
+                                gray = (red * 0.299) + (green * 0.587) + (blue * 0.114)
+
+                                pixels[i, j] = (int(gray), int(gray), int(gray))
+                    new.save('usuariopb.png')
+                    await ctx.channel.send(file=discord.File('usuariopb.png'))
+                except:
+                    return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            try:
+                if user is None:
+                    imagem = ctx.author.avatar_url_as(size=256)
+                    response = requests.get(imagem)
+                    image = Image.open(BytesIO(response.content))
+                    texto = f"Olá {ctx.author.name}, está é sua imagem de perfil em preto e branco."
+                    width, height = image.size
+
+                    new = create_image(width, height)
+                    pixels = new.load()
+
+                    for i in range(width):
+                        for j in range(height):
+                            pixel = get_pixel(image, i, j)
+
+                            red = pixel[0]
+                            green = pixel[1]
+                            blue = pixel[2]
+
+                            gray = (red * 0.299) + (green * 0.587) + (blue * 0.114)
+
+                            pixels[i, j] = (int(gray), int(gray), int(gray))
+                else:
+                    imagem = user.avatar_url_as(size=256)
+                    response = requests.get(imagem)
+                    image = Image.open(BytesIO(response.content))
+                    texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name} em preto e branco."
+                    width, height = image.size
+
+                    new = create_image(width, height)
+                    pixels = new.load()
+
+                    for i in range(width):
+                        for j in range(height):
+                            pixel = get_pixel(image, i, j)
+
+                            red = pixel[0]
+                            green = pixel[1]
+                            blue = pixel[2]
+
+                            gray = (red * 0.299) + (green * 0.587) + (blue * 0.114)
+
+                            pixels[i, j] = (int(gray), int(gray), int(gray))
+                new.save('usuariopb.png')
+                await ctx.channel.send(file=discord.File('usuariopb.png'))
+            except:
+                return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
+
+    @commands.guild_only()
+    @commands.command(name='primario', aliases=['primary'])
+    async def primario(self, ctx, user: discord.Member = None):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                try:
+                    if user is None:
+                        imagem = ctx.author.avatar_url_as(size=256)
+                        response = requests.get(imagem)
+                        image = Image.open(BytesIO(response.content))
+                        texto = f"Olá {ctx.author.name}, está é sua imagem de perfil em preto e branco."
+                        width, height = image.size
+
+                        new = create_image(width, height)
+                        pixels = new.load()
+
+                        for i in range(width):
+                            for j in range(height):
+                                # Get Pixel
+                                pixel = get_pixel(image, i, j)
+
+                                red = pixel[0]
+                                green = pixel[1]
+                                blue = pixel[2]
+
+                                if red > 127:
+                                    red = 255
+                                else:
+                                    red = 0
+                                if green > 127:
+                                    green = 255
+                                else:
+                                    green = 0
+                                if blue > 127:
+                                    blue = 255
+                                else:
+                                    blue = 0
+
+                                pixels[i, j] = (int(red), int(green), int(blue))
+                    else:
+                        imagem = user.avatar_url_as(size=256)
+                        response = requests.get(imagem)
+                        image = Image.open(BytesIO(response.content))
+                        texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name} em preto e branco."
+                        width, height = image.size
+
+                        new = create_image(width, height)
+                        pixels = new.load()
+
+                        for i in range(width):
+                            for j in range(height):
+                                # Get Pixel
+                                pixel = get_pixel(image, i, j)
+
+                                red = pixel[0]
+                                green = pixel[1]
+                                blue = pixel[2]
+
+                                if red > 127:
+                                    red = 255
+                                else:
+                                    red = 0
+                                if green > 127:
+                                    green = 255
+                                else:
+                                    green = 0
+                                if blue > 127:
+                                    blue = 255
+                                else:
+                                    blue = 0
+
+                                pixels[i, j] = (int(red), int(green), int(blue))
+                    new.save('usuarioprimario.png')
+                    await ctx.channel.send(file=discord.File('usuarioprimario.png'))
+                except:
+                    return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            try:
+                if user is None:
+                    imagem = ctx.author.avatar_url_as(size=256)
+                    response = requests.get(imagem)
+                    image = Image.open(BytesIO(response.content))
+                    texto = f"Olá {ctx.author.name}, está é sua imagem de perfil em preto e branco."
+                    width, height = image.size
+
+                    new = create_image(width, height)
+                    pixels = new.load()
+
+                    for i in range(width):
+                        for j in range(height):
+                            # Get Pixel
+                            pixel = get_pixel(image, i, j)
+
+                            red = pixel[0]
+                            green = pixel[1]
+                            blue = pixel[2]
+
+                            if red > 127:
+                                red = 255
+                            else:
+                                red = 0
+                            if green > 127:
+                                green = 255
+                            else:
+                                green = 0
+                            if blue > 127:
+                                blue = 255
+                            else:
+                                blue = 0
+
+                            pixels[i, j] = (int(red), int(green), int(blue))
+                else:
+                    imagem = user.avatar_url_as(size=256)
+                    response = requests.get(imagem)
+                    image = Image.open(BytesIO(response.content))
+                    texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name} em preto e branco."
+                    width, height = image.size
+
+                    new = create_image(width, height)
+                    pixels = new.load()
+
+                    for i in range(width):
+                        for j in range(height):
+                            # Get Pixel
+                            pixel = get_pixel(image, i, j)
+
+                            red = pixel[0]
+                            green = pixel[1]
+                            blue = pixel[2]
+
+                            if red > 127:
+                                red = 255
+                            else:
+                                red = 0
+                            if green > 127:
+                                green = 255
+                            else:
+                                green = 0
+                            if blue > 127:
+                                blue = 255
+                            else:
+                                blue = 0
+
+                            pixels[i, j] = (int(red), int(green), int(blue))
+                new.save('usuarioprimario.png')
+                await ctx.channel.send(file=discord.File('usuarioprimario.png'))
+            except:
+                return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
+
+    @commands.guild_only()
+    @commands.command(name='pontilhado', aliases=['dither'])
+    async def pontilhado(self, ctx, user: discord.Member = None):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                try:
+                    if user is None:
+                        imagem = ctx.author.avatar_url_as(size=256)
+                        response = requests.get(imagem)
+                        image = Image.open(BytesIO(response.content))
+                        texto = f"Olá {ctx.author.name}, está é sua imagem de perfil em preto e branco."
+                        width, height = image.size
+
+                        new = create_image(width, height)
+                        pixels = new.load()
+
+                        for i in range(0, width, 2):
+                            for j in range(0, height, 2):
+                                # Get Pixels
+                                p1 = get_pixel(image, i, j)
+                                p2 = get_pixel(image, i, j + 1)
+                                p3 = get_pixel(image, i + 1, j)
+                                p4 = get_pixel(image, i + 1, j + 1)
+
+                                # Color Saturation by RGB channel
+                                red = (p1[0] + p2[0] + p3[0] + p4[0]) / 4
+                                green = (p1[1] + p2[1] + p3[1] + p4[1]) / 4
+                                blue = (p1[2] + p2[2] + p3[2] + p4[2]) / 4
+
+                                # Results by channel
+                                r = [0, 0, 0, 0]
+                                g = [0, 0, 0, 0]
+                                b = [0, 0, 0, 0]
+
+                                # Get Quadrant Color
+                                for x in range(0, 4):
+                                    r[x] = get_saturation(red, x)
+                                    g[x] = get_saturation(green, x)
+                                    b[x] = get_saturation(blue, x)
+
+                                # Set Dithered Colors
+                                pixels[i, j] = (r[0], g[0], b[0])
+                                pixels[i, j + 1] = (r[1], g[1], b[1])
+                                pixels[i + 1, j] = (r[2], g[2], b[2])
+                                pixels[i + 1, j + 1] = (r[3], g[3], b[3])
+                    else:
+                        imagem = user.avatar_url_as(size=256)
+                        response = requests.get(imagem)
+                        image = Image.open(BytesIO(response.content))
+                        texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name} em preto e branco."
+                        width, height = image.size
+
+                        new = create_image(width, height)
+                        pixels = new.load()
+
+                        for i in range(0, width, 2):
+                            for j in range(0, height, 2):
+                                # Get Pixels
+                                p1 = get_pixel(image, i, j)
+                                p2 = get_pixel(image, i, j + 1)
+                                p3 = get_pixel(image, i + 1, j)
+                                p4 = get_pixel(image, i + 1, j + 1)
+
+                                # Color Saturation by RGB channel
+                                red = (p1[0] + p2[0] + p3[0] + p4[0]) / 4
+                                green = (p1[1] + p2[1] + p3[1] + p4[1]) / 4
+                                blue = (p1[2] + p2[2] + p3[2] + p4[2]) / 4
+
+                                # Results by channel
+                                r = [0, 0, 0, 0]
+                                g = [0, 0, 0, 0]
+                                b = [0, 0, 0, 0]
+
+                                # Get Quadrant Color
+                                for x in range(0, 4):
+                                    r[x] = get_saturation(red, x)
+                                    g[x] = get_saturation(green, x)
+                                    b[x] = get_saturation(blue, x)
+
+                                # Set Dithered Colors
+                                pixels[i, j] = (r[0], g[0], b[0])
+                                pixels[i, j + 1] = (r[1], g[1], b[1])
+                                pixels[i + 1, j] = (r[2], g[2], b[2])
+                                pixels[i + 1, j + 1] = (r[3], g[3], b[3])
+                    new.save('usuariopontilhado.png')
+                    await ctx.channel.send(file=discord.File('usuariopontilhado.png'))
+                except:
+                    return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            try:
+                if user is None:
+                    imagem = ctx.author.avatar_url_as(size=256)
+                    response = requests.get(imagem)
+                    image = Image.open(BytesIO(response.content))
+                    texto = f"Olá {ctx.author.name}, está é sua imagem de perfil em preto e branco."
+                    width, height = image.size
+
+                    new = create_image(width, height)
+                    pixels = new.load()
+
+                    for i in range(0, width, 2):
+                        for j in range(0, height, 2):
+                            # Get Pixels
+                            p1 = get_pixel(image, i, j)
+                            p2 = get_pixel(image, i, j + 1)
+                            p3 = get_pixel(image, i + 1, j)
+                            p4 = get_pixel(image, i + 1, j + 1)
+
+                            # Color Saturation by RGB channel
+                            red = (p1[0] + p2[0] + p3[0] + p4[0]) / 4
+                            green = (p1[1] + p2[1] + p3[1] + p4[1]) / 4
+                            blue = (p1[2] + p2[2] + p3[2] + p4[2]) / 4
+
+                            # Results by channel
+                            r = [0, 0, 0, 0]
+                            g = [0, 0, 0, 0]
+                            b = [0, 0, 0, 0]
+
+                            # Get Quadrant Color
+                            for x in range(0, 4):
+                                r[x] = get_saturation(red, x)
+                                g[x] = get_saturation(green, x)
+                                b[x] = get_saturation(blue, x)
+
+                            # Set Dithered Colors
+                            pixels[i, j] = (r[0], g[0], b[0])
+                            pixels[i, j + 1] = (r[1], g[1], b[1])
+                            pixels[i + 1, j] = (r[2], g[2], b[2])
+                            pixels[i + 1, j + 1] = (r[3], g[3], b[3])
+                else:
+                    imagem = user.avatar_url_as(size=256)
+                    response = requests.get(imagem)
+                    image = Image.open(BytesIO(response.content))
+                    texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name} em preto e branco."
+                    width, height = image.size
+
+                    new = create_image(width, height)
+                    pixels = new.load()
+
+                    for i in range(0, width, 2):
+                        for j in range(0, height, 2):
+                            # Get Pixels
+                            p1 = get_pixel(image, i, j)
+                            p2 = get_pixel(image, i, j + 1)
+                            p3 = get_pixel(image, i + 1, j)
+                            p4 = get_pixel(image, i + 1, j + 1)
+
+                            # Color Saturation by RGB channel
+                            red = (p1[0] + p2[0] + p3[0] + p4[0]) / 4
+                            green = (p1[1] + p2[1] + p3[1] + p4[1]) / 4
+                            blue = (p1[2] + p2[2] + p3[2] + p4[2]) / 4
+
+                            # Results by channel
+                            r = [0, 0, 0, 0]
+                            g = [0, 0, 0, 0]
+                            b = [0, 0, 0, 0]
+
+                            # Get Quadrant Color
+                            for x in range(0, 4):
+                                r[x] = get_saturation(red, x)
+                                g[x] = get_saturation(green, x)
+                                b[x] = get_saturation(blue, x)
+
+                            # Set Dithered Colors
+                            pixels[i, j] = (r[0], g[0], b[0])
+                            pixels[i, j + 1] = (r[1], g[1], b[1])
+                            pixels[i + 1, j] = (r[2], g[2], b[2])
+                            pixels[i + 1, j + 1] = (r[3], g[3], b[3])
+                new.save('usuariopontilhado.png')
+                await ctx.channel.send(file=discord.File('usuariopontilhado.png'))
+            except:
+                return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
 
 
 def setup(client):
