@@ -60,12 +60,10 @@ class Interação:
     def __init__(self, client):
         self.client = client
 
-    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command()
     async def treta(self, ctx):
         """Todas as tretas do grupo!"""
-
 
     @commands.guild_only()
     @commands.command(name='endeline')
@@ -520,7 +518,6 @@ class Interação:
                                'minutos  e `{2}` segundos. Para'
                                ' usar o comando beija novamente.**'.format(round(h), round(min), round(sec)))
 
-    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.command()
     async def tnc(self, ctx):
         guild_id = str(ctx.guild.id)
@@ -965,7 +962,6 @@ class Interação:
                                'minutos  e `{2}` segundos. Para'
                                ' usar o comando ship novamente.**'.format(round(h), round(min), round(sec)))
 
-    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='roletarussa', aliases=['roleta', 'rr'])
     async def roletarussa(self, ctx):
