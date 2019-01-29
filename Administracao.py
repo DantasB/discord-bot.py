@@ -74,7 +74,6 @@ class Administração:
         embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
         await guild.send(embed=embed)
 
-
     @commands.guild_only()
     @commands.command(pass_context=True)
     async def pong(self, ctx):
@@ -102,7 +101,7 @@ class Administração:
         embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
         await guild.send(embed=embed)
 
-
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='apaga', aliases=['delete', 'clean'])
     @has_permissions(manage_messages=True, read_message_history=True)
@@ -140,8 +139,6 @@ class Administração:
 
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
-
-
         elif isinstance(error, commands.MissingRequiredArgument):
             if error.param.name == 'amount':
                 embed = discord.Embed(title="Comando $apaga:", colour=discord.Colour(0x370c5e),
@@ -161,7 +158,18 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send(
+                    '**Espere `{0}` segundos . Para usar o comando apaga novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando apaga novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='ban', aliases=['banir', 'bane'])
     @has_permissions(ban_members=True)
@@ -292,7 +300,6 @@ class Administração:
 
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
-
         elif isinstance(error, commands.MissingRequiredArgument):
             if error.param.name == 'member':
                 embed = discord.Embed(title="Comando $ban:", colour=discord.Colour(0x370c5e),
@@ -313,7 +320,6 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-
         elif isinstance(error, commands.BotMissingPermissions):
             embed = discord.Embed(title="Comando $ban:", colour=discord.Colour(0x370c5e),
                                   description="Bane o usuário do servidor por um motivo"
@@ -333,13 +339,23 @@ class Administração:
 
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send(
+                    '**Espere `{0}` segundos . Para usar o comando ban novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando ban novamente.**'.format(round(h), round(min), round(sec)))
 
     @commands.guild_only()
     @commands.command()
     async def ajuda(self, ctx):
         await ctx.invoke(self.client.get_command("help"))
 
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='membro', aliases=['userinfo', 'ui'])
     async def membro(self, ctx, member: discord.Member):
@@ -448,26 +464,7 @@ class Administração:
 
     @membro.error
     async def membro_handler(self, ctx, error):
-        if isinstance(error, MissingPermissions):
-            embed = discord.Embed(title="Comando $membro:", colour=discord.Colour(0x370c5e),
-                                  description="Diz as informações sobre o usuário"
-                                              "\n \n**Como usar: $membro <usuário>**")
-
-            embed.set_author(name="Betina#9182",
-                             icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
-            embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
-                                                            "ter a permissão de* ``"
-                                                            "Gerenciar Cargos`` *para utilizar este comando!*",
-                            inline=False)
-            embed.add_field(name="📖**Exemplos:**", value="$membro @fulano\n$membro @sicrano",
-                            inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$userinfo, $ui.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
-        elif isinstance(error, commands.MissingRequiredArgument):
+        if isinstance(error, commands.MissingRequiredArgument):
             if error.param.name == 'member':
                 embed = discord.Embed(title="Comando $membro:", colour=discord.Colour(0x370c5e),
                                       description="Diz as informações sobre o usuário"
@@ -497,7 +494,6 @@ class Administração:
                                'minutos  e `{2}` segundos. Para'
                                ' usar o comando userinfo novamente.**'.format(round(h), round(min), round(sec)))
 
-    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(pass_context=True, name='servidor', aliases=['serverinfo', 'si'])
     @has_permissions(administrator=True)
@@ -562,7 +558,7 @@ class Administração:
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(pass_context=True, name='warn', aliases=['aviso', 'wrn'])
     @has_permissions(kick_members=True)
@@ -661,7 +657,6 @@ class Administração:
 
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
-
         elif isinstance(error, commands.MissingRequiredArgument):
             if error.param.name == 'user':
                 embed = discord.Embed(title="Comando $warn:", colour=discord.Colour(0x370c5e),
@@ -681,8 +676,18 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send(
+                    '**Espere `{0}` segundos . Para usar o comando warn novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando warn novamente.**'.format(round(h), round(min), round(sec)))
 
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(pass_context=True, name='warnings', aliases=['avisos', 'wrns'])
     @has_permissions(kick_members=True)
@@ -771,7 +776,6 @@ class Administração:
 
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
-
         elif isinstance(error, commands.MissingRequiredArgument):
             if error.param.name == 'user':
                 embed = discord.Embed(title="Comando $warnings:", colour=discord.Colour(0x370c5e),
@@ -791,8 +795,18 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send(
+                    '**Espere `{0}` segundos . Para usar o comando warnings novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando warnings novamente.**'.format(round(h), round(min), round(sec)))
 
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='clearlastwarn', aliases=['limpawarn', 'tirawarn'])
     @has_permissions(ban_members=True)
@@ -873,7 +887,6 @@ class Administração:
 
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
-
         elif isinstance(error, commands.MissingRequiredArgument):
             if error.param.name == 'user':
                 embed = discord.Embed(title="Comando $clearlastwarn:", colour=discord.Colour(0x370c5e),
@@ -894,8 +907,17 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send(
+                    '**Espere `{0}` segundos . Para usar o comando clearlastwarn novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando clearlastwarn novamente.**'.format(round(h), round(min), round(sec)))
 
-    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='mute', aliases=['mutar', 'silenciar'])
     @has_permissions(kick_members=True, manage_roles=True)
@@ -987,7 +1009,6 @@ class Administração:
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
 
-    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='unmute', aliases=['desmutar', 'semsilenciar'])
     @has_permissions(kick_members=True, manage_roles=True)
@@ -1134,6 +1155,7 @@ class Administração:
                 await ctx.send('**Espere `{0}` horas `{1}` '
                                'minutos  e `{2}` segundos. Para'
                                ' usar o comando suggestion novamente.**'.format(round(h), round(min), round(sec)))
-                                       
+
+
 def setup(client):
     client.add_cog(Administração(client))
