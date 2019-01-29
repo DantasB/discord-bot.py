@@ -712,6 +712,7 @@ async def help(ctx):
         return
 
 
+@commands.cooldown(2, 10, commands.BucketType.user)
 @commands.guild_only()
 @client.command(name='afk', aliases=['away', 'ausente'])
 async def afk(ctx, *, arg: str = None):
@@ -757,6 +758,20 @@ async def afk(ctx, *, arg: str = None):
         json.dump(afklist, file)
 
 
+@afk.error
+async def afk_error(ctx, error):
+    if isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando afk novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando afk novamente.**'.format(round(h), round(min), round(sec)))
+
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(pass_context=True, name='addtreta', aliases=['maistreta', 'adiciona'])
 @has_permissions(administrator=True)
@@ -813,7 +828,18 @@ async def addtreta_handler(ctx, error):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando addtreta novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando addtreta novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='cargo', aliases=['cargoauto', 'autorole'])
 @has_permissions(administrator=True)
@@ -898,7 +924,18 @@ async def cargo_handler(ctx, error):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando autorole novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando autorole novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='joinlogs', aliases=['defjoinlogs', 'djlogs'])
 @has_permissions(administrator=True)
@@ -983,7 +1020,18 @@ async def joinlogs_handler(ctx, error):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando joinlogs novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando joinlogs novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='leavelogs', aliases=['defleavelogs', 'dllogs'])
 @has_permissions(administrator=True)
@@ -1068,7 +1116,18 @@ async def leave_handler(ctx, error):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando leavelogs novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando leavelogs novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='reactionlogsin', aliases=['defreactionlogsin', 'drlogsin'])
 @has_permissions(administrator=True)
@@ -1133,7 +1192,19 @@ async def reaction_logsin_handler(ctx, error):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando reactionlogsin '
+                           'novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando reactionlogsin novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='reactionlogsout', aliases=['defreactionlogsout', 'drlogsout'])
 @has_permissions(administrator=True)
@@ -1198,7 +1269,19 @@ async def reaction_logsout_handler(ctx, error):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando reactionlogsout '
+                           'novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando reactionlogsout novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='cargoinicial', aliases=['defci', 'dci'])
 @has_permissions(administrator=True)
@@ -1261,7 +1344,19 @@ async def cargo_inicial_handler(ctx, error):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando cargoinicial '
+                           'novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando cargoinicial novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='prefixo', aliases=['newprefix', 'novoprefixo'])
 @has_permissions(administrator=True)
@@ -1324,7 +1419,19 @@ async def novo_prefixo_handler(ctx, error):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando newprefix '
+                           'novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando newprefix novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='config', aliases=['configuration', 'definições'])
 @has_permissions(administrator=True)
@@ -1423,7 +1530,19 @@ async def configuration_handler(ctx, error):
         msg = await ctx.send(embed=embed)
         await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando config '
+                           'novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando config novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='digitlogs', aliases=['defdigitlogs', 'ddlogs'])
 @has_permissions(administrator=True)
@@ -1488,7 +1607,19 @@ async def digilog_handler(ctx, error):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando digitlogs '
+                           'novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando digitlogs novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='invites', aliases=['userinv', 'uinv'])
 @has_permissions(administrator=True)
@@ -1554,7 +1685,19 @@ async def invites_handler(ctx, error):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando invites '
+                           'novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando invites novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='botchannel', aliases=['canaldobot', 'cdb'])
 @has_permissions(administrator=True)
@@ -1581,7 +1724,8 @@ async def limite_handler(ctx, error):
     if isinstance(error, MissingPermissions):
         embed = discord.Embed(
             title="Comando $botchannel: define um canal que será o único local que pode usar o comando da Betina"
-                  "\n \n**Como usar: $canaldobot <#Canal>**", colour=discord.Colour(0x370c5e), description='*Os únicos comandos'
+                  "\n \n**Como usar: $canald"
+                  "obot <#Canal>**", colour=discord.Colour(0x370c5e), description='*Os únicos comandos'
                                                                        ' limitados são: afk, userinfo, '
                                                                        'todas as funções da parte de Diversão,'
                                                                        ' Interação e Cobrança*.')
@@ -1606,7 +1750,8 @@ async def limite_handler(ctx, error):
         if error.param.name == 'channel':
             embed = discord.Embed(
                 title="Comando $botchannel: define um canal que será o único local que pode usar o comando da Betina"
-                      "\n \n**Como usar: $canaldobot <#Canal>**", colour=discord.Colour(0x370c5e), description='*Os únicos comandos'
+                      "\n \n**Como usar: $canaldobot"
+                      " <#Canal>**", colour=discord.Colour(0x370c5e), description='*Os únicos comandos'
                                                                        ' limitados são: afk, userinfo, '
                                                                        'todas as funções da parte de Diversão,'
                                                                        ' Interação e Cobrança*.')
@@ -1627,7 +1772,19 @@ async def limite_handler(ctx, error):
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando botchannel '
+                           'novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando botchannel novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='tirabotchannel', aliases=['tiracanaldobot', 'tiracdb'])
 @has_permissions(administrator=True)
@@ -1673,7 +1830,19 @@ async def tira_limite_handler(ctx, error):
         msg = await ctx.send(embed=embed)
         await msg.add_reaction("❓")
 
+    elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando tirabotchannel '
+                           'novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando tirabotchannel novamente.**'.format(round(h), round(min), round(sec)))
 
+
+@commands.cooldown(2, 10, commands.BucketType.guild)
 @commands.guild_only()
 @client.command(name='betinainfo')
 async def betinainfo(ctx):
@@ -1684,13 +1853,15 @@ async def betinainfo(ctx):
             t1 = time.perf_counter()
             async with ctx.message.channel.typing():
                 t2 = time.perf_counter()
-                embed = discord.Embed(colour=discord.Colour(0x370c5e), description='<a:carregando:509840579316940800>**Informações da Betina:**')
+                embed = discord.Embed(colour=discord.Colour(0x370c5e), description='**<a:carregando:'
+                                                                                   '509840579316940800> Inf'
+                                                                                   'ormações da Betina:**')
                 criador = '\n 🤴 BDantas#7096'
                 nome = 'Betina'
                 id = str(client.user.id)
                 tag = str(client.user)
                 ping = '{}ms'.format(round((t2 - t1) * 1000))
-                users = str(len(set(client.get_all_members())))
+                users = str(len(set(client.users)))
                 servers = str(len(client.guilds))
                 canais = str(len(set(client.get_all_channels())))
                 fundado = '02/01/2019'
@@ -1698,15 +1869,36 @@ async def betinainfo(ctx):
                 program = "Python 3.6.6"
                 hospedagem = 'Raspberry Pi'
                 uptime = "{} horas {} minutos ".format(0, 0)
-                commandos2 = '60'
+                commandos2 = '71'
                 cpu = "{} % ".format(str(psutil.cpu_percent(interval=1)))
-                invite = '[[Me adicione]](https://discordapp.com/oauth2/authorize?&client_id=527565353199337474&scope=bot&permissions=8)'
+                invite = '[[Me adicione]](https://discordapp.com/oauth2/authorize?&client_id=527' \
+                         '565353199337474&scope=bot&permissions=8)'
                 suporte = '[[Peça ajuda]](https://discord.gg/eZrzDfs)'
-                aa = "\n<:bot:510893968414867468> **Nome:** " + nome + "\n💻 **ID:** " + id + "\n📛 **Tag:** " + tag + "\n⭐ **Fundado em:** " + fundado + "\n<a:ping:512065320320761867>**Ping:** " + ping
-                bb = "\n<a:cursor:507925560333434890> **Servidores:** " + servers + "\n<a:happy:515518973618683910> **Usuários:** " + users + "\n📇 **Canais:** " + canais
+                aa = "\n<:bot:510893" \
+                     "968414867468> **Nom" \
+                     "e:** " + nome + "\n💻 **I" \
+                                      "D:** " + id + "\n📛 **T" \
+                                                     "ag:** " + tag + "\n⭐ **" \
+                                                                      "Fundado em:**" \
+                                                                      " " + fundado + "\n<a:pin" \
+                                                                                      "g:51206" \
+                                                                                      "5320320761867>**Ping:** " + ping
+                bb = "\n🌐 **Servidores:** " + servers + "\n<a:happy:51551" \
+                                                         "8973618683910> **Usuár" \
+                                                         "ios:** " + users + "\n📇 **Canais:** " + canais
                 cc = "\n<a:faps:515518909521330176> **Totais:** " + commandos2
-                ee = "\n<:python:507486258184978443> **Programação:** " + program + "\n<:download:316264057659326464> **Hospedagem:** " + hospedagem + "\n🕒 **Tempo Online:** " + uptime + "\n💽 **Cpu Usado:** " + cpu
-                gg = "\n🖼️ **Avatar:** " + avatar + "\n✉ **Invite:** " + invite + "\n**<:DiscordDev:507925579245551616> Suporte:** " + suporte
+                ee = "\n<:python:" \
+                     "507486258184978443>" \
+                     " **Programaçã" \
+                     "o:** " + program + "\n<a:cursor" \
+                                         ":507925560333434890> **H" \
+                                         "ospedagem:** " + hospedagem + "\n🕒 **Tem" \
+                                                                        "po Online:" \
+                                                                        "** " + uptime + "\n💽 **Cpu Usado:** " + cpu
+                gg = "\n🖼️ **Avatar:** " + avatar + "\n✉ **Invite:** " + invite + "\n**<:Di" \
+                                                                                   "scordDev:507925" \
+                                                                                   "579245551616> S" \
+                                                                                   "uporte:** " + suporte
                 ff = criador
                 embed.add_field(name="`📑 | Informações:`", value=aa, inline=False)
                 embed.set_thumbnail(url=f"{betina_icon}")
@@ -1725,7 +1917,9 @@ async def betinainfo(ctx):
         t1 = time.perf_counter()
         async with ctx.message.channel.typing():
             t2 = time.perf_counter()
-            embed = discord.Embed(colour=discord.Colour(0x370c5e), description='**<a:carregando:509840579316940800> Informações da Betina:**')
+            embed = discord.Embed(colour=discord.Colour(0x370c5e), description='**<a:carregando:'
+                                                                               '509840579316940800> Inf'
+                                                                               'ormações da Betina:**')
             criador = '\n 🤴 BDantas#7096'
             nome = 'Betina'
             id = str(client.user.id)
@@ -1741,13 +1935,31 @@ async def betinainfo(ctx):
             uptime = "{} horas {} minutos ".format(0, 0)
             commandos2 = '71'
             cpu = "{} % ".format(str(psutil.cpu_percent(interval=1)))
-            invite = '[[Me adicione]](https://discordapp.com/oauth2/authorize?&client_id=527565353199337474&scope=bot&permissions=8)'
+            invite = '[[Me adicione]](https://discordapp.com/oauth2/authorize?&client_id=527' \
+                     '565353199337474&scope=bot&permissions=8)'
             suporte = '[[Peça ajuda]](https://discord.gg/eZrzDfs)'
-            aa = "\n<:bot:510893968414867468> **Nome:** " + nome + "\n💻 **ID:** " + id + "\n📛 **Tag:** " + tag + "\n⭐ **Fundado em:** " + fundado + "\n<a:ping:512065320320761867>**Ping:** " + ping
-            bb = "\n🌐 **Servidores:** " + servers + "\n<a:happy:515518973618683910> **Usuários:** " + users + "\n📇 **Canais:** " + canais
+            aa = "\n<:bot:510893" \
+                 "968414867468> **Nom" \
+                 "e:** " + nome + "\n💻 **I" \
+                                  "D:** " + id + "\n📛 **T" \
+                                                 "ag:** " + tag + "\n⭐ **" \
+                                                                  "Fundado em:**" \
+                                                                  " " + fundado + "\n<a:pin" \
+                                                                                  "g:51206" \
+                                                                                  "5320320761867>**Ping:** " + ping
+            bb = "\n🌐 **Servidores:** " + servers + "\n<a:happy:51551" \
+                                                     "8973618683910> **Usuár" \
+                                                     "ios:** " + users + "\n📇 **Canais:** " + canais
             cc = "\n<a:faps:515518909521330176> **Totais:** " + commandos2
-            ee = "\n<:python:507486258184978443> **Programação:** " + program + "\n<a:cursor:507925560333434890> **Hospedagem:** " + hospedagem + "\n🕒 **Tempo Online:** " + uptime + "\n💽 **Cpu Usado:** " + cpu
-            gg = "\n🖼️ **Avatar:** " + avatar + "\n✉ **Invite:** " + invite + "\n**<:DiscordDev:507925579245551616> Suporte:** " + suporte
+            ee = "\n<:python:" \
+                 "507486258184978443>" \
+                 " **Programaçã" \
+                 "o:** " + program + "\n<a:cursor:507925560333434890>" \
+                                     " **Hospedagem:** " + hospedagem + "\n🕒 **Tempo Online:** " + uptime + "\n💽 **C" \
+                                                                                              "pu Usado:** " + cpu
+            gg = "\n🖼️ **Avatar:** " + avatar + "\n✉ **Invite:** " + invite + "\n**<:Di" \
+                                                                               "scordDev:507925" \
+                                                                               "579245551616> Suporte:** " + suporte
             ff = criador
             embed.add_field(name="`📑 | Informações:`", value=aa, inline=False)
             embed.set_thumbnail(url=f"{betina_icon}")
@@ -1760,6 +1972,19 @@ async def betinainfo(ctx):
         await ctx.send(embed=embed)
 
 
+@betinainfo.error
+async def betina_info_error(ctx, error):
+    if isinstance(error, discord.ext.commands.CommandOnCooldown):
+        min, sec = divmod(error.retry_after, 60)
+        h, min = divmod(min, 60)
+        if min == 0.0 and h == 0:
+            await ctx.send('**Espere `{0}` segundos . Para usar o comando betinainfo novamente.**'.format(round(sec)))
+        else:
+            await ctx.send('**Espere `{0}` horas `{1}` '
+                           'minutos  e `{2}` segundos. Para'
+                           ' usar o comando betinainfo novamente.**'.format(round(h), round(min), round(sec)))
+
+
 if __name__ == '__main__':
     for extension in startup_extensions:
         try:
@@ -1769,4 +1994,3 @@ if __name__ == '__main__':
             print('Falha ao carregar a extensão {}\n{}'.format(extension, exc))
 
 client.run(TOKEN)
-
