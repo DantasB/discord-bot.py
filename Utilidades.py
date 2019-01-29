@@ -108,6 +108,7 @@ class Utilidades:
     def __init__(self, client):
         self.client = client
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='conversor', aliases=['converter', 'converte'])
     async def conversor(self, ctx, moeda1, moeda2, quantidade=None):
@@ -195,7 +196,17 @@ class Utilidades:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando conversor novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando conversor novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='deve', aliases=['rsp', 'owe'])
     async def deve(self, ctx, member: discord.Member):
@@ -243,7 +254,17 @@ class Utilidades:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando deve novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando deve novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='devemenos', aliases=['dntp', 'naomedeve'])
     async def devemenos(self, ctx, member: discord.Member, a: float):
@@ -336,7 +357,17 @@ class Utilidades:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando devemenos novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando devemenos novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='devemais', aliases=['ntp', 'medeve', 'pay'])
     async def devemais(self, ctx, member: discord.Member, a: float):
@@ -399,7 +430,17 @@ class Utilidades:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando devemais novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando devemais novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command()
     async def clima(self, ctx, *, buscar=None):
@@ -455,6 +496,19 @@ class Utilidades:
             embed.set_footer(text="Climatempo 2019")
             await ctx.send(embed=embed)
 
+    @clima.error
+    async def clima_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando clima novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando clima novamente.**'.format(round(h), round(min), round(sec)))
+
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command()
     async def picture(self, ctx, *, user: discord.Member = None):
@@ -492,6 +546,19 @@ class Utilidades:
 
             await ctx.send(embed=embed)
 
+    @picture.error
+    async def picture_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando picture novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando picture novamente.**'.format(round(h), round(min), round(sec)))
+
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command()
     async def gerasenha(self, ctx, nbytes: int = 18):
@@ -519,6 +586,19 @@ class Utilidades:
 
             await ctx.author.send(f"🎁 **Aqui está sua senha:**\n{secrets.token_urlsafe(nbytes)}")
 
+    @gerasenha.error
+    async def gera_senha_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando gerasenha novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando gerasenha novamente.**'.format(round(h), round(min), round(sec)))
+
+    @commands.cooldown(2, 10, commands.BucketType.guild)
     @commands.guild_only()
     @commands.command(name='geraconvite', aliases=['invitegenerator', 'gerador'])
     @has_permissions(manage_channels=True)
@@ -558,7 +638,17 @@ class Utilidades:
 
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando invite novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando invite novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='tradutor', aliases=['translate', 'traduz'])
     async def traduz(self, ctx, *, arg):
@@ -611,7 +701,17 @@ class Utilidades:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando traduz novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando traduz novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='buscacep')
     async def cep(self, ctx, buscar):
@@ -689,6 +789,19 @@ class Utilidades:
                 await msg.add_reaction("❓")
                 return
 
+    @cep.error
+    async def cep_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando cep novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando cep novamente.**'.format(round(h), round(min), round(sec)))
+
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='cor', aliases=['randomcolour', 'geracor'])
     async def cor(self, ctx):
@@ -730,6 +843,19 @@ class Utilidades:
             embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
             await ctx.send(embed=embed)
 
+    @cor.error
+    async def cor_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando cor novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando cor novamente.**'.format(round(h), round(min), round(sec)))
+
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='pb', aliases=['bw'])
     async def preto_e_branco(self, ctx, user: discord.Member = None):
@@ -837,6 +963,19 @@ class Utilidades:
             except:
                 return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
 
+    @preto_e_branco.error
+    async def preto_e_branco_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando pb novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando pb novamente.**'.format(round(h), round(min), round(sec)))
+
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='primario', aliases=['primary'])
     async def primario(self, ctx, user: discord.Member = None):
@@ -992,6 +1131,19 @@ class Utilidades:
             except:
                 return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
 
+    @primario.error
+    async def primario_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando primario novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando primario novamente.**'.format(round(h), round(min), round(sec)))
+
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='pontilhado', aliases=['dither'])
     async def pontilhado(self, ctx, user: discord.Member = None):
@@ -1170,6 +1322,18 @@ class Utilidades:
                 await ctx.channel.send(file=discord.File('usuariopontilhado.png'))
             except:
                 return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
+
+    @pontilhado.error
+    async def pontilhado_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando pontilhado novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando pontilhado novamente.**'.format(round(h), round(min), round(sec)))
 
 
 def setup(client):
