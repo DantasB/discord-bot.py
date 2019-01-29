@@ -477,14 +477,14 @@ async def help(ctx):
                      icon_url=betina_icon)
 
     embed.add_field(name="😂 **Diversão (11)**", value="``$moeda, $ppt, $rola ...``", inline=False)
-    embed.add_field(name="💰 **Utilidades (13)**", value="``$devemais, $devemenos, $deve...``", inline=False)
+    embed.add_field(name="🛠 **Utilidades (13)**", value="``$devemais, $devemenos, $deve...``", inline=False)
     embed.add_field(name="🎵 **Música (8)**", value="``$play, $resume, $stop, $fila...``", inline=False)
     embed.add_field(name="🗣 **Interação (14)**", value="``$bate, $abraça, $treta...``", inline=False)
     embed.add_field(name="👮 **Administração (11)**", value="``$apaga, $ping, $pong...``", inline=False)
     embed.add_field(name="⚙ **Configuração (15)**", value="``$joinlogs, $leavelogs, $autorole...``", inline=False)
     message = await author.send(embed=embed)
 
-    reaction_list = ["😂", "💰", "🎵", "🗣", "👮", "⚙"]
+    reaction_list = ["😂", "🛠", "🎵", "🗣", "👮", "⚙"]
 
     for reaction in reaction_list:
         await message.add_reaction(reaction)
@@ -495,7 +495,7 @@ async def help(ctx):
     try:
         while True:
             reaction, user = await client.wait_for('reaction_add', check=check)
-            if str(reaction.emoji) == "💰":
+            if str(reaction.emoji) == "🛠":
                 embed = discord.Embed(title="Utilidades", colour=discord.Colour(0x370c5e),
                                       description="*Bem vindo a categoria Utilidades:\nAqui você encontrará"
                                                   " comandos que ajudará você a ter noção"
@@ -516,6 +516,9 @@ async def help(ctx):
                                 inline=False)
                 embed.add_field(name="**$clima <local>"
                                      "**", value="``Direi o clima do local.``",
+                                inline=False)
+                embed.add_field(name="**$wordcloud <texto>"
+                                     "**", value="``Gerarei um wordcloud com as palavras do texto.``",
                                 inline=False)
                 embed.add_field(name="**$picture <usuário> (opcional)"
                                      "**", value="``Darei a foto do usuário em questão.``",
