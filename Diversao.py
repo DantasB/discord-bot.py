@@ -50,7 +50,6 @@ class Diversão:
     def __init__(self, client):
         self.client = client
 
-
     @commands.guild_only()
     @commands.command(name='moeda', aliases=['coin', 'ht'])
     async def moeda(self, ctx):
@@ -76,7 +75,6 @@ class Diversão:
                 await ctx.send('😃')
             else:
                 await ctx.send('👑')
-
 
     @commands.guild_only()
     @commands.command(name='ppt', aliases=['Rsp', 'jogo'])
@@ -159,7 +157,6 @@ class Diversão:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-
 
     @commands.guild_only()
     @commands.command(name='rola', aliases=['roll', 'dice'])
@@ -539,12 +536,12 @@ class Diversão:
                                'minutos  e `{2}` segundos. Para'
                                ' usar o comando ata novamente.**'.format(round(h), round(min), round(sec)))
 
-    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command()
     async def tias(self, ctx):
         await ctx.channel.send(file=discord.File('tias.png'))
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command()
     async def bolsonaro(self, ctx, *, texto='Tudo comunista!'):
@@ -638,6 +635,16 @@ class Diversão:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send(
+                    '**Espere `{0}` segundos . Para usar o comando reverse novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando reverse novamente.**'.format(round(h), round(min), round(sec)))
 
     @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
@@ -687,3 +694,4 @@ class Diversão:
 
 def setup(client):
     client.add_cog(Diversão(client))
+
