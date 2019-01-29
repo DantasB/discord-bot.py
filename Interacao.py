@@ -55,15 +55,17 @@ with open('limitador.json', 'r') as file:
         limitador_log = {}
 
         
+
 class Interação:
     def __init__(self, client):
         self.client = client
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command()
     async def treta(self, ctx):
         """Todas as tretas do grupo!"""
-        await ctx.message.delete()
+
 
     @commands.guild_only()
     @commands.command(name='endeline')
@@ -79,6 +81,7 @@ class Interação:
                                   "527565353199337474/d9bbb0a041182b2896ecdab36a223ad2.png?size=256")
         await ctx.send(embed=embed, delete_after=10)
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='emputece', aliases=['angry', 'rage'])
     async def emputece(self, ctx, member: discord.Member, membro=None):
@@ -167,6 +170,15 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando emputece novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando emputece novamente.**'.format(round(h), round(min), round(sec)))
 
     @commands.guild_only()
     @commands.command(name='putin')
@@ -197,6 +209,7 @@ class Interação:
             await msg.delete()
             await ctx.invoke(self.client.get_command('endeline'))
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='bate', aliases=['hit', 'punch'])
     async def bate(self, ctx, member: discord.Member, membro=None):
@@ -288,7 +301,17 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando bate novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando bate novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='abraça', aliases=['hug', 'abraço'])
     async def abraça(self, ctx, member: discord.Member, membro=None):
@@ -383,7 +406,17 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando abraça novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando abraça novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='beija', aliases=['kiss', 'beijou'])
     async def beija(self, ctx, member: discord.Member, membro=None):
@@ -477,14 +510,23 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando beija novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando beija novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.command()
     async def tnc(self, ctx):
         guild_id = str(ctx.guild.id)
         user_id = str(ctx.author.id)
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
-                await ctx.message.delete()
                 gif1 = random.choice(angry)
                 gif2 = random.choice(omg)
 
@@ -504,7 +546,6 @@ class Interação:
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
                 return
         else:
-            await ctx.message.delete()
             gif1 = random.choice(angry)
             gif2 = random.choice(omg)
 
@@ -519,6 +560,7 @@ class Interação:
             msg = await ctx.send(embed=embed)
             await msg.add_reaction('😮')
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='voltapracaverna', aliases=['caverna', 'goback'])
     async def voltapracaverna(self, ctx, member: discord.Member, membro=None):
@@ -613,7 +655,17 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando voltapracaverna novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando voltapracaverna novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='dança', aliases=['dance', 'dançar'])
     async def dança(self, ctx, member: discord.Member, membro=None):
@@ -706,7 +758,17 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando dança novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando dança novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='ataca', aliases=['attack', 'atacar'])
     async def ataca(self, ctx, member: discord.Member, membro=None):
@@ -794,8 +856,17 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando ataca novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando ataca novamente.**'.format(round(h), round(min), round(sec)))
 
-
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='ship', aliases=['shipar', 'shipou'])
     async def ship(self, ctx, member: discord.Member, membro: discord.Member = None):
@@ -867,7 +938,6 @@ class Interação:
                 await msg.delete()
                 await ctx.invoke(self.client.get_command('ship'), ctx.author, member)
 
-
     @ship.error
     async def ship_handler(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
@@ -885,8 +955,17 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando ship novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando ship novamente.**'.format(round(h), round(min), round(sec)))
 
-
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='roletarussa', aliases=['roleta', 'rr'])
     async def roletarussa(self, ctx):
@@ -998,7 +1077,7 @@ class Interação:
                                  icon_url=betina_icon)
                 msg = await ctx.send(embed=embed)
 
-
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='highfive', aliases=['hf', 'batemao'])
     async def highfive(self, ctx, member: discord.Member, membro: discord.Member = None):
@@ -1070,7 +1149,6 @@ class Interação:
                 await msg.delete()
                 await ctx.invoke(self.client.get_command('highfive'), ctx.author, member)
 
-
     @highfive.error
     async def highfive_handler(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
@@ -1088,8 +1166,17 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando highfive novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando highfive novamente.**'.format(round(h), round(min), round(sec)))
 
-
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='mencionar', aliases=['reply', 'quote'])
     async def mention(self, ctx, message: int, *, text: str = ' '):
@@ -1097,7 +1184,6 @@ class Interação:
         user_id = str(ctx.author.id)
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
-                await ctx.message.delete()
                 texto = await ctx.get_message(message)
                 embed = discord.Embed(colour=discord.Colour(0x370c5e),
                                       description=f"{texto.content}\nem #{texto.channel}")
@@ -1109,13 +1195,11 @@ class Interação:
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
                 return
         else:
-            await ctx.message.delete()
             texto = await ctx.get_message(message)
             embed = discord.Embed(colour=discord.Colour(0x370c5e), description=f"{texto.content}\nem #{texto.channel}")
             embed.set_author(name=f"{texto.author.name} disse: ", icon_url=texto.author.avatar_url)
             await ctx.send(f'{texto.author.mention} {text}')
             await ctx.send(embed=embed)
-
 
     @mention.error
     async def mention_handler(self, ctx, error):
@@ -1137,8 +1221,17 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando mention novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando mention novamente.**'.format(round(h), round(min), round(sec)))
 
-
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='fala', aliases=['speak', 'falar'])
     async def talk(self, ctx, channel: typing.Optional[discord.TextChannel] = None, *, message: str):
@@ -1147,7 +1240,6 @@ class Interação:
             user_id = str(ctx.author.id)
             if guild_id in limitador_log:
                 if str(ctx.message.channel.id) == limitador_log[guild_id]:
-                    await ctx.message.delete()
                     await ctx.send(f'{message}')
                 else:
                     guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
@@ -1155,14 +1247,12 @@ class Interação:
                         f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
                     return
             else:
-                await ctx.message.delete()
                 await ctx.send(f'{message}')
         else:
             guild_id = str(ctx.guild.id)
             user_id = str(ctx.author.id)
             if guild_id in limitador_log:
                 if str(ctx.message.channel.id) == limitador_log[guild_id]:
-                    await ctx.message.delete()
                     await channel.send(f'{message}')
                 else:
                     guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
@@ -1170,9 +1260,7 @@ class Interação:
                         f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
                     return
             else:
-                await ctx.message.delete()
                 await channel.send(f'{message}')
-
 
     @talk.error
     async def talk_handler(self, ctx, error):
@@ -1194,7 +1282,17 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando talk novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando talk novamente.**'.format(round(h), round(min), round(sec)))
 
 
 def setup(client):
     client.add_cog(Interação(client))
+
