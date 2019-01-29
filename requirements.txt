@@ -3,3 +3,5 @@ dhooks
 asyncio
 forex-python
 pillow
+matplotlib
+wordcloud
