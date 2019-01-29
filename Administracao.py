@@ -74,6 +74,7 @@ class Administração:
         embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
         await guild.send(embed=embed)
 
+
     @commands.guild_only()
     @commands.command(pass_context=True)
     async def pong(self, ctx):
@@ -100,6 +101,7 @@ class Administração:
         embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
         embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
         await guild.send(embed=embed)
+
 
     @commands.guild_only()
     @commands.command(name='apaga', aliases=['delete', 'clean'])
@@ -337,9 +339,9 @@ class Administração:
     async def ajuda(self, ctx):
         await ctx.invoke(self.client.get_command("help"))
 
+    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='membro', aliases=['userinfo', 'ui'])
-    @has_permissions(manage_roles=True)
     async def membro(self, ctx, member: discord.Member):
         texto = await ctx.get_message(ctx.message.id)
         guild_id = str(ctx.guild.id)
@@ -465,8 +467,6 @@ class Administração:
 
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
-
-
         elif isinstance(error, commands.MissingRequiredArgument):
             if error.param.name == 'member':
                 embed = discord.Embed(title="Comando $membro:", colour=discord.Colour(0x370c5e),
@@ -487,7 +487,17 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando userinfo novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando userinfo novamente.**'.format(round(h), round(min), round(sec)))
 
+    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(pass_context=True, name='servidor', aliases=['serverinfo', 'si'])
     @has_permissions(administrator=True)
@@ -552,6 +562,7 @@ class Administração:
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
 
+    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(pass_context=True, name='warn', aliases=['aviso', 'wrn'])
     @has_permissions(kick_members=True)
@@ -671,6 +682,7 @@ class Administração:
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
 
+    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(pass_context=True, name='warnings', aliases=['avisos', 'wrns'])
     @has_permissions(kick_members=True)
@@ -780,6 +792,7 @@ class Administração:
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
 
+    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='clearlastwarn', aliases=['limpawarn', 'tirawarn'])
     @has_permissions(ban_members=True)
@@ -882,6 +895,7 @@ class Administração:
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
 
+    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='mute', aliases=['mutar', 'silenciar'])
     @has_permissions(kick_members=True, manage_roles=True)
@@ -973,6 +987,7 @@ class Administração:
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
 
+    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='unmute', aliases=['desmutar', 'semsilenciar'])
     @has_permissions(kick_members=True, manage_roles=True)
@@ -1054,6 +1069,7 @@ class Administração:
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
 
+    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='sugestão', aliases=['suggestion', 'sug'])
     async def suggestion(self, ctx, *, arg: str):
@@ -1109,7 +1125,15 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-
-
+        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando suggestion novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando suggestion novamente.**'.format(round(h), round(min), round(sec)))
+                                       
 def setup(client):
     client.add_cog(Administração(client))
