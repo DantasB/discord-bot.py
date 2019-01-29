@@ -77,6 +77,7 @@ class Diversão:
             else:
                 await ctx.send('👑')
 
+
     @commands.guild_only()
     @commands.command(name='ppt', aliases=['Rsp', 'jogo'])
     async def ppt(self, ctx, msg: str):
@@ -140,7 +141,6 @@ class Diversão:
             else:
                 await ctx.send('``Escreve direito, por favor!``')
 
-
     @ppt.error
     async def ppt_handler(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
@@ -159,6 +159,7 @@ class Diversão:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+
 
     @commands.guild_only()
     @commands.command(name='rola', aliases=['roll', 'dice'])
@@ -214,6 +215,7 @@ class Diversão:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
+
 
     @commands.guild_only()
     @commands.command(name='hungergames', aliases=['hg', 'killall'])
@@ -367,6 +369,7 @@ class Diversão:
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
 
+
     @commands.guild_only()
     @commands.command()
     async def faustao(self, ctx):
@@ -431,6 +434,7 @@ class Diversão:
             await webhook.send("Taokei?")
             await webhook.delete()
 
+
     @commands.guild_only()
     @commands.command()
     async def miranha(self, ctx):
@@ -462,6 +466,7 @@ class Diversão:
             await webhook.send("EU SOU O MIRANHA!")
             await webhook.delete()
 
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command()
     async def ata(self, ctx, *, texto='ATA'):
@@ -521,6 +526,20 @@ class Diversão:
                 img.save('mnc.png')
                 await ctx.channel.send(file=discord.File('mnc.png'))
 
+    @ata.error
+    async def ata_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send(
+                    '**Espere `{0}` segundos . Para usar o comando ata novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando ata novamente.**'.format(round(h), round(min), round(sec)))
+
+    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command()
     async def tias(self, ctx):
@@ -571,6 +590,20 @@ class Diversão:
                 img.save('blsnr.png')
                 await ctx.channel.send(file=discord.File('blsnr.png'))
 
+    @bolsonaro.error
+    async def bolsonaro_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send(
+                    '**Espere `{0}` segundos . Para usar o comando bolsonaro novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando bolsonaro novamente.**'.format(round(h), round(min), round(sec)))
+
+    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='reverse', aliases=['reverte', 'avesso'])
     async def reverse(self, ctx, *, text: str):
@@ -606,6 +639,7 @@ class Diversão:
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
 
+    @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command()
     async def facebook(self, ctx, *, texto='Mark Zuckerberg: um androide!'):
@@ -636,6 +670,19 @@ class Diversão:
                 escrever.text(xy=(15, 60), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                 img.save('fc.png')
                 await ctx.channel.send(file=discord.File('fc.png'))
+
+    @facebook.error
+    async def facebook_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send(
+                    '**Espere `{0}` segundos . Para usar o comando facebook novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando facebook novamente.**'.format(round(h), round(min), round(sec)))
 
 
 def setup(client):
