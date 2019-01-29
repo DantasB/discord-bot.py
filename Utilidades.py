@@ -29,6 +29,7 @@ import json
 import requests
 import secrets
 import pycep_correios
+import matplotlib.pyplot as plt
 
 
 from discord.ext import commands
@@ -39,6 +40,7 @@ from discord.ext.commands import has_permissions, MissingPermissions
 from googletrans import Translator
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
+from wordcloud import WordCloud
 
 
 def open_image(path):
@@ -264,7 +266,7 @@ class Utilidades:
                                'minutos  e `{2}` segundos. Para'
                                ' usar o comando deve novamente.**'.format(round(h), round(min), round(sec)))
 
-    @commands.cooldown(2, 3, commands.BucketType.user)
+    @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='devemenos', aliases=['dntp', 'naomedeve'])
     async def devemenos(self, ctx, member: discord.Member, a: float):
@@ -1334,6 +1336,79 @@ class Utilidades:
                 await ctx.send('**Espere `{0}` horas `{1}` '
                                'minutos  e `{2}` segundos. Para'
                                ' usar o comando pontilhado novamente.**'.format(round(h), round(min), round(sec)))
+
+    @commands.cooldown(2, 10, commands.BucketType.user)
+    @commands.guild_only()
+    @commands.command(name='wordcloud', aliases=['wc'])
+    async def wordcloud(self, ctx, *, texto):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                text = f"{texto}"
+
+                x, y = np.ogrid[:300, :300]
+
+                mask = (x - 150) ** 2 + (y - 150) ** 2 > 130 ** 2
+                mask = 255 * mask.astype(int)
+
+                wc = WordCloud(background_color="white", repeat=True, mask=mask)
+                wc.generate(text)
+
+                plt.axis("off")
+                plt.imshow(wc, interpolation="bilinear")
+                wordcloud = 'wordcloud.png'
+                wc.to_file(wordcloud)
+                await ctx.channel.send(file=discord.File('wordcloud.png'))
+            else:
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            text = f"{texto}"
+
+            x, y = np.ogrid[:300, :300]
+
+            mask = (x - 150) ** 2 + (y - 150) ** 2 > 130 ** 2
+            mask = 255 * mask.astype(int)
+
+            wc = WordCloud(background_color="white", repeat=True, mask=mask)
+            wc.generate(text)
+
+            plt.axis("off")
+            plt.imshow(wc, interpolation="bilinear")
+            wordcloud = 'wordcloud.png'
+            wc.to_file(wordcloud)
+            await ctx.channel.send(file=discord.File('wordcloud.png'))
+
+    @wordcloud.error
+    async def wordcloud_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            min, sec = divmod(error.retry_after, 60)
+            h, min = divmod(min, 60)
+            if min == 0.0 and h == 0:
+                await ctx.send('**Espere `{0}` segundos . Para usar o comando wordcloud novamente.**'.format(round(sec)))
+            else:
+                await ctx.send('**Espere `{0}` horas `{1}` '
+                               'minutos  e `{2}` segundos. Para'
+                               ' usar o comando wordcloud novamente.**'.format(round(h), round(min), round(sec)))
+        elif isinstance(error, commands.MissingRequiredArgument):
+            if error.param.name == 'texto':
+                embed = discord.Embed(title="Comando $wordcloud:", colour=discord.Colour(0x370c5e),
+                                      description="Gera um wordcloud com as palavras que você definir\n \n**Como"
+                                                  " usar: $wordcloud <texto>**")
+
+                embed.set_author(name="Betina#9182",
+                                 icon_url=betina_icon)
+                embed.set_footer(text="Betina Brazilian Bot",
+                                 icon_url=betina_icon)
+
+                embed.add_field(name="📖**Exemplos:**", value="$wordcloud palavra 500\n$wordcloud Gosto de Tortas",
+                                inline=False)
+                embed.add_field(name="🔀**Outros Comandos**", value="``$wc.``", inline=False)
+
+                msg = await ctx.send(embed=embed)
+                await msg.add_reaction("❓")
 
 
 def setup(client):
