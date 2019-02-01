@@ -32,6 +32,7 @@ from forex_python.converter import CurrencyRates
 from dhooks import Webhook
 from discord.utils import get
 from discord.ext.commands import has_permissions, MissingPermissions
+from horario import*
 
 # gifs
 angry = [] #giphy angry links
@@ -74,9 +75,9 @@ class Interação:
                               description="{}".format(endmessage))
 
         embed.set_image(url="{}".format(gif))
-        embed.set_footer(text="Betina Brazilian Bot",
-                         icon_url="https://images.discordapp.net/avatars/"
-                                  "527565353199337474/d9bbb0a041182b2896ecdab36a223ad2.png?size=256")
+        embed.set_footer(icon_url=betina_icon,
+                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                   year()))
         await ctx.send(embed=embed, delete_after=10)
 
     @commands.cooldown(2, 10, commands.BucketType.user)
@@ -101,8 +102,10 @@ class Interação:
                                       description="{}".format(emputece2))
 
                 embed.set_image(url="{}".format(gif))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction('😡')
 
@@ -135,8 +138,9 @@ class Interação:
                                   description="{}".format(emputece2))
 
             embed.set_image(url="{}".format(gif))
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             msg = await ctx.send(embed=embed)
             await msg.add_reaction('😡')
 
@@ -160,23 +164,17 @@ class Interação:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$emputece @fulano\n$emputece @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$rage, $angry.``", inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando emputece novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando emputece novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.guild_only()
     @commands.command(name='putin')
@@ -191,8 +189,9 @@ class Interação:
                                 description="{}".format(emputece2))
 
         embed.set_image(url="{}".format(gif))
-        embed.set_footer(text="Betina Brazilian Bot",
-                            icon_url=betina_icon)
+        embed.set_footer(icon_url=betina_icon,
+                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                   year()))
         msg = await ctx.send(embed=embed)
         await msg.add_reaction('😡')
 
@@ -230,8 +229,10 @@ class Interação:
                                       description="{}".format(bate2))
 
                 embed.set_image(url="{}".format(gif))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 msg = await ctx.send(embed=embed)
 
                 await msg.add_reaction("🔙")
@@ -265,8 +266,9 @@ class Interação:
             embed = discord.Embed(title="**Tapão!**", colour=discord.Colour(0x370c5e), description="{}".format(bate2))
 
             embed.set_image(url="{}".format(gif))
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             msg = await ctx.send(embed=embed)
 
             await msg.add_reaction("🔙")
@@ -291,23 +293,17 @@ class Interação:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$bate @fulano\n$bate @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$hit, $punch.``", inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando bate novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando bate novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -333,8 +329,10 @@ class Interação:
                                       description="{}".format(abraça2))
 
                 embed.set_image(url="{}".format(gif))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 msg = await ctx.send(embed=embed)
 
                 await msg.add_reaction("🔙")
@@ -370,8 +368,9 @@ class Interação:
                                   description="{}".format(abraça2))
 
             embed.set_image(url="{}".format(gif))
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             msg = await ctx.send(embed=embed)
 
             await msg.add_reaction("🔙")
@@ -396,23 +395,17 @@ class Interação:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$abraça @fulano\n$abraça @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$hug, $abraço.``", inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando abraça novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando abraça novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -438,8 +431,10 @@ class Interação:
                                       description="{}".format(beija2))
 
                 embed.set_image(url="{}".format(gif2))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 msg = await ctx.send(embed=embed)
 
                 await msg.add_reaction("🔙")
@@ -474,8 +469,9 @@ class Interação:
             embed = discord.Embed(title="**Beijo!**", colour=discord.Colour(0x370c5e), description="{}".format(beija2))
 
             embed.set_image(url="{}".format(gif2))
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             msg = await ctx.send(embed=embed)
 
             await msg.add_reaction("🔙")
@@ -500,23 +496,17 @@ class Interação:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$beija @fulano\n$beija @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$kiss, $beijou.``", inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando beija novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando beija novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.command()
     async def tnc(self, ctx):
@@ -534,8 +524,10 @@ class Interação:
                 embed = discord.Embed(title="**Raiva!**", colour=discord.Colour(0x370c5e),
                                       description="{}".format(tnc1))
                 embed.set_image(url="{}".format(gif2))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction('😮')
             else:
@@ -552,8 +544,9 @@ class Interação:
 
             embed = discord.Embed(title="**Raiva!**", colour=discord.Colour(0x370c5e), description="{}".format(tnc1))
             embed.set_image(url="{}".format(gif2))
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             msg = await ctx.send(embed=embed)
             await msg.add_reaction('😮')
 
@@ -580,8 +573,10 @@ class Interação:
                 embed = discord.Embed(title="**Volta pra Caverna!**", colour=discord.Colour(0x370c5e),
                                       description="{}".format(cave2))
                 embed.set_image(url="{}".format(gif))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 msg = await ctx.send(embed=embed)
 
                 await msg.add_reaction("🔙")
@@ -616,8 +611,9 @@ class Interação:
             embed = discord.Embed(title="**Volta pra Caverna!**", colour=discord.Colour(0x370c5e),
                                   description="{}".format(cave2))
             embed.set_image(url="{}".format(gif))
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             msg = await ctx.send(embed=embed)
 
             await msg.add_reaction("🔙")
@@ -643,8 +639,10 @@ class Interação:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$voltapracaverna @fulano\n$voltapracaverna"
                                                               " @sicrano", inline=False)
@@ -652,15 +650,7 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando voltapracaverna novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando voltapracaverna novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -685,8 +675,10 @@ class Interação:
                 embed = discord.Embed(title="**Dançante!**", colour=discord.Colour(0x370c5e),
                                       description="{}".format(dança2))
                 embed.set_image(url="{}".format(gif))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 msg = await ctx.send(embed=embed)
 
                 await msg.add_reaction("🔙")
@@ -721,8 +713,9 @@ class Interação:
             embed = discord.Embed(title="**Dançante!**", colour=discord.Colour(0x370c5e),
                                   description="{}".format(dança2))
             embed.set_image(url="{}".format(gif))
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             msg = await ctx.send(embed=embed)
 
             await msg.add_reaction("🔙")
@@ -747,23 +740,17 @@ class Interação:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$dança @fulano\n$dança @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$dance, $dançar.``", inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando dança novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando dança novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -786,8 +773,10 @@ class Interação:
                 embed = discord.Embed(title="**Ataque!**", colour=discord.Colour(0x370c5e),
                                       description="{}".format(ataca2))
                 embed.set_image(url="{}".format(gif))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 msg = await ctx.send(embed=embed)
 
                 await msg.add_reaction("🔙")
@@ -819,8 +808,9 @@ class Interação:
 
             embed = discord.Embed(title="**Ataque!**", colour=discord.Colour(0x370c5e), description="{}".format(ataca2))
             embed.set_image(url="{}".format(gif))
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             msg = await ctx.send(embed=embed)
 
             await msg.add_reaction("🔙")
@@ -845,23 +835,17 @@ class Interação:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$ataca @fulano\n$ataca @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$attack, $atacar.``", inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando ataca novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando ataca novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -884,8 +868,10 @@ class Interação:
                 embed = discord.Embed(title="**Shipados!**", colour=discord.Colour(0x370c5e),
                                       description="{}".format(ataca2))
                 embed.set_image(url="{}".format(gif))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 msg = await ctx.send(embed=embed)
 
                 await msg.add_reaction("🔙")
@@ -918,8 +904,9 @@ class Interação:
             embed = discord.Embed(title="**Shipados!**", colour=discord.Colour(0x370c5e),
                                   description="{}".format(ataca2))
             embed.set_image(url="{}".format(gif))
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             msg = await ctx.send(embed=embed)
 
             await msg.add_reaction("🔙")
@@ -944,23 +931,17 @@ class Interação:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$ship @fulano @sicrano\n$ship @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$shipar, $shipou.``", inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando ship novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando ship novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.guild_only()
     @commands.command(name='roletarussa', aliases=['roleta', 'rr'])
@@ -981,7 +962,10 @@ class Interação:
                     colour=discord.Colour(0x370c5e))
 
                 embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-                embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="**Regras do jogo:**",
                                 value="```Clique na arma para participar. Quando tivermos 6 participantes começarei o jogo!```")
                 message = await ctx.send(embed=embed)
@@ -1007,8 +991,10 @@ class Interação:
                         embed = discord.Embed(title="**Morte!**", colour=discord.Colour(0x370c5e),
                                               description="{}".format(msg1))
                         embed.set_image(url="{}".format(gif1))
-                        embed.set_footer(text="Betina Brazilian Bot",
-                                         icon_url=betina_icon)
+                        embed.set_footer(icon_url=betina_icon,
+                                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                                   self.client.user.name,
+                                                                                                   year()))
                         msg = await ctx.send(embed=embed)
                         await asyncio.sleep(5)
 
@@ -1017,8 +1003,10 @@ class Interação:
                     embed = discord.Embed(title="**Sobreviveu!**", colour=discord.Colour(0x370c5e),
                                           description="{}".format(msg2))
                     embed.set_image(url="{}".format(gif2))
-                    embed.set_footer(text="Betina Brazilian Bot",
-                                     icon_url=betina_icon)
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
                     msg = await ctx.send(embed=embed)
             else:
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
@@ -1033,7 +1021,9 @@ class Interação:
                 colour=discord.Colour(0x370c5e))
 
             embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-            embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             embed.add_field(name="**Regras do jogo:**",
                             value="```Clique na arma para participar. Quando tivermos 6 participantes começarei o jogo!```")
             message = await ctx.send(embed=embed)
@@ -1059,8 +1049,10 @@ class Interação:
                     embed = discord.Embed(title="**Morte!**", colour=discord.Colour(0x370c5e),
                                           description="{}".format(msg1))
                     embed.set_image(url="{}".format(gif1))
-                    embed.set_footer(text="Betina Brazilian Bot",
-                                     icon_url=betina_icon)
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
                     msg = await ctx.send(embed=embed)
                     await asyncio.sleep(5)
 
@@ -1069,8 +1061,10 @@ class Interação:
                 embed = discord.Embed(title="**Sobreviveu!**", colour=discord.Colour(0x370c5e),
                                       description="{}".format(msg2))
                 embed.set_image(url="{}".format(gif2))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 msg = await ctx.send(embed=embed)
 
     @commands.cooldown(2, 10, commands.BucketType.user)
@@ -1094,8 +1088,10 @@ class Interação:
                 embed = discord.Embed(title="**Shipados!**", colour=discord.Colour(0x370c5e),
                                       description="{}".format(ataca2))
                 embed.set_image(url="{}".format(gif))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 msg = await ctx.send(embed=embed)
 
                 await msg.add_reaction("🔙")
@@ -1128,8 +1124,9 @@ class Interação:
             embed = discord.Embed(title="**Shipados!**", colour=discord.Colour(0x370c5e),
                                   description="{}".format(ataca2))
             embed.set_image(url="{}".format(gif))
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             msg = await ctx.send(embed=embed)
 
             await msg.add_reaction("🔙")
@@ -1154,23 +1151,17 @@ class Interação:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$highfive @fulano\n$highfive @sicrano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$hf, $batemao.``", inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando highfive novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando highfive novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -1208,8 +1199,10 @@ class Interação:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$mencionar 537452046320664597 filosófico!",
                                 inline=False)
@@ -1217,15 +1210,7 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando mention novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando mention novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -1249,6 +1234,7 @@ class Interação:
             user_id = str(ctx.author.id)
             if guild_id in limitador_log:
                 if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                    await ctx.send(f'Mensagem enviada para o canal {channel}')
                     await channel.send(f'{message}')
                 else:
                     guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
@@ -1256,6 +1242,7 @@ class Interação:
                         f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
                     return
             else:
+                await ctx.send(f'Mensagem enviada para o canal {channel}')
                 await channel.send(f'{message}')
 
     @talk.error
@@ -1269,8 +1256,10 @@ class Interação:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$fala filosófico!",
                                 inline=False)
@@ -1278,17 +1267,8 @@ class Interação:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando talk novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando talk novamente.**'.format(round(h), round(min), round(sec)))
+
 
 
 def setup(client):
     client.add_cog(Interação(client))
-
