@@ -174,8 +174,10 @@ class Utilidades:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$converte usd brl\n$converte eur pln", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$converter, $converte.``", inline=False)
@@ -190,23 +192,16 @@ class Utilidades:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$converte usd brl\n$converte eur pln", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$converter, $converte.``", inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando conversor novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando conversor novamente.**'.format(round(h), round(min), round(sec)))
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -248,23 +243,17 @@ class Utilidades:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$deve @sicrano\n$deve @fulano", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$rsp, $owe.``", inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando deve novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando deve novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -333,8 +322,10 @@ class Utilidades:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$devemenos @sicrano 500\n$devemenos @fulano 10",
                                 inline=False)
@@ -350,8 +341,10 @@ class Utilidades:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$devemenos @sicrano 500\n$devemenos @fulano 10",
                                 inline=False)
@@ -359,15 +352,7 @@ class Utilidades:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando devemenos novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando devemenos novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -406,8 +391,10 @@ class Utilidades:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$devemais @sicrano 500\n$devemais @fulano 10",
                                 inline=False)
@@ -423,8 +410,10 @@ class Utilidades:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$devemais @sicrano 500\n$devemais @fulano 10",
                                 inline=False)
@@ -432,15 +421,7 @@ class Utilidades:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando devemais novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando devemais novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -498,17 +479,7 @@ class Utilidades:
             embed.set_footer(text="Climatempo 2019")
             await ctx.send(embed=embed)
 
-    @clima.error
-    async def clima_error(self, ctx, error):
-        if isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando clima novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando clima novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -527,7 +498,10 @@ class Utilidades:
 
                 embed = discord.Embed(title=texto, color=0x370c5e)
                 embed.set_image(url=usuario)
-                embed.set_footer(text=self.client.user.name + " Brazilian Bot.")
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 await ctx.send(embed=embed)
             else:
@@ -544,21 +518,13 @@ class Utilidades:
 
             embed = discord.Embed(title=texto, color=0x370c5e)
             embed.set_image(url=usuario)
-            embed.set_footer(text=self.client.user.name + " Brazilian Bot.", icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
 
             await ctx.send(embed=embed)
 
-    @picture.error
-    async def picture_error(self, ctx, error):
-        if isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando picture novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando picture novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -588,17 +554,7 @@ class Utilidades:
 
             await ctx.author.send(f"🎁 **Aqui está sua senha:**\n{secrets.token_urlsafe(nbytes)}")
 
-    @gerasenha.error
-    async def gera_senha_error(self, ctx, error):
-        if isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando gerasenha novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando gerasenha novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.guild)
     @commands.guild_only()
@@ -615,7 +571,7 @@ class Utilidades:
         embedMsg = discord.Embed(color=0x370c5e)
         embedMsg.add_field(name="Convite criado:", value=invitelinknew)
         embedMsg.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-        embedMsg.set_footer(text="Convite do servidor", icon_url=ctx.message.guild.icon_url)
+        embedMsg.set_footer(text=f"Convite do servidor| Criado às {hora()} Horário de Brasília", icon_url=ctx.message.guild.icon_url)
         await ctx.send(embed=embedMsg)
 
     @invite.error
@@ -627,8 +583,9 @@ class Utilidades:
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Gerenciar canais`` *para utilizar este comando!*",
@@ -640,15 +597,7 @@ class Utilidades:
 
             msg = await ctx.send(embed=embed)
             await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando invite novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando invite novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -694,8 +643,10 @@ class Utilidades:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$traduz como se dize esto\n$traduz knowledge",
                                 inline=False)
@@ -703,15 +654,7 @@ class Utilidades:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando traduz novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando traduz novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -747,8 +690,10 @@ class Utilidades:
 
                     embed.set_author(name="Betina#9182",
                                      icon_url=betina_icon)
-                    embed.set_footer(text="Betina Brazilian Bot",
-                                     icon_url=betina_icon)
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
                     embed.add_field(name="❗**Atenção:**", value="Utilize um cep existente!", inline=False)
                     msg = await ctx.send(embed=embed)
                     await msg.add_reaction("❓")
@@ -784,24 +729,16 @@ class Utilidades:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="❗**Atenção:**", value="Utilize um cep existente!", inline=False)
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
                 return
 
-    @cep.error
-    async def cep_error(self, ctx, error):
-        if isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando cep novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando cep novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -823,7 +760,10 @@ class Utilidades:
                     avi = ctx.message.author.avatar_url_as(static_format='png')
                 embed = discord.Embed(title=f"<:gay:539489743067545622> Cor gerada: {color}",
                                       colour=color)
-                embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 await ctx.send(embed=embed)
             else:
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
@@ -842,20 +782,12 @@ class Utilidades:
                 avi = ctx.message.author.avatar_url_as(static_format='png')
             embed = discord.Embed(title=f"<:gay:539489743067545622> Cor gerada: {color}",
                                   colour=color)
-            embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             await ctx.send(embed=embed)
 
-    @cor.error
-    async def cor_error(self, ctx, error):
-        if isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando cor novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando cor novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -870,7 +802,8 @@ class Utilidades:
                         imagem = ctx.author.avatar_url_as(size=256)
                         response = requests.get(imagem)
                         image = Image.open(BytesIO(response.content))
-                        texto = f"Olá {ctx.author.name}, está é sua imagem de perfil em preto e branco."
+                        msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                               f'509840579316940800>')
                         width, height = image.size
 
                         new = create_image(width, height)
@@ -891,7 +824,8 @@ class Utilidades:
                         imagem = user.avatar_url_as(size=256)
                         response = requests.get(imagem)
                         image = Image.open(BytesIO(response.content))
-                        texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name} em preto e branco."
+                        msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                               f'509840579316940800>')
                         width, height = image.size
 
                         new = create_image(width, height)
@@ -909,6 +843,7 @@ class Utilidades:
 
                                 pixels[i, j] = (int(gray), int(gray), int(gray))
                     new.save('usuariopb.png')
+                    await msg.delete()
                     await ctx.channel.send(file=discord.File('usuariopb.png'))
                 except:
                     return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
@@ -922,7 +857,8 @@ class Utilidades:
                     imagem = ctx.author.avatar_url_as(size=256)
                     response = requests.get(imagem)
                     image = Image.open(BytesIO(response.content))
-                    texto = f"Olá {ctx.author.name}, está é sua imagem de perfil em preto e branco."
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                           f'509840579316940800>')
                     width, height = image.size
 
                     new = create_image(width, height)
@@ -943,7 +879,8 @@ class Utilidades:
                     imagem = user.avatar_url_as(size=256)
                     response = requests.get(imagem)
                     image = Image.open(BytesIO(response.content))
-                    texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name} em preto e branco."
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                           f'509840579316940800>')
                     width, height = image.size
 
                     new = create_image(width, height)
@@ -961,21 +898,12 @@ class Utilidades:
 
                             pixels[i, j] = (int(gray), int(gray), int(gray))
                 new.save('usuariopb.png')
+                await msg.delete()
                 await ctx.channel.send(file=discord.File('usuariopb.png'))
             except:
                 return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
 
-    @preto_e_branco.error
-    async def preto_e_branco_error(self, ctx, error):
-        if isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando pb novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando pb novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -990,7 +918,8 @@ class Utilidades:
                         imagem = ctx.author.avatar_url_as(size=256)
                         response = requests.get(imagem)
                         image = Image.open(BytesIO(response.content))
-                        texto = f"Olá {ctx.author.name}, está é sua imagem de perfil em preto e branco."
+                        msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                               f'509840579316940800>')
                         width, height = image.size
 
                         new = create_image(width, height)
@@ -1023,7 +952,8 @@ class Utilidades:
                         imagem = user.avatar_url_as(size=256)
                         response = requests.get(imagem)
                         image = Image.open(BytesIO(response.content))
-                        texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name} em preto e branco."
+                        msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                               f'509840579316940800>')
                         width, height = image.size
 
                         new = create_image(width, height)
@@ -1052,6 +982,7 @@ class Utilidades:
                                     blue = 0
 
                                 pixels[i, j] = (int(red), int(green), int(blue))
+                    await msg.delete()
                     new.save('usuarioprimario.png')
                     await ctx.channel.send(file=discord.File('usuarioprimario.png'))
                 except:
@@ -1066,7 +997,8 @@ class Utilidades:
                     imagem = ctx.author.avatar_url_as(size=256)
                     response = requests.get(imagem)
                     image = Image.open(BytesIO(response.content))
-                    texto = f"Olá {ctx.author.name}, está é sua imagem de perfil em preto e branco."
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                           f'509840579316940800>')
                     width, height = image.size
 
                     new = create_image(width, height)
@@ -1099,7 +1031,8 @@ class Utilidades:
                     imagem = user.avatar_url_as(size=256)
                     response = requests.get(imagem)
                     image = Image.open(BytesIO(response.content))
-                    texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name} em preto e branco."
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                           f'509840579316940800>')
                     width, height = image.size
 
                     new = create_image(width, height)
@@ -1129,21 +1062,12 @@ class Utilidades:
 
                             pixels[i, j] = (int(red), int(green), int(blue))
                 new.save('usuarioprimario.png')
+                await msg.delete()
                 await ctx.channel.send(file=discord.File('usuarioprimario.png'))
             except:
                 return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
 
-    @primario.error
-    async def primario_error(self, ctx, error):
-        if isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando primario novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando primario novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -1158,7 +1082,8 @@ class Utilidades:
                         imagem = ctx.author.avatar_url_as(size=256)
                         response = requests.get(imagem)
                         image = Image.open(BytesIO(response.content))
-                        texto = f"Olá {ctx.author.name}, está é sua imagem de perfil em preto e branco."
+                        msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                               f'509840579316940800>')
                         width, height = image.size
 
                         new = create_image(width, height)
@@ -1195,9 +1120,10 @@ class Utilidades:
                                 pixels[i + 1, j + 1] = (r[3], g[3], b[3])
                     else:
                         imagem = user.avatar_url_as(size=256)
+                        msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                               f'509840579316940800>')
                         response = requests.get(imagem)
                         image = Image.open(BytesIO(response.content))
-                        texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name} em preto e branco."
                         width, height = image.size
 
                         new = create_image(width, height)
@@ -1233,6 +1159,7 @@ class Utilidades:
                                 pixels[i + 1, j] = (r[2], g[2], b[2])
                                 pixels[i + 1, j + 1] = (r[3], g[3], b[3])
                     new.save('usuariopontilhado.png')
+                    await msg.delete()
                     await ctx.channel.send(file=discord.File('usuariopontilhado.png'))
                 except:
                     return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
@@ -1246,7 +1173,8 @@ class Utilidades:
                     imagem = ctx.author.avatar_url_as(size=256)
                     response = requests.get(imagem)
                     image = Image.open(BytesIO(response.content))
-                    texto = f"Olá {ctx.author.name}, está é sua imagem de perfil em preto e branco."
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                           f'509840579316940800>')
                     width, height = image.size
 
                     new = create_image(width, height)
@@ -1285,7 +1213,8 @@ class Utilidades:
                     imagem = user.avatar_url_as(size=256)
                     response = requests.get(imagem)
                     image = Image.open(BytesIO(response.content))
-                    texto = f"Olá {ctx.author.name}, está é a imagem do usuário {user.name} em preto e branco."
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                           f'509840579316940800>')
                     width, height = image.size
 
                     new = create_image(width, height)
@@ -1321,21 +1250,11 @@ class Utilidades:
                             pixels[i + 1, j] = (r[2], g[2], b[2])
                             pixels[i + 1, j + 1] = (r[3], g[3], b[3])
                 new.save('usuariopontilhado.png')
+                await msg.delete()
                 await ctx.channel.send(file=discord.File('usuariopontilhado.png'))
             except:
                 return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
 
-    @pontilhado.error
-    async def pontilhado_error(self, ctx, error):
-        if isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando pontilhado novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando pontilhado novamente.**'.format(round(h), round(min), round(sec)))
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -1346,7 +1265,8 @@ class Utilidades:
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
                 text = f"{texto}"
-
+                msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                             f'509840579316940800>')
                 x, y = np.ogrid[:300, :300]
 
                 mask = (x - 150) ** 2 + (y - 150) ** 2 > 130 ** 2
@@ -1359,6 +1279,7 @@ class Utilidades:
                 plt.imshow(wc, interpolation="bilinear")
                 wordcloud = 'wordcloud.png'
                 wc.to_file(wordcloud)
+                await msg.delete()
                 await ctx.channel.send(file=discord.File('wordcloud.png'))
             else:
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
@@ -1366,7 +1287,8 @@ class Utilidades:
                 return
         else:
             text = f"{texto}"
-
+            msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                   f'509840579316940800>')
             x, y = np.ogrid[:300, :300]
 
             mask = (x - 150) ** 2 + (y - 150) ** 2 > 130 ** 2
@@ -1379,20 +1301,12 @@ class Utilidades:
             plt.imshow(wc, interpolation="bilinear")
             wordcloud = 'wordcloud.png'
             wc.to_file(wordcloud)
+            await msg.delete()
             await ctx.channel.send(file=discord.File('wordcloud.png'))
 
     @wordcloud.error
     async def wordcloud_error(self, ctx, error):
-        if isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando wordcloud novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando wordcloud novamente.**'.format(round(h), round(min), round(sec)))
-        elif isinstance(error, commands.MissingRequiredArgument):
+        if isinstance(error, commands.MissingRequiredArgument):
             if error.param.name == 'texto':
                 embed = discord.Embed(title="Comando $wordcloud:", colour=discord.Colour(0x370c5e),
                                       description="Gera um wordcloud com as palavras que você definir\n \n**Como"
@@ -1400,12 +1314,118 @@ class Utilidades:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$wordcloud palavra 500\n$wordcloud Gosto de Tortas",
                                 inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$wc.``", inline=False)
+
+                msg = await ctx.send(embed=embed)
+                await msg.add_reaction("❓")
+
+
+    @commands.cooldown(2, 20, commands.BucketType.user)
+    @commands.guild_only()
+    @commands.command(name='anuncio')
+    async def anuncio(self, ctx, html: typing.Optional[str] = None, channel: typing.Optional[discord.TextChannel] = None, *, mensagem):
+        if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+            avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+        else:
+            avi = ctx.message.author.avatar_url_as(static_format='png')
+        if html[0] == 'h' and html[1] == 't' and html[2] == 't' and html[3] == 'p' and html[4] == 's':
+            if channel is None:
+                if (html[-1] == 'g' and html[-2] == 'p' and html[-3] == 'j') or (
+                        html[-1] == 'g' and html[-2] == 'n' and html[-3] == 'p') \
+                        or (html[-1] == 'f' and html[-2] == 'i' and html[-3] == 'g'):
+                    embed = discord.Embed(title="Anúncio novo ",
+                                          colour=discord.Colour(0x370c5e), description=f"{mensagem}")
+
+                    embed.set_image(url=f'{html}')
+                    embed.set_author(name=f"{ctx.author.name}", icon_url=f"{avi}")
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
+                    await ctx.message.delete()
+                    await ctx.send(embed=embed)
+                else:
+                    embed = discord.Embed(title="Anúncio novo ",
+                                          colour=discord.Colour(0x370c5e), description=f"{mensagem}", url=f'{html}')
+
+                    embed.set_image(url="http://3.bp.blogspot.com/-TdzBjPxRhGU/T"
+                                        "fuMXBMtvLI/AAAAAAAAHKs/iF_iO31lSYA/s1600/300px-Nyan_Cat_animation.gif")
+                    embed.set_author(name=f"{ctx.author.name}", icon_url=f"{avi}")
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
+                    await ctx.message.delete()
+                    await ctx.send(embed=embed)
+            else:
+
+                if (html[-1] =='g' and html[-2] =='p' and html[-3] =='j') or (html[-1] =='g' and html[-2] =='n' and html[-3] =='p'):
+                    embed = discord.Embed(title="Anúncio novo ",
+                                          colour=discord.Colour(0x370c5e), description=f"{mensagem}")
+
+                    embed.set_image(url=f'{html}')
+                    embed.set_author(name=f"{ctx.author.name}", icon_url=f"{avi}")
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
+                    await ctx.message.delete()
+                    await channel.send(embed=embed)
+                else:
+                    embed = discord.Embed(title="Anúncio novo ",
+                                          colour=discord.Colour(0x370c5e), description=f"{mensagem}",
+                                          url=f'{html}')
+
+                    embed.set_image(url="http://3.bp.blogspot.com/-TdzBjPxRhGU/T"
+                                        "fuMXBMtvLI/AAAAAAAAHKs/iF_iO31lSYA/s1600/300px-Nyan_Cat_animation.gif")
+                    embed.set_author(name=f"{ctx.author.name}", icon_url=f"{avi}")
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
+                    await ctx.message.delete()
+                    await channel.send(embed=embed)
+
+        else:
+            embed = discord.Embed(title="Anuncio Importante!",
+                                  colour=discord.Colour(0x370c5e), description=f"{html} {mensagem}")
+            embed.set_image(url="http://3.bp.blogspot.com/-TdzBjPxRhGU/TfuMXBMtvLI/"
+                                "AAAAAAAAHKs/iF_iO31lSYA/s1600/300px-Nyan_Cat_animation.gif")
+            embed.set_author(name=f"{ctx.author.name}", icon_url=f"{avi}")
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                       self.client.user.name,
+                                                                                       year()))
+            await ctx.message.delete()
+            await ctx.send(embed=embed)
+
+
+    @anuncio.error
+    async def anuncio_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            if error.param.name == 'mensagem':
+                embed = discord.Embed(title="Comando $anuncio:", colour=discord.Colour(0x370c5e),
+                                      description="Gera um anuncio!\n \n**Como"
+                                                  " usar: $anuncio <html> (opcional)"
+                                            " <Canal> (opcional) <mensagem>**")
+
+                embed.set_author(name="Betina#9182",
+                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
+
+                embed.add_field(name="📖**Exemplos:**", value="$anuncio Atenção,"
+                                                              " hoje vou sair\n$anuncio <link> lançou video novo",
+                                inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
