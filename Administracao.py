@@ -1,3 +1,24 @@
+"""
+The MIT License (MIT)
+Copyright (c) 2015-2019 Rapptz
+Copyright (c) 2019 DantasB
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+"""
+
 import random
 import time
 import discord
@@ -11,9 +32,11 @@ from forex_python.converter import CurrencyRates
 from dhooks import Webhook
 from discord.utils import get
 from discord.ext.commands import has_permissions, MissingPermissions
+from horario import*
 
 banhammer = [] #banhammer giphy gifs
 omg = [] #omg giphy gifs
+kick = [] #kick giphy gifs
 
 betina_icon = " " #bot icon
 
@@ -41,8 +64,7 @@ with open('limitador.json', 'r') as file:
         limitador_log = json.load(file)
     except ValueError:
         limitador_log = {}
-        
-        
+
 
 class Administração:
     def __init__(self, client):
@@ -71,7 +93,9 @@ class Administração:
                               colour=discord.Colour(0x370c5e))
 
         embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+        embed.set_footer(icon_url=betina_icon,
+                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                   year()))
         await guild.send(embed=embed)
 
     @commands.guild_only()
@@ -98,7 +122,9 @@ class Administração:
                               colour=discord.Colour(0x370c5e))
 
         embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+        embed.set_footer(icon_url=betina_icon,
+                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                   year()))
         await guild.send(embed=embed)
 
     @commands.cooldown(2, 10, commands.BucketType.user)
@@ -116,7 +142,9 @@ class Administração:
                               colour=discord.Colour(0x370c5e))
 
         embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+        embed.set_footer(icon_url=betina_icon,
+                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                   year()))
 
         await ctx.send(embed=embed, delete_after=10)
 
@@ -128,8 +156,9 @@ class Administração:
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Gerenciar Mensagens, Ler o histórico de "
@@ -146,8 +175,10 @@ class Administração:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Gerenciar Mensagens, Ler o histórico de "
@@ -158,16 +189,7 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send(
-                    '**Espere `{0}` segundos . Para usar o comando apaga novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando apaga novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -188,8 +210,9 @@ class Administração:
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             embed.add_field(name="👮**Permissões:**", value="*Você e o bot precisam "
                                                             "ter a permissão de* ``"
                                                             "Banir membros e estar no topo dos cargos`` *para utilizar este comando!*",
@@ -217,8 +240,10 @@ class Administração:
                 embed = discord.Embed(title="**Pensativa...**", colour=discord.Colour(0x370c5e),
                                       description="{}".format(msg1))
                 embed.set_image(url="{}".format(gif2))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 await ctx.channel.send(embed=embed)
                 if guild_id not in digit_log:
                     return
@@ -231,18 +256,23 @@ class Administração:
 
                 embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-                embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 await guild.send(embed=embed)
                 return
             else:
                 embed = discord.Embed(title="**BAN!**", colour=discord.Colour(0x370c5e), description="{}".format(msg2))
                 embed.set_image(url="{}".format(gif1))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 mbd = discord.Embed(title="**BAN!**", colour=discord.Colour(0x370c5e), description="{}".format(msg3))
                 mbd.set_image(url="{}".format(gif1))
-                mbd.set_footer(text="Betina Brazilian Bot",
-                               icon_url=betina_icon)
+                mbd.set_footer(icon_url=betina_icon,
+                    text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name, year()))
 
                 if not member.bot:
                     await member.send(embed=mbd)
@@ -258,7 +288,10 @@ class Administração:
 
                     embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-                    embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
                     await guild.send(embed=embed)
                     await ctx.guild.ban(member)
 
@@ -275,7 +308,10 @@ class Administração:
 
                     embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-                    embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
                     await guild.send(embed=embed)
                     await ctx.guild.ban(member)
 
@@ -288,8 +324,9 @@ class Administração:
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos"
                                                             "ter a permissão de* ``"
                                                             "Banir membros e estar no topo dos cargos`` *para utilizar este comando!*",
@@ -308,8 +345,10 @@ class Administração:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Banir membros e estar no topo dos cargos`` *para utilizar este comando!*",
@@ -320,35 +359,7 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, commands.BotMissingPermissions):
-            embed = discord.Embed(title="Comando $ban:", colour=discord.Colour(0x370c5e),
-                                  description="Bane o usuário do servidor por um motivo"
-                                              "\n \n**Como usar: $bane <usuário> <motivo> (opcional)**")
 
-            embed.set_author(name="Betina#9182",
-                             icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
-            embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
-                                                            "ter a permissão de* ``"
-                                                            "Banir membros e estar no topo dos cargos`` *para utilizar este comando!*",
-                            inline=False)
-            embed.add_field(name="📖**Exemplos:**", value="$ban @fulano\n$ban @fulano xingou o moderador",
-                            inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$bane, $banir.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send(
-                    '**Espere `{0}` segundos . Para usar o comando ban novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando ban novamente.**'.format(round(h), round(min), round(sec)))
 
     @commands.guild_only()
     @commands.command()
@@ -375,8 +386,9 @@ class Administração:
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
                 embed = discord.Embed(title='📟 Informações do Usuário {}'.format(member.name), color=member.color)
-                embed.set_footer(text="{}".format(ctx.message.author.name),
+                embed.set_footer(text="Usado às {} Horário de Brasília | {} {} .".format(hora(), ctx.message.author.name , year()),
                                  icon_url=avi1)
+
                 if member.nick == None:
                     embed.add_field(name='📛 Apelido:', value='Não tem nenhum nick!', inline=True)
                 else:
@@ -415,8 +427,9 @@ class Administração:
                 return
         else:
             embed = discord.Embed(title='📟 Informações do Usuário {}'.format(member.name), color=member.color)
-            embed.set_footer(text="{}".format(ctx.message.author.name),
-                             icon_url=avi1)
+            embed.set_footer(
+                text="Usado às {} Horário de Brasília | {} {} .".format(hora(), ctx.message.author.name, year()),
+                icon_url=avi1)
             if member.nick == None:
                 embed.add_field(name='📛 Apelido:', value='Não tem nenhum nick!', inline=True)
             else:
@@ -459,7 +472,9 @@ class Administração:
 
         embed1.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-        embed1.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+        embed1.set_footer(icon_url=betina_icon,
+                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                   year()))
         await guild.send(embed=embed1)
 
     @membro.error
@@ -472,8 +487,10 @@ class Administração:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Gerenciar Cargos`` *para utilizar este comando!*",
@@ -484,15 +501,7 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando userinfo novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando userinfo novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.guild_only()
     @commands.command(pass_context=True, name='servidor', aliases=['serverinfo', 'si'])
@@ -506,7 +515,7 @@ class Administração:
             avi = ctx.message.author.avatar_url_as(static_format='png')
         embed = discord.Embed(name='Informações do {}'.format(ctx.message.guild.name),
                               description='Aqui está tudo o que pude encontrar sobre esse servidor!', color=0x370c5e)
-        embed.set_footer(text="{}".format(ctx.message.author.name),
+        embed.set_footer(text="Usado às {} Horário de Brasília | {} {}".format(hora(), ctx.message.author.name, year()),
                          icon_url=avi)
         embed.set_author(name='📟 Informações do servidor {}:'.format(ctx.message.guild.name))
         embed.add_field(name='📛 Nome do Servidor:', value=ctx.message.guild.name, inline=True)
@@ -534,7 +543,9 @@ class Administração:
 
         embed1.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-        embed1.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+        embed1.set_footer(icon_url=betina_icon,
+                          text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                    year()))
         await guild.send(embed=embed1)
 
     @servidor.error
@@ -546,8 +557,9 @@ class Administração:
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                              text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                        year()))
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Administrador`` *para utilizar este comando!*",
@@ -587,7 +599,10 @@ class Administração:
                                       colour=discord.Colour(0x370c5e), description=f"Pelo seguinte motivo: {reason}")
 
                 embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-                embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                  text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                            self.client.user.name,
+                                                                                            year()))
 
                 await ctx.send(embed=embed, delete_after=10)
                 if guild_id not in digit_log:
@@ -601,7 +616,10 @@ class Administração:
 
                 embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-                embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                  text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                            self.client.user.name,
+                                                                                            year()))
                 await guild.send(embed=embed)
                 break
         else:
@@ -618,7 +636,10 @@ class Administração:
                                   colour=discord.Colour(0x370c5e), description=f"Pelo seguinte motivo: {reason}")
 
             embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-            embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                              text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                        self.client.user.name,
+                                                                                        year()))
 
             await ctx.send(embed=embed, delete_after=10)
             if guild_id not in digit_log:
@@ -632,7 +653,10 @@ class Administração:
 
             embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-            embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                              text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                        self.client.user.name,
+                                                                                        year()))
             await guild.send(embed=embed)
         with open('reports.json', 'w+') as f:
             json.dump(report, f)
@@ -646,8 +670,10 @@ class Administração:
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                              text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                        self.client.user.name,
+                                                                                        year()))
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Expulsar membros`` *para utilizar este comando!*",
@@ -665,8 +691,10 @@ class Administração:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Expulsar membros`` *para utilizar este comando!*",
@@ -676,16 +704,6 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send(
-                    '**Espere `{0}` segundos . Para usar o comando warn novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando warn novamente.**'.format(round(h), round(min), round(sec)))
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -706,8 +724,10 @@ class Administração:
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                       self.client.user.name,
+                                                                                       year()))
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Expulsar membros`` *para utilizar este comando!*",
@@ -734,7 +754,10 @@ class Administração:
 
                         embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-                        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                        embed.set_footer(icon_url=betina_icon,
+                                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                                   self.client.user.name,
+                                                                                                   year()))
                         await guild.send(embed=embed)
                         break
                     else:
@@ -753,7 +776,10 @@ class Administração:
 
                 embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-                embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 await guild.send(embed=embed)
 
     @warnings.error
@@ -765,8 +791,10 @@ class Administração:
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                       self.client.user.name,
+                                                                                       year()))
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Expulsar membros`` *para utilizar este comando!*",
@@ -784,8 +812,10 @@ class Administração:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Expulsar membros`` *para utilizar este comando!*",
@@ -795,16 +825,6 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send(
-                    '**Espere `{0}` segundos . Para usar o comando warnings novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando warnings novamente.**'.format(round(h), round(min), round(sec)))
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -824,7 +844,10 @@ class Administração:
                                       colour=discord.Colour(0x370c5e), description='Ultimo warn limpo: {}'.format(current_user['reasons'][-1]))
 
                 embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-                embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 await ctx.send(embed=embed, delete_after=10)
                 if guild_id not in digit_log:
@@ -838,7 +861,10 @@ class Administração:
 
                 embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-                embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 await guild.send(embed=embed)
                 del current_user['reasons'][-1]
                 break
@@ -847,7 +873,10 @@ class Administração:
                                   colour=discord.Colour(0x370c5e))
 
             embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-            embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                       self.client.user.name,
+                                                                                       year()))
 
             await ctx.send(embed=embed, delete_after=10)
             if guild_id not in digit_log:
@@ -861,7 +890,10 @@ class Administração:
 
             embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-            embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                       self.client.user.name,
+                                                                                       year()))
             await guild.send(embed=embed)
 
         with open('reports.json', 'w+') as f:
@@ -876,8 +908,10 @@ class Administração:
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                       self.client.user.name,
+                                                                                       year()))
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Banir membros`` *para utilizar este comando!*",
@@ -895,8 +929,10 @@ class Administração:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Banir membros`` *para utilizar este comando!*",
@@ -907,16 +943,7 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send(
-                    '**Espere `{0}` segundos . Para usar o comando clearlastwarn novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando clearlastwarn novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.guild_only()
     @commands.command(name='mute', aliases=['mutar', 'silenciar'])
@@ -956,7 +983,10 @@ class Administração:
 
         embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+        embed.set_footer(icon_url=betina_icon,
+                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                   self.client.user.name,
+                                                                                   year()))
         await guild.send(embed=embed)
 
         with open('mutados.json', 'w') as file:
@@ -971,8 +1001,10 @@ class Administração:
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                       self.client.user.name,
+                                                                                       year()))
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Expulsar membros e Gerenciar cargos"
@@ -994,8 +1026,10 @@ class Administração:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Expulsar membros e Gerenciar cargos"
@@ -1038,7 +1072,10 @@ class Administração:
 
         embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+        embed.set_footer(icon_url=betina_icon,
+                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                   self.client.user.name,
+                                                                                   year()))
         await guild.send(embed=embed)
         with open('mutados.json', 'w') as file:
             json.dump(cargos_dos_mutados, file)
@@ -1054,8 +1091,10 @@ class Administração:
 
             embed.set_author(name="Betina#9182",
                              icon_url=betina_icon)
-            embed.set_footer(text="Betina Brazilian Bot",
-                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                       self.client.user.name,
+                                                                                       year()))
             embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                             "ter a permissão de* ``"
                                                             "Expulsar membros e Gerenciar"
@@ -1077,8 +1116,10 @@ class Administração:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
                                                                 "ter a permissão de* ``"
                                                                 "Expulsar membros e Gerenciar"
@@ -1108,11 +1149,11 @@ class Administração:
 
         embed = discord.Embed(title="Sugestão: ", colour=discord.Colour(0x370c5e),
                               description=f"{arg}")
-        embed.set_footer(text="{}".format(ctx.message.author.name), icon_url=avi)
+        embed.set_footer(text="Usado às {} Horário de Brasília | {} {} .".format(hora(), ctx.message.author.name, year()), icon_url=avi)
         mensagem = await ctx.send(embed=embed)
-        await mensagem.add_reaction('✅')
-        await mensagem.add_reaction('❌')
-        await mensagem.add_reaction('⚠')
+        await mensagem.add_reaction("confirm:540714191938519071")
+        await mensagem.add_reaction("deny:540714208111755265")
+        await mensagem.add_reaction("report:540714227585908754")
         if guild_id not in digit_log:
             return
 
@@ -1124,7 +1165,10 @@ class Administração:
 
         embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-        embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+        embed.set_footer(icon_url=betina_icon,
+                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                   self.client.user.name,
+                                                                                   year()))
         await guild.send(embed=embed)
 
     @suggestion.error
@@ -1137,8 +1181,10 @@ class Administração:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$sugestão que tal adicionar uma função e sugestão"
                                                               "\n$sugestão criar um canal de jogos", inline=False)
@@ -1146,16 +1192,179 @@ class Administração:
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send('**Espere `{0}` segundos . Para usar o comando suggestion novamente.**'.format(round(sec)))
+
+
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.guild_only()
+    @commands.command(name='kick')
+    @has_permissions(kick_members=True)
+    async def kickar(self, ctx, member: discord.Member, *, arg=None):
+        texto = await ctx.get_message(ctx.message.id)
+        print(1)
+        guild_id = str(ctx.guild.id)
+        print(2)
+        if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+            avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+        else:
+            avi = ctx.message.author.avatar_url_as(static_format='png')
+        print(3)
+        if member.top_role >= member.guild.me.top_role:
+            embed = discord.Embed(title="Comando $kick:", colour=discord.Colour(0x370c5e),
+                                  description="Kicka o usuário do servidor por um motivo"
+                                              "\n \n**Como usar: $kick <usuário> <motivo> (opcional)**")
+
+            embed.set_author(name="Betina#9182",
+                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
+            embed.add_field(name="👮**Permissões:**", value="*Você e o bot precisam "
+                                                            "ter a permissão de* ``"
+                                                            "Expulsar membros e estar no topo dos cargos`` *para utilizar este comando!*",
+                            inline=False)
+            embed.add_field(name="📖**Exemplos:**", value="$kick @fulano\n$kick @fulano xingou o moderador",
+                            inline=False)
+
+            msg = await ctx.send(embed=embed)
+            await msg.add_reaction("❓")
+            return
+        else:
+            if arg == None:
+                reason = 'Sem motivos específicados!'
             else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando suggestion novamente.**'.format(round(h), round(min), round(sec)))
+                reason = arg
+
+            gif1 = random.choice(kick)
+            gif2 = random.choice(omg)
+            msg1 = '**Você estava tentando se expulsar ?**'
+            msg2 = '{} foi Kickado do servidor {} pelo seguinte motivo: {}'.format(member, ctx.guild.name, reason)
+            msg3 = 'Você foi Kickado do servidor {} pelo seguinte motivo: {}'.format(ctx.guild.name, reason)
+            if member == ctx.message.author:
+
+                embed = discord.Embed(title="**Pensativa...**", colour=discord.Colour(0x370c5e),
+                                      description="{}".format(msg1))
+                embed.set_image(url="{}".format(gif2))
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
+                await ctx.channel.send(embed=embed)
+                if guild_id not in digit_log:
+                    return
+
+                guild = ctx.guild.get_channel(int(digit_log[guild_id]))
+
+                embed = discord.Embed(
+                    title=f"{ctx.message.author.name} Tentou se Kickar do servidor no canal: #{texto.channel}",
+                    colour=discord.Colour(0x370c5e))
+
+                embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
+
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
+                await guild.send(embed=embed)
+                return
+            else:
+                embed = discord.Embed(title="**Kick!**", colour=discord.Colour(0x370c5e), description="{}".format(msg2))
+                embed.set_image(url="{}".format(gif1))
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
+                mbd = discord.Embed(title="**Kick!**", colour=discord.Colour(0x370c5e), description="{}".format(msg3))
+                mbd.set_image(url="{}".format(gif1))
+                mbd.set_footer(icon_url=betina_icon,
+                               text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                         year()))
+
+                if not member.bot:
+                    await member.send(embed=mbd)
+                    await ctx.channel.send(embed=embed)
+                    if guild_id not in digit_log:
+                        return
+
+                    guild = ctx.guild.get_channel(int(digit_log[guild_id]))
+
+                    embed = discord.Embed(
+                        title=f"{ctx.message.author.name} Kickou o usuário {member.name} no canal: #{texto.channel}",
+                        colour=discord.Colour(0x370c5e), description=f"pelo seguinte motivo: {reason}")
+
+                    embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
+
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
+                    await guild.send(embed=embed)
+                    await ctx.guild.kick(member)
+
+                else:
+                    await ctx.channel.send(embed=embed)
+                    if guild_id not in digit_log:
+                        return
+
+                    guild = ctx.guild.get_channel(int(digit_log[guild_id]))
+
+                    embed = discord.Embed(
+                        title=f"{ctx.message.author.name} Kickou o usuário {member.name} no canal: #{texto.channel}",
+                        colour=discord.Colour(0x370c5e), description=f"pelo seguinte motivo: {reason}")
+
+                    embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
+
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
+                    await guild.send(embed=embed)
+                    await ctx.guild.kick(member)
+
+    @kickar.error
+    async def kickar_handler(self, ctx, error):
+        if isinstance(error, MissingPermissions):
+            embed = discord.Embed(title="Comando $kick:", colour=discord.Colour(0x370c5e),
+                                  description="Kicka o usuário do servidor por um motivo"
+                                              "\n \n**Como usar: $kick <usuário> <motivo> (opcional)**")
+
+            embed.set_author(name="Betina#9182",
+                             icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
+            embed.add_field(name="👮**Permissões:**", value="*Você e o bot precisam "
+                                                            "ter a permissão de* ``"
+                                                            "Expulsar membros e estar no topo dos cargos`` *para utilizar este comando!*",
+                            inline=False)
+            embed.add_field(name="📖**Exemplos:**", value="$kick @fulano\n$kick @fulano xingou o moderador",
+                            inline=False)
+
+            msg = await ctx.send(embed=embed)
+            await msg.add_reaction("❓")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            if error.param.name == 'member':
+                embed = discord.Embed(title="Comando $kick:", colour=discord.Colour(0x370c5e),
+                                      description="Kicka o usuário do servidor por um motivo"
+                                                  "\n \n**Como usar: $kick <usuário> <motivo> (opcional)**")
+
+                embed.set_author(name="Betina#9182",
+                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
+                embed.add_field(name="👮**Permissões:**", value="*Você e o bot precisam "
+                                                                "ter a permissão de* ``"
+                                                                "Expulsar membros e estar no topo dos cargos`` *para utilizar este comando!*",
+                                inline=False)
+                embed.add_field(name="📖**Exemplos:**", value="$kick @fulano\n$kick @fulano xingou o moderador",
+                                inline=False)
+
+                msg = await ctx.send(embed=embed)
+                await msg.add_reaction("❓")
+
 
 
 def setup(client):
     client.add_cog(Administração(client))
+
