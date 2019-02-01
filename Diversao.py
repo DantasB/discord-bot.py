@@ -19,6 +19,8 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
+from __future__ import division
+
 import random
 import time
 import discord
@@ -27,13 +29,18 @@ import aiohttp
 import asyncio
 import json
 import requests
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as anim
 
 from discord.ext import commands
 from forex_python.converter import CurrencyRates
 from dhooks import Webhook
 from discord.utils import get
 from discord.ext.commands import has_permissions, MissingPermissions
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
+from horario import*
+from io import BytesIO
 
 dead = [] #dead giphy gifs
 alive = [] #alive giphy gifs
@@ -49,6 +56,14 @@ with open('limitador.json', 'r') as file:
 class Diversão:
     def __init__(self, client):
         self.client = client
+
+    text_flip = {}
+    char_list = "!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}"
+    alt_char_list = "{|}zʎxʍʌnʇsɹbdouɯlʞɾᴉɥƃɟǝpɔqɐ,‾^[\]Z⅄XMΛ∩┴SɹQԀONW˥ʞſIHפℲƎpƆq∀@¿<=>;:68ㄥ9ϛㄣƐᄅƖ0/˙-'+*(),⅋%$#¡"[
+                    ::-1]
+    for idx, char in enumerate(char_list):
+        text_flip[char] = alt_char_list[idx]
+        text_flip[alt_char_list[idx]] = char
 
     @commands.guild_only()
     @commands.command(name='moeda', aliases=['coin', 'ht'])
@@ -149,8 +164,10 @@ class Diversão:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
 
                 embed.add_field(name="📖**Exemplos:**", value="$ppt pedra\n$ppt tesoura", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$Rsp, $jogo.``", inline=False)
@@ -204,8 +221,10 @@ class Diversão:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="❗**Atenção:**", value="Escolha um dado que existe!", inline=False)
                 embed.add_field(name="📖**Exemplos:**", value="$rola 10\n$rola 4", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$roll, $dice.``", inline=False)
@@ -235,7 +254,10 @@ class Diversão:
                     colour=discord.Colour(0x370c5e))
 
                 embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-                embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="**Regras do jogo:**",
                                 value=f"```Clique na reação abaixo para participar."
                                 f" Quando tivermos {number} participantes começarei o jogo!```")
@@ -268,8 +290,10 @@ class Diversão:
                         embed = discord.Embed(title="**Morte!**", colour=discord.Colour(0x370c5e),
                                               description="{}".format(msg1))
                         embed.set_image(url="{}".format(gif1))
-                        embed.set_footer(text="Betina Brazilian Bot",
-                                         icon_url=betina_icon)
+                        embed.set_footer(icon_url=betina_icon,
+                                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                                   self.client.user.name,
+                                                                                                   year()))
                         msg = await ctx.send(embed=embed)
                         await asyncio.sleep(5)
 
@@ -278,8 +302,10 @@ class Diversão:
                     embed = discord.Embed(title="**Sobreviveu!**", colour=discord.Colour(0x370c5e),
                                           description="{}".format(msg2))
                     embed.set_image(url="{}".format(gif2))
-                    embed.set_footer(text="Betina Brazilian Bot",
-                                     icon_url=betina_icon)
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
                     msg = await ctx.send(embed=embed)
             else:
 
@@ -301,7 +327,9 @@ class Diversão:
                 colour=discord.Colour(0x370c5e))
 
             embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
-            embed.set_footer(text="Betina Brazilian Bot", icon_url=betina_icon)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                       year()))
             embed.add_field(name="**Regras do jogo:**",
                             value=f"```Clique na reação abaixo para participar."
                             f" Quando tivermos {number} participantes começarei o jogo!```")
@@ -334,8 +362,10 @@ class Diversão:
                     embed = discord.Embed(title="**Morte!**", colour=discord.Colour(0x370c5e),
                                           description="{}".format(msg1))
                     embed.set_image(url="{}".format(gif1))
-                    embed.set_footer(text="Betina Brazilian Bot",
-                                     icon_url=betina_icon)
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
                     msg = await ctx.send(embed=embed)
                     await asyncio.sleep(5)
 
@@ -344,8 +374,10 @@ class Diversão:
                 embed = discord.Embed(title="**Sobreviveu!**", colour=discord.Colour(0x370c5e),
                                       description="{}".format(msg2))
                 embed.set_image(url="{}".format(gif2))
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 msg = await ctx.send(embed=embed)
 
     @HungerGames.error
@@ -358,8 +390,10 @@ class Diversão:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="📖**Exemplos:**", value="$hungergames 10\n$hungergames 4", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$hg, $killall.``", inline=False)
 
@@ -475,24 +509,33 @@ class Diversão:
                     return await ctx.send('Tente colocar um texto com menos de 20 letras!')
                 if texto == 'ATA' or texto == 'Ata' or texto == 'ata':
                     img = Image.open('monica.png')
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                       f'509840579316940800>')
                     fonte = ImageFont.truetype('BEBAS.ttf', 60)
                     escrever = ImageDraw.Draw(img)
                     escrever.text(xy=(400, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                     img.save('mnc.png')
+                    await msg.delete()
                     await ctx.channel.send(file=discord.File('mnc.png'))
                 elif len(texto) <= 15:
                     img = Image.open('monica.png')
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                       f'509840579316940800>')
                     fonte = ImageFont.truetype('BEBAS.ttf', 30)
                     escrever = ImageDraw.Draw(img)
                     escrever.text(xy=(380, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                     img.save('mnc.png')
+                    await msg.delete()
                     await ctx.channel.send(file=discord.File('mnc.png'))
                 else:
                     img = Image.open('monica.png')
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                       f'509840579316940800>')
                     fonte = ImageFont.truetype('BEBAS.ttf', 30)
                     escrever = ImageDraw.Draw(img)
                     escrever.text(xy=(340, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                     img.save('mnc.png')
+                    await msg.delete()
                     await ctx.channel.send(file=discord.File('mnc.png'))
             else:
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
@@ -503,42 +546,42 @@ class Diversão:
                 return await ctx.send('Tente colocar um texto com menos de 20 letras!')
             if texto == 'ATA' or texto == 'Ata' or texto == 'ata':
                 img = Image.open('monica.png')
+                msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                       f'509840579316940800>')
                 fonte = ImageFont.truetype('BEBAS.ttf', 60)
                 escrever = ImageDraw.Draw(img)
                 escrever.text(xy=(400, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                 img.save('mnc.png')
+                await msg.delete()
                 await ctx.channel.send(file=discord.File('mnc.png'))
             elif len(texto) <= 15:
+                msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                       f'509840579316940800>')
                 img = Image.open('monica.png')
                 fonte = ImageFont.truetype('BEBAS.ttf', 30)
                 escrever = ImageDraw.Draw(img)
                 escrever.text(xy=(380, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                 img.save('mnc.png')
+                await msg.delete()
                 await ctx.channel.send(file=discord.File('mnc.png'))
             else:
                 img = Image.open('monica.png')
+                msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                       f'509840579316940800>')
                 fonte = ImageFont.truetype('BEBAS.ttf', 30)
                 escrever = ImageDraw.Draw(img)
                 escrever.text(xy=(340, 130), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                 img.save('mnc.png')
+                await msg.delete()
                 await ctx.channel.send(file=discord.File('mnc.png'))
 
-    @ata.error
-    async def ata_error(self, ctx, error):
-        if isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send(
-                    '**Espere `{0}` segundos . Para usar o comando ata novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando ata novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.guild_only()
     @commands.command()
     async def tias(self, ctx):
+        msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                               f'509840579316940800>')
         await ctx.channel.send(file=discord.File('tias.png'))
 
     @commands.cooldown(2, 10, commands.BucketType.user)
@@ -552,18 +595,24 @@ class Diversão:
                 if len(texto) > 30:
                     return await ctx.send('Tente colocar um texto com menos de 30 letras!')
                 if len(texto) <= 25:
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                       f'509840579316940800>')
                     img = Image.open('bolsonaro.png')
                     fonte = ImageFont.truetype('BEBAS.ttf', 20)
                     escrever = ImageDraw.Draw(img)
                     escrever.text(xy=(170, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                     img.save('blsnr.png')
+                    await msg.delete()
                     await ctx.channel.send(file=discord.File('blsnr.png'))
                 else:
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                           f'509840579316940800>')
                     img = Image.open('bolsonaro.png')
                     fonte = ImageFont.truetype('BEBAS.ttf', 20)
                     escrever = ImageDraw.Draw(img)
                     escrever.text(xy=(120, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                     img.save('blsnr.png')
+                    await msg.delete()
                     await ctx.channel.send(file=discord.File('blsnr.png'))
             else:
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
@@ -574,31 +623,26 @@ class Diversão:
                 return await ctx.send('Tente colocar um texto com menos de 30 letras!')
             if len(texto) <= 25:
                 img = Image.open('bolsonaro.png')
+                msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                       f'509840579316940800>')
                 fonte = ImageFont.truetype('BEBAS.ttf', 20)
                 escrever = ImageDraw.Draw(img)
                 escrever.text(xy=(170, 0), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                 img.save('blsnr.png')
+                await msg.delete()
                 await ctx.channel.send(file=discord.File('blsnr.png'))
             else:
                 img = Image.open('bolsonaro.png')
+                msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                       f'509840579316940800>')
                 fonte = ImageFont.truetype('BEBAS.ttf', 20)
                 escrever = ImageDraw.Draw(img)
                 escrever.text(xy=(120, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                 img.save('blsnr.png')
+                await msg.delete()
                 await ctx.channel.send(file=discord.File('blsnr.png'))
 
-    @bolsonaro.error
-    async def bolsonaro_error(self, ctx, error):
-        if isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send(
-                    '**Espere `{0}` segundos . Para usar o comando bolsonaro novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando bolsonaro novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
@@ -628,23 +672,16 @@ class Diversão:
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
-                embed.set_footer(text="Betina Brazilian Bot",
-                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
                 embed.add_field(name="📖**Exemplos:**", value="$reverse 10\n$reverse irreversivel", inline=False)
                 embed.add_field(name="🔀**Outros Comandos**", value="``$reverte, $avesso.``", inline=False)
 
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
-        elif isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send(
-                    '**Espere `{0}` segundos . Para usar o comando reverse novamente.**'.format(round(sec)))
-            else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando reverse novamente.**'.format(round(h), round(min), round(sec)))
+
 
     @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
@@ -655,13 +692,16 @@ class Diversão:
         if guild_id in limitador_log:
             if str(ctx.message.channel.id) == limitador_log[guild_id]:
                 if len(texto) >= 50:
-                    return await ctx.send('Tente colocar um texto com menos de 40 letras!')
+                    return await ctx.send('Tente colocar um texto com menos de 50 letras!')
                 else:
                     img = Image.open('face.png')
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                       f'509840579316940800>')
                     fonte = ImageFont.truetype('Tahoma.ttf', 20)
                     escrever = ImageDraw.Draw(img)
                     escrever.text(xy=(15, 60), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                     img.save('fc.png')
+                    await msg.delete()
                     await ctx.channel.send(file=discord.File('fc.png'))
             else:
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
@@ -672,26 +712,71 @@ class Diversão:
                 return await ctx.send('Tente colocar um texto com menos de 40 letras!')
             else:
                 img = Image.open('face.png')
+                msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                       f'509840579316940800>')
                 fonte = ImageFont.truetype('Tahoma.ttf', 20)
                 escrever = ImageDraw.Draw(img)
                 escrever.text(xy=(15, 60), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                 img.save('fc.png')
+                await msg.delete()
                 await ctx.channel.send(file=discord.File('fc.png'))
 
-    @facebook.error
-    async def facebook_error(self, ctx, error):
-        if isinstance(error, discord.ext.commands.CommandOnCooldown):
-            min, sec = divmod(error.retry_after, 60)
-            h, min = divmod(min, 60)
-            if min == 0.0 and h == 0:
-                await ctx.send(
-                    '**Espere `{0}` segundos . Para usar o comando facebook novamente.**'.format(round(sec)))
+
+
+    @commands.cooldown(2, 3, commands.BucketType.user)
+    @commands.guild_only()
+    @commands.command()
+    async def twitter(self, ctx, *, texto='Eu sou um dos criadores do twitter!'):
+        guild_id = str(ctx.guild.id)
+        user_id = str(ctx.author.id)
+        if guild_id in limitador_log:
+            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                if len(texto) > 52:
+                    return await ctx.send('Tente colocar um texto com menos de 50 letras!')
+                else:
+                    img = Image.open('twitter.png')
+                    msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                                 f'509840579316940800>')
+                    fonte = ImageFont.truetype('Tahoma.ttf', 20)
+                    escrever = ImageDraw.Draw(img)
+                    escrever.text(xy=(73, 30), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                    img.save('ttr.png')
+                    await msg.delete()
+                    await ctx.channel.send(file=discord.File('ttr.png'))
             else:
-                await ctx.send('**Espere `{0}` horas `{1}` '
-                               'minutos  e `{2}` segundos. Para'
-                               ' usar o comando facebook novamente.**'.format(round(h), round(min), round(sec)))
+                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                return
+        else:
+            if len(texto) > 52:
+                return await ctx.send('Tente colocar um texto com menos de 50 letras!')
+            else:
+                img = Image.open('twitter.png')
+                msg = await ctx.channel.send(f'Sua imagem está carregando {ctx.author.name}! <a:carregando:'
+                                             f'509840579316940800>')
+                fonte = ImageFont.truetype('Tahoma.ttf', 20)
+                escrever = ImageDraw.Draw(img)
+                escrever.text(xy=(73, 30), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                img.save('ttr.png')
+                await msg.delete()
+                await ctx.channel.send(file=discord.File('ttr.png'))
+
+
+
+    @commands.cooldown(2, 3, commands.BucketType.user)
+    @commands.guild_only()
+    @commands.command()
+    async def flip(self, ctx, *, msg='Preciso de um texto para inverter'):
+        result = ""
+        for char in msg:
+            if char in self.text_flip:
+                result += self.text_flip[char]
+            else:
+                result += char
+        await ctx.send(content=result[::-1]) # slice reverses the string
+
+
 
 
 def setup(client):
     client.add_cog(Diversão(client))
-
