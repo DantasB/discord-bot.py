@@ -54,7 +54,7 @@ async def get_pre(client, message):
         return bot_prefix[guild_id]
     return '$'
 
-startup_extensions = ['Music', 'Diversao', 'Interacao', 'Utilidades', 'Error', 'Administracao']
+startup_extensions = ['Music', 'Diversao', 'Interacao', 'Utilidades', 'Error', 'Administracao', 'Tickets']
 prefix = get_pre
 client = commands.Bot(command_prefix=prefix)
 TOKEN = 'Seu discord bot token'
@@ -711,13 +711,14 @@ async def help(ctx):
     embed.add_field(name="🗣 **Interação**", value="``$bate, $abraça, $treta...``", inline=False)
     embed.add_field(name="👮 **Administração**", value="``$apaga, $ping, $pong...``", inline=False)
     embed.add_field(name="⚙ **Configuração**", value="``$joinlogs, $leavelogs, $autorole...``", inline=False)
-    embed.add_field(name="🤑 **Doação**", value="``donateinfo``", inline=False)
+    embed.add_field(name="🤑 **Doação**", value="``$donateinfo``", inline=False)
+    embed.add_field(name="🎟 **Ticket**", value="``$openticket, $closeticket, $infoticket``", inline=False)
     try:
         message = await author.send(embed=embed)
     except:
         return await ctx.send('Você está com sua DM bloqueada. Por favor desbloqueie!')
 
-    reaction_list = ["😂", "🛠", "🎵", "🗣", "👮", "⚙", "🤑"]
+    reaction_list = ["😂", "🛠", "🎵", "🗣", "👮", "⚙", "🤑", "🎟"]
 
     for reaction in reaction_list:
         await message.add_reaction(reaction)
@@ -922,6 +923,9 @@ async def help(ctx):
                                 inline=False)
                 embed.add_field(name="**$kick <usuário> <motivo> (opcional)**", value="``Tirarei o ultimo warn do usuário!``",
                                 inline=False)
+                embed.add_field(name="**$bugreport <mensagem>**",
+                                value="``Reporta um bug ao meu desenvolvedor!``",
+                                inline=False)
 
                 msg = await message.edit(embed=embed)
 
@@ -997,8 +1001,24 @@ async def help(ctx):
                 embed.set_footer(icon_url=betina_icon,
                                  text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), client.user.name,
                                                                                            year()))
-                embed.add_field(name="**donateinfo**", value="``Informações de contas para"
+                embed.add_field(name="**$donateinfo**", value="``Informações de contas para"
                                                              " recebimento de doações!``", inline=False)
+                msg = await message.edit(embed=embed)
+
+            elif str(reaction.emoji) == "🎟":
+                embed = discord.Embed(title="Ticket", colour=discord.Colour(0x370c5e),
+                                      description="*Bem vindo a categoria Ticket:\nAqui você encontrará"
+                                                  " comandos que poderão ser importantes"
+                                                  " caso você queira criar uma conversa privada com alguem!*")
+                embed.set_thumbnail(
+                    url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), client.user.name,
+                                                                                           year()))
+                embed.add_field(name="**$openticket**", value="``Abre um novo Ticket no servidor!``", inline=False)
+                embed.add_field(name="**$closeticket**", value="``Fecha o Ticket aberto no servidor!``", inline=False)
+                embed.add_field(name="**$infoticket**", value="``Envia para você um arquivo.txt com todas as"
+                                                        " mensagens do Ticket!``", inline=False)
                 msg = await message.edit(embed=embed)
     except:
         return
