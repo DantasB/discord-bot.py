@@ -59,11 +59,12 @@ class Tickets:
     @commands.command(name='infoticket', aliases=['ticketinfo'])
     @commands.guild_only()
     async def info(self, ctx):
-        f = open("information.txt", "w+")
+        resultado = numero['criaticket']
+        f = open(f"information{resultado}.txt", "w+")
         resultado = numero['criaticket']
         c = 0
         author = ctx.author
-        async for message in ctx.message.channel.history():
+        async for message in ctx.message.channel.history(reverse=True):
             c += 1
             if ctx.message.channel.name != f'ticket-número-{resultado}':
                 mensagem = f"<:stop:540852590083178497> **Este comando só pode obter informações do canal de nome:" \
@@ -72,7 +73,7 @@ class Tickets:
                 break
             f.write(f"Mensagem {c}: {message.author} disse: {message.content}\n")
         f.close()
-        await author.send(file=discord.File('information.txt'))
+        await author.send(file=discord.File(f'information{resultado}.txt'))
 
 
 def setup(client):
