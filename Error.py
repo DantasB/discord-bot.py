@@ -27,7 +27,7 @@ from discord.ext import commands
 from horario import *
 from difflib import SequenceMatcher
 
-betina_icon = ""
+betina_icon = "https://images.discordapp.net/avatars/527565353199337474/4c21db45f96d92a2b8214b5f93d059c4.png?size=256"
 
 
 def similar(a, b):
@@ -46,7 +46,7 @@ class Error:
         error = getattr(error, 'original', error)
 
         if isinstance(error, ignored):
-            comandos = [x.name for x in self.client.commands]
+            comandos = [x for x in self.client.all_commands]
             possiveis = []
             possivel = str(error).split(' ')[1]
             for comando in comandos:
@@ -55,27 +55,15 @@ class Error:
             if not possiveis:
                 return await ctx.message.add_reaction("deny:540714208111755265")
             else:
-                await ctx.send(f'```Olá usuário, não encontrei o comando {possivel}.'
-                               f'\nVocê quis dizer: 'f'{possiveis}```')
+                valor = '\n-> $'.join([x for x in possiveis])
+                return await ctx.send(f'```Olá usuário, não encontrei o comando {possivel}.'
+                               f'\nVocê quis dizer:\n'f'-> ${valor}```')
             return
 
 
         elif isinstance(error, commands.BadArgument):
-            if ctx.command.qualified_name == 'tag list':  # Check if the command being invoked is 'tag list'
-                if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
-                    avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
-                else:
-                    avi = ctx.message.author.avatar_url_as(static_format='png')
-
-                embed = discord.Embed(title=f"ERRO!", colour=discord.Colour(0x370c5e))
-
-                embed.set_author(name=f"{ctx.message.author}", icon_url=f"{avi}")
-                embed.set_footer(icon_url=betina_icon,
-                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
-                                                                                           self.client.user.name,
-                                                                                           year()))
-
-                return await ctx.send(embed=embed, delete_after=10)
+            mensagem = f"<:stop:540852590083178497> **Por favor, coloque um argumento válido!**\n **{error}**"
+            return await ctx.send(mensagem)
 
         elif isinstance(error, commands.BotMissingPermissions):
             mensagem = f"<:stop:540852590083178497> **Eu não tenho permissão para executar esse comando.**"
