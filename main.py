@@ -936,6 +936,7 @@ async def help(ctx):
                                  text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), client.user.name,
                                                                                            year()))
                 embed.add_field(name="**$config**", value="``Mostra todas as configurações do bot!``", inline=False)
+                embed.add_field(name="**$emojis**", value="``Diz todos os emojis desse servidor!``", inline=False)
                 embed.add_field(name="**$betinainfo**", value="``Mostra todas as informações do bot!``", inline=False)
                 embed.add_field(name="**$joinlogs <#canal> <mensagem>**",
                                 value="``Definirei um canal para enviar uma mensagem"
@@ -982,6 +983,8 @@ async def help(ctx):
                                                                    " poder utilizar os comandos.``", inline=False)
                 embed.add_field(name="**$levelson <#Canal>**", value="``Ativa o s"
                                                                      "istema de level nesse servidor``", inline=False)
+                embed.add_field(name="**$roleinfo <@cargo>**", value="``Diz as"
+                                                                     " informações sobre esse cargo``", inline=False)
                 msg = await message.edit(embed=embed)
 
             elif str(reaction.emoji) == "🤑":
@@ -1523,8 +1526,8 @@ async def reaction_logsout_handler(ctx, error):
 @client.command(name='cargoinicial', aliases=['defci', 'dci'])
 @has_permissions(administrator=True)
 async def cargo_inicial(ctx, role: discord.Role):
+    cargos = ctx.guild.roles
     guild_id = str(ctx.guild.id)
-
     embed = discord.Embed(title="Cargo inicial definido: " + str(role), colour=discord.Colour(0x370c5e))
     embed.set_footer(icon_url=betina_icon,
                      text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), client.user.name, year()))
@@ -1711,7 +1714,7 @@ async def configuration(ctx):
         status8 = 'Desligado!'
     else:
         status8 = 'Ligado!'
-    if guild_id not in levels_on:
+    if guild_id not in level_on:
         status9 = 'Desligado!'
     else:
         status9 = 'Ligado!'
@@ -2061,7 +2064,7 @@ async def betinainfo(ctx):
                 program = "Python 3.6.6"
                 hospedagem = 'Raspberry Pi'
                 uptime = "{} horas {} minutos ".format(0, 0)
-                temp =[x.name for x in ctx.bot.commands]
+                temp = [x.name for x in ctx.bot.commands]
                 commandos2 = str(len(temp))
                 cpu = "{} % ".format(str(psutil.cpu_percent(interval=1)))
                 invite = '[[Me adicione]](https://discordapp.com/oauth2/authorize?&client_id=527' \
