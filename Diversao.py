@@ -627,7 +627,7 @@ class Diversão:
                                        f'509840579316940800>')
                 fonte = ImageFont.truetype('BEBAS.ttf', 20)
                 escrever = ImageDraw.Draw(img)
-                escrever.text(xy=(170, 0), text=f"{texto}", fill=(0, 0, 0), font=fonte)
+                escrever.text(xy=(170, 80), text=f"{texto}", fill=(0, 0, 0), font=fonte)
                 img.save('blsnr.png')
                 await msg.delete()
                 await ctx.channel.send(file=discord.File('blsnr.png'))
@@ -773,7 +773,8 @@ class Diversão:
                 result += self.text_flip[char]
             else:
                 result += char
-        await ctx.send(content=result[::-1]) # slice reverses the string
+        await ctx.send(content=result[::-1])
+
 
 
 
