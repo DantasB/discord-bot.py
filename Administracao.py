@@ -366,29 +366,166 @@ class Administração:
     async def ajuda(self, ctx):
         await ctx.invoke(self.client.get_command("help"))
 
-    @commands.cooldown(2, 10, commands.BucketType.user)
+        @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='membro', aliases=['userinfo', 'ui'])
-    async def membro(self, ctx, member: discord.Member):
-        texto = await ctx.get_message(ctx.message.id)
-        guild_id = str(ctx.guild.id)
-        user_id = str(ctx.author.id)
-        if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
-            avi1 = ctx.message.author.avatar_url.rsplit("?", 1)[0]
-        else:
-            avi1 = ctx.message.author.avatar_url_as(static_format='png')
-        roles = ', '.join([x.name for x in member.roles if x.name != "@everyone"])
-        if member.avatar_url_as(static_format='png')[54:].startswith('a_'):
-            avi = member.avatar_url.rsplit("?", 1)[0]
-        else:
-            avi = member.avatar_url_as(static_format='png')
+    async def membro(self, ctx, member: discord.Member = None):
+        if member is None:
+            member = ctx.message.author
+            texto = await ctx.get_message(ctx.message.id)
+            guild_id = str(ctx.guild.id)
+            user_id = str(ctx.author.id)
+            if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                avi1 = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+            else:
+                avi1 = ctx.message.author.avatar_url_as(static_format='png')
+            roles = ', '.join([x.name for x in member.roles if x.name != "@everyone"])
+            if member.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                avi = member.avatar_url.rsplit("?", 1)[0]
+            else:
+                avi = member.avatar_url_as(static_format='png')
 
-        if guild_id in limitador_log:
-            if str(ctx.message.channel.id) == limitador_log[guild_id]:
+            if guild_id in limitador_log:
+                if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                    embed = discord.Embed(title='📟 Informações do Usuário {}'.format(member.name), color=member.color)
+                    embed.set_footer(text="Usado às {} Horário de Brasília | {} {} .".format(hora(), ctx.message.author.name , year()),
+                                     icon_url=avi1)
+
+                    if member.nick == None:
+                        embed.add_field(name='📛 Apelido:', value='Não tem nenhum nick!', inline=True)
+                    else:
+                        embed.add_field(name='📛 Apelido:', value='{}'.format(member.nick), inline=True)
+                    embed.add_field(name='💻 Id:', value='{}'.format(member.id), inline=True)
+                    embed.add_field(name='📆 Conta criada em',
+                                    value=member.created_at.__format__('%d de %b de %Y às %H:%M:%S'))
+                    embed.add_field(name='⭐ Entrou no servidor em:',
+                                    value='{}'.format(member.joined_at.__format__('%d de %b de %Y às %H:%M:%S')),
+                                    inline=True)
+                    embed.add_field(name='📃 Status:', value='{}'.format(member.status), inline=True)
+                    embed.add_field(name='🎌 Cargos:', value='{}'.format(roles), inline=True)
+                    embed.set_thumbnail(url=avi)
+                    if member.id == ctx.message.guild.owner.id:
+                        if str(member.status) == 'online':
+                            embed.set_author(name='👑 ✅ {}'.format(member))
+                        elif str(member.status) == 'dnd':
+                            embed.set_author(name='👑 🔴 {}'.format(member))
+                        elif str(member.status) == 'idle':
+                            embed.set_author(name='👑 🐤 {}'.format(member))
+                        elif str(member.status) == 'offline':
+                            embed.set_author(name='👑 ⚪ {}'.format(member))
+                    else:
+                        if str(member.status) == 'online':
+                            embed.set_author(name='✅ {}'.format(member))
+                        elif str(member.status) == 'dnd':
+                            embed.set_author(name='🔴 {}'.format(member))
+                        elif str(member.status) == 'idle':
+                            embed.set_author(name='🐤 {}'.format(member))
+                        elif str(member.status) == 'offline':
+                            embed.set_author(name='⚪ {}'.format(member))
+                    await ctx.send(embed=embed)
+                else:
+                    guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                    await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                    return
+            else:
                 embed = discord.Embed(title='📟 Informações do Usuário {}'.format(member.name), color=member.color)
-                embed.set_footer(text="Usado às {} Horário de Brasília | {} {} .".format(hora(), ctx.message.author.name , year()),
-                                 icon_url=avi1)
+                embed.set_footer(
+                    text="Usado às {} Horário de Brasília | {} {} .".format(hora(), ctx.message.author.name, year()),
+                    icon_url=avi1)
+                if member.nick == None:
+                    embed.add_field(name='📛 Apelido:', value='Não tem nenhum nick!', inline=True)
+                else:
+                    embed.add_field(name='📛 Apelido:', value='{}'.format(member.nick), inline=True)
+                embed.add_field(name='💻 Id:', value='{}'.format(member.id), inline=True)
+                embed.add_field(name='📆 Conta criada em', value=member.created_at.__format__('%d de %b de %Y às %H:%M:%S'))
+                embed.add_field(name='⭐ Entrou no servidor em:',
+                                value='{}'.format(member.joined_at.__format__('%d de %b de %Y às %H:%M:%S')), inline=True)
+                embed.add_field(name='📃 Status:', value='{}'.format(member.status), inline=True)
+                embed.add_field(name='🎌 Cargos:', value='{}'.format(roles), inline=True)
+                embed.set_thumbnail(url=avi)
+                if member.id == ctx.message.guild.owner.id:
+                    if str(member.status) == 'online':
+                        embed.set_author(name='👑 ✅ {}'.format(member))
+                    elif str(member.status) == 'dnd':
+                        embed.set_author(name='👑 🔴 {}'.format(member))
+                    elif str(member.status) == 'idle':
+                        embed.set_author(name='👑 🐤 {}'.format(member))
+                    elif str(member.status) == 'offline':
+                        embed.set_author(name='👑 ⚪ {}'.format(member))
+                else:
+                    if str(member.status) == 'online':
+                        embed.set_author(name='✅ {}'.format(member))
+                    elif str(member.status) == 'dnd':
+                        embed.set_author(name='🔴 {}'.format(member))
+                    elif str(member.status) == 'idle':
+                        embed.set_author(name='🐤 {}'.format(member))
+                    elif str(member.status) == 'offline':
+                        embed.set_author(name='⚪ {}'.format(member))
+                await ctx.send(embed=embed)
+        else:
+            texto = await ctx.get_message(ctx.message.id)
+            guild_id = str(ctx.guild.id)
+            user_id = str(ctx.author.id)
+            if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                avi1 = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+            else:
+                avi1 = ctx.message.author.avatar_url_as(static_format='png')
+            roles = ', '.join([x.name for x in member.roles if x.name != "@everyone"])
+            if member.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                avi = member.avatar_url.rsplit("?", 1)[0]
+            else:
+                avi = member.avatar_url_as(static_format='png')
 
+            if guild_id in limitador_log:
+                if str(ctx.message.channel.id) == limitador_log[guild_id]:
+                    embed = discord.Embed(title='📟 Informações do Usuário {}'.format(member.name), color=member.color)
+                    embed.set_footer(
+                        text="Usado às {} Horário de Brasília | {} {} .".format(hora(), ctx.message.author.name,
+                                                                                year()),
+                        icon_url=avi1)
+
+                    if member.nick == None:
+                        embed.add_field(name='📛 Apelido:', value='Não tem nenhum nick!', inline=True)
+                    else:
+                        embed.add_field(name='📛 Apelido:', value='{}'.format(member.nick), inline=True)
+                    embed.add_field(name='💻 Id:', value='{}'.format(member.id), inline=True)
+                    embed.add_field(name='📆 Conta criada em',
+                                    value=member.created_at.__format__('%d de %b de %Y às %H:%M:%S'))
+                    embed.add_field(name='⭐ Entrou no servidor em:',
+                                    value='{}'.format(member.joined_at.__format__('%d de %b de %Y às %H:%M:%S')),
+                                    inline=True)
+                    embed.add_field(name='📃 Status:', value='{}'.format(member.status), inline=True)
+                    embed.add_field(name='🎌 Cargos:', value='{}'.format(roles), inline=True)
+                    embed.set_thumbnail(url=avi)
+                    if member.id == ctx.message.guild.owner.id:
+                        if str(member.status) == 'online':
+                            embed.set_author(name='👑 ✅ {}'.format(member))
+                        elif str(member.status) == 'dnd':
+                            embed.set_author(name='👑 🔴 {}'.format(member))
+                        elif str(member.status) == 'idle':
+                            embed.set_author(name='👑 🐤 {}'.format(member))
+                        elif str(member.status) == 'offline':
+                            embed.set_author(name='👑 ⚪ {}'.format(member))
+                    else:
+                        if str(member.status) == 'online':
+                            embed.set_author(name='✅ {}'.format(member))
+                        elif str(member.status) == 'dnd':
+                            embed.set_author(name='🔴 {}'.format(member))
+                        elif str(member.status) == 'idle':
+                            embed.set_author(name='🐤 {}'.format(member))
+                        elif str(member.status) == 'offline':
+                            embed.set_author(name='⚪ {}'.format(member))
+                    await ctx.send(embed=embed)
+                else:
+                    guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
+                    await ctx.send(
+                        f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
+                    return
+            else:
+                embed = discord.Embed(title='📟 Informações do Usuário {}'.format(member.name), color=member.color)
+                embed.set_footer(
+                    text="Usado às {} Horário de Brasília | {} {} .".format(hora(), ctx.message.author.name, year()),
+                    icon_url=avi1)
                 if member.nick == None:
                     embed.add_field(name='📛 Apelido:', value='Não tem nenhum nick!', inline=True)
                 else:
@@ -421,45 +558,6 @@ class Administração:
                     elif str(member.status) == 'offline':
                         embed.set_author(name='⚪ {}'.format(member))
                 await ctx.send(embed=embed)
-            else:
-                guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
-                await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
-                return
-        else:
-            embed = discord.Embed(title='📟 Informações do Usuário {}'.format(member.name), color=member.color)
-            embed.set_footer(
-                text="Usado às {} Horário de Brasília | {} {} .".format(hora(), ctx.message.author.name, year()),
-                icon_url=avi1)
-            if member.nick == None:
-                embed.add_field(name='📛 Apelido:', value='Não tem nenhum nick!', inline=True)
-            else:
-                embed.add_field(name='📛 Apelido:', value='{}'.format(member.nick), inline=True)
-            embed.add_field(name='💻 Id:', value='{}'.format(member.id), inline=True)
-            embed.add_field(name='📆 Conta criada em', value=member.created_at.__format__('%d de %b de %Y às %H:%M:%S'))
-            embed.add_field(name='⭐ Entrou no servidor em:',
-                            value='{}'.format(member.joined_at.__format__('%d de %b de %Y às %H:%M:%S')), inline=True)
-            embed.add_field(name='📃 Status:', value='{}'.format(member.status), inline=True)
-            embed.add_field(name='🎌 Cargos:', value='{}'.format(roles), inline=True)
-            embed.set_thumbnail(url=avi)
-            if member.id == ctx.message.guild.owner.id:
-                if str(member.status) == 'online':
-                    embed.set_author(name='👑 ✅ {}'.format(member))
-                elif str(member.status) == 'dnd':
-                    embed.set_author(name='👑 🔴 {}'.format(member))
-                elif str(member.status) == 'idle':
-                    embed.set_author(name='👑 🐤 {}'.format(member))
-                elif str(member.status) == 'offline':
-                    embed.set_author(name='👑 ⚪ {}'.format(member))
-            else:
-                if str(member.status) == 'online':
-                    embed.set_author(name='✅ {}'.format(member))
-                elif str(member.status) == 'dnd':
-                    embed.set_author(name='🔴 {}'.format(member))
-                elif str(member.status) == 'idle':
-                    embed.set_author(name='🐤 {}'.format(member))
-                elif str(member.status) == 'offline':
-                    embed.set_author(name='⚪ {}'.format(member))
-            await ctx.send(embed=embed)
 
         if guild_id not in digit_log:
             return
@@ -477,35 +575,9 @@ class Administração:
                                                                                    year()))
         await guild.send(embed=embed1)
 
-    @membro.error
-    async def membro_handler(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            if error.param.name == 'member':
-                embed = discord.Embed(title="Comando $membro:", colour=discord.Colour(0x370c5e),
-                                      description="Diz as informações sobre o usuário"
-                                                  "\n \n**Como usar: $membro <usuário>**")
-
-                embed.set_author(name="Betina#9182",
-                                 icon_url=betina_icon)
-                embed.set_footer(icon_url=betina_icon,
-                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
-                                                                                           self.client.user.name,
-                                                                                           year()))
-                embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
-                                                                "ter a permissão de* ``"
-                                                                "Gerenciar Cargos`` *para utilizar este comando!*",
-                                inline=False)
-                embed.add_field(name="📖**Exemplos:**", value="$membro @fulano\n$membro @sicrano",
-                                inline=False)
-                embed.add_field(name="🔀**Outros Comandos**", value="``$memberinfo, $ui.``", inline=False)
-
-                msg = await ctx.send(embed=embed)
-                await msg.add_reaction("❓")
-
 
     @commands.guild_only()
     @commands.command(pass_context=True, name='servidor', aliases=['serverinfo', 'si'])
-    @has_permissions(administrator=True)
     async def servidor(self, ctx):
         texto = await ctx.get_message(ctx.message.id)
         guild_id = str(ctx.guild.id)
@@ -548,27 +620,6 @@ class Administração:
                                                                                     year()))
         await guild.send(embed=embed1)
 
-    @servidor.error
-    async def servidor_handler(self, ctx, error):
-        if isinstance(error, MissingPermissions):
-            embed = discord.Embed(title="Comando $servidor:", colour=discord.Colour(0x370c5e),
-                                  description="Diz as informações sobre o servidor"
-                                              "\n \n**Como usar: $servidor**")
-
-            embed.set_author(name="Betina#9182",
-                             icon_url=betina_icon)
-            embed.set_footer(icon_url=betina_icon,
-                              text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
-                                                                                        year()))
-            embed.add_field(name="👮**Permissões:**", value="*Você e eu precisamos "
-                                                            "ter a permissão de* ``"
-                                                            "Administrador`` *para utilizar este comando!*",
-                            inline=False)
-            embed.add_field(name="📖**Exemplos:**", value="$servidor", inline=False)
-            embed.add_field(name="🔀**Outros Comandos**", value="``$serverinfo, $si.``", inline=False)
-
-            msg = await ctx.send(embed=embed)
-            await msg.add_reaction("❓")
 
     @commands.cooldown(2, 10, commands.BucketType.user)
     @commands.guild_only()
@@ -1134,42 +1185,82 @@ class Administração:
     @commands.cooldown(2, 3, commands.BucketType.user)
     @commands.guild_only()
     @commands.command(name='sugestão', aliases=['suggestion', 'sug'])
-    async def suggestion(self, ctx, *, arg: str):
-        texto = await ctx.get_message(ctx.message.id)
-        guild_id = str(ctx.guild.id)
-        if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
-            avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+    async def suggestion(self, ctx, channel: typing.Optional[discord.TextChannel] = None, *, arg: str):
+        if channel is None:
+            texto = await ctx.get_message(ctx.message.id)
+            guild_id = str(ctx.guild.id)
+            if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+            else:
+                avi = ctx.message.author.avatar_url_as(static_format='png')
+
+            if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+            else:
+                avi = ctx.message.author.avatar_url_as(static_format='png')
+
+            embed = discord.Embed(title="Sugestão: ", colour=discord.Colour(0x370c5e),
+                                  description=f"{arg}")
+            embed.set_footer(text="Usado às {} Horário de Brasília | {} {} .".format(hora(), ctx.message.author.name, year()), icon_url=avi)
+            mensagem = await ctx.send(embed=embed)
+            await mensagem.add_reaction("confirm:540714191938519071")
+            await mensagem.add_reaction("deny:540714208111755265")
+            await mensagem.add_reaction("report:540714227585908754")
+            if guild_id not in digit_log:
+                return
+
+            guild = ctx.guild.get_channel(int(digit_log[guild_id]))
+
+            embed = discord.Embed(
+                title=f"{ctx.message.author.name} usou o comando sugestão no canal #{texto.channel}",
+                colour=discord.Colour(0x370c5e), description=f'Sugestão: {arg}')
+
+            embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
+
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                       self.client.user.name,
+                                                                                       year()))
+            await guild.send(embed=embed)
         else:
-            avi = ctx.message.author.avatar_url_as(static_format='png')
+            texto = await ctx.get_message(ctx.message.id)
+            guild_id = str(ctx.guild.id)
+            if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+            else:
+                avi = ctx.message.author.avatar_url_as(static_format='png')
 
-        if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
-            avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
-        else:
-            avi = ctx.message.author.avatar_url_as(static_format='png')
+            if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
+                avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
+            else:
+                avi = ctx.message.author.avatar_url_as(static_format='png')
 
-        embed = discord.Embed(title="Sugestão: ", colour=discord.Colour(0x370c5e),
-                              description=f"{arg}")
-        embed.set_footer(text="Usado às {} Horário de Brasília | {} {} .".format(hora(), ctx.message.author.name, year()), icon_url=avi)
-        mensagem = await ctx.send(embed=embed)
-        await mensagem.add_reaction("confirm:540714191938519071")
-        await mensagem.add_reaction("deny:540714208111755265")
-        await mensagem.add_reaction("report:540714227585908754")
-        if guild_id not in digit_log:
-            return
+            embed = discord.Embed(title="Sugestão: ", colour=discord.Colour(0x370c5e),
+                                  description=f"{arg}")
+            embed.set_footer(
+                text="Usado às {} Horário de Brasília | {} {} .".format(hora(), ctx.message.author.name, year()),
+                icon_url=avi)
+            await ctx.send(f'Mensagem enviada para o canal {channel}')
+            mensagem = await channel.send(embed=embed)
+            await mensagem.add_reaction("confirm:540714191938519071")
+            await mensagem.add_reaction("deny:540714208111755265")
+            await mensagem.add_reaction("report:540714227585908754")
+            if guild_id not in digit_log:
+                return
 
-        guild = ctx.guild.get_channel(int(digit_log[guild_id]))
+            guild = ctx.guild.get_channel(int(digit_log[guild_id]))
 
-        embed = discord.Embed(
-            title=f"{ctx.message.author.name} usou o comando sugestão no canal #{texto.channel}",
-            colour=discord.Colour(0x370c5e), description=f'Sugestão: {arg}')
+            embed = discord.Embed(
+                title=f"{ctx.message.author.name} usou o comando sugestão no canal #{texto.channel}",
+                colour=discord.Colour(0x370c5e), description=f'Sugestão: {arg}')
 
-        embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
+            embed.set_author(name=f"{ctx.message.author.name}", icon_url=f"{avi}")
 
-        embed.set_footer(icon_url=betina_icon,
-                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
-                                                                                   self.client.user.name,
-                                                                                   year()))
-        await guild.send(embed=embed)
+            embed.set_footer(icon_url=betina_icon,
+                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                       self.client.user.name,
+                                                                                       year()))
+            await guild.send(embed=embed)
 
     @suggestion.error
     async def suggestion_handler(self, ctx, error):
@@ -1177,7 +1268,7 @@ class Administração:
             if error.param.name == 'arg':
                 embed = discord.Embed(title="Comando $sugestão:", colour=discord.Colour(0x370c5e),
                                       description="Começa a votação sobre uma sugestão!"
-                                                  "\n \n**Como usar: $sugestão <mensagem>**")
+                                                  "\n \n**Como usar: $sugestão <#canal> <mensagem>**")
 
                 embed.set_author(name="Betina#9182",
                                  icon_url=betina_icon)
@@ -1199,15 +1290,14 @@ class Administração:
     @commands.command(name='kick')
     @has_permissions(kick_members=True)
     async def kickar(self, ctx, member: discord.Member, *, arg=None):
+        if str(member.id) == '527565353199337474':
+            return await ctx.send('<:stop:540852590083178497> **Não tem como eu me kickar do seu servidor!**')
         texto = await ctx.get_message(ctx.message.id)
-        print(1)
         guild_id = str(ctx.guild.id)
-        print(2)
         if ctx.message.author.avatar_url_as(static_format='png')[54:].startswith('a_'):
             avi = ctx.message.author.avatar_url.rsplit("?", 1)[0]
         else:
             avi = ctx.message.author.avatar_url_as(static_format='png')
-        print(3)
         if member.top_role >= member.guild.me.top_role:
             embed = discord.Embed(title="Comando $kick:", colour=discord.Colour(0x370c5e),
                                   description="Kicka o usuário do servidor por um motivo"
@@ -1363,8 +1453,91 @@ class Administração:
                 msg = await ctx.send(embed=embed)
                 await msg.add_reaction("❓")
 
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.guild_only()
+    @commands.command()
+    async def emojis(self, ctx):
+        server = ctx.message.guild
+        emojis = [str(x) for x in server.emojis]
+        await ctx.message.delete()
+        await ctx.send("".join(emojis))
+
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.guild_only()
+    @commands.command(name='roleinfo', aliases=['ri', 'cargoinfo'])
+    async def roleinfo(self, ctx, *, role: discord.Role):
+        guild = ctx.message.guild
+        guild_roles = ctx.message.guild.roles
+        guild_id = guild.id
+        all_users = [x for x in role.members]
+        em = discord.Embed(title=f'Informações do cargo {role}', color=role.color)
+        em.add_field(name='📛 Nome:', value=role.name)
+        em.add_field(name='💻ID:', value=role.id)
+        em.add_field(name='👥 Usuários:', value=str(len(role.members)))
+        em.add_field(name='<a:Conga:518188538114605074> Cor do cargo Hex:', value=str(role.color))
+        em.add_field(name='<a:Conga:518188538114605074> Cor do cargo RGB:', value=role.color.to_rgb())
+        if role.mentionable:
+            em.add_field(name='<a:MEGA:525468489583034368> Mencionavel:', value='Sim')
+        else:
+            em.add_field(name='<a:MEGA:525468489583034368> Mencionavel:', value='Não')
+        if role.hoist:
+            em.add_field(name='<a:MEGA:525468489583034368> Separada:', value='Sim')
+        else:
+            em.add_field(name='<a:MEGA:525468489583034368> Separada:', value='Não')
+        em.add_field(name='<a:MEGA:525468489583034368> Posição:', value=role.position)
+        if role.managed:
+            em.add_field(name='⚙ Gerenciada:', value='Sim')
+        else:
+            em.add_field(name='⚙ Gerenciada:', value='Não')
+        em.add_field(name='⭐ Criado em:', value=role.created_at.__format__('%d de %b de %Y às %H:%M:%S'))
+        if len(role.members) >= 1:
+            em.add_field(name='👥 Usuários:', value=len(all_users), inline=False)
+        else:
+            em.add_field(name='👥 Usuários', value=0, inline=False)
+        em.set_thumbnail(url='http://www.colorhexa.com/{}.png'.format(str(role.color).strip("#")))
+        em.set_footer(icon_url=betina_icon,
+                         text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                   self.client.user.name,
+                                                                                   year()))
+        await ctx.send(embed=em)
+
+        if guild_id not in digit_log:
+            return
+
+        guild = ctx.guild.get_channel(int(digit_log[guild_id]))
+
+        embed1 = discord.Embed(
+            title=f"{ctx.message.author.name} usou o comando roleinfo no "
+            f"canal {ctx.message.channel.mention}",
+            colour=discord.Colour(0x370c5e))
+
+        embed1.set_author(name=f"{ctx.message.author.mention}", icon_url=f"{ctx.message.author.avatar_url}")
+
+        embed1.set_footer(icon_url=betina_icon,
+                      text="Usado às {} Horário de Brasília | © {} {} .".format(hora(), self.client.user.name,
+                                                                                year()))
+        await guild.send(embed=embed1)
+
+    @roleinfo.error
+    async def roleinfo_handler(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            if error.param.name == 'role':
+                embed = discord.Embed(title="Comando $roleinfo:", colour=discord.Colour(0x370c5e),
+                                      description="Diz as informações sobre o cargo "
+                                                  "\n \n**Como usar: $roleinfo <cargo>**")
+
+                embed.set_author(name="Betina#9182",
+                                 icon_url=betina_icon)
+                embed.set_footer(icon_url=betina_icon,
+                                 text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                           self.client.user.name,
+                                                                                           year()))
+                embed.add_field(name="📖**Exemplos:**", value="$ri @fulano\n$roleinfo @membro",
+                                inline=False)
+                embed.add_field(name="🔀**Outros Comandos**", value="``$cargoinfo, $ri.``", inline=False)
+                msg = await ctx.send(embed=embed)
+                await msg.add_reaction("❓")
 
 
 def setup(client):
     client.add_cog(Administração(client))
-
