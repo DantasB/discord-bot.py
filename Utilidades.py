@@ -846,7 +846,8 @@ class Utilidades:
                     await msg.delete()
                     await ctx.channel.send(file=discord.File('usuariopb.png'))
                 except:
-                    return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
+                    await msg.delete()
+                    return await ctx.send('A imagem enviada é um gif. Eu não pude converter')
             else:
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
@@ -901,7 +902,8 @@ class Utilidades:
                 await msg.delete()
                 await ctx.channel.send(file=discord.File('usuariopb.png'))
             except:
-                return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
+                await msg.delete()
+                return await ctx.send('A imagem enviada é um gif. Eu não pude converter')
 
 
 
@@ -986,7 +988,8 @@ class Utilidades:
                     new.save('usuarioprimario.png')
                     await ctx.channel.send(file=discord.File('usuarioprimario.png'))
                 except:
-                    return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
+                    await msg.delete()
+                    return await ctx.send('A imagem enviada é um gif. Eu não pude converter')
             else:
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
@@ -1065,7 +1068,8 @@ class Utilidades:
                 await msg.delete()
                 await ctx.channel.send(file=discord.File('usuarioprimario.png'))
             except:
-                return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
+                await msg.delete()
+                return await ctx.send('A imagem enviada é um gif. Eu não pude converter')
 
 
 
@@ -1162,7 +1166,8 @@ class Utilidades:
                     await msg.delete()
                     await ctx.channel.send(file=discord.File('usuariopontilhado.png'))
                 except:
-                    return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
+                    await msg.delete()
+                    return await ctx.send('A imagem enviada é um gif. Eu não pude converter')
             else:
                 guild = ctx.guild.get_channel(int(limitador_log[guild_id]))
                 await ctx.send(f'Esse não foi o canal definido para usar os comandos. Tente utilizar o canal {guild}')
@@ -1253,7 +1258,8 @@ class Utilidades:
                 await msg.delete()
                 await ctx.channel.send(file=discord.File('usuariopontilhado.png'))
             except:
-                return await ctx.send('A imagem enviada é muito grande. Eu não pude converter')
+                await msg.delete()
+                return await ctx.send('A imagem enviada é um gif. Eu não pude converter')
 
 
     @commands.cooldown(2, 10, commands.BucketType.user)
@@ -1365,7 +1371,6 @@ class Utilidades:
                     await ctx.message.delete()
                     await ctx.send(embed=embed)
             else:
-
                 if (html[-1] =='g' and html[-2] =='p' and html[-3] =='j') or (html[-1] =='g' and html[-2] =='n' and html[-3] =='p'):
                     embed = discord.Embed(title="Anúncio novo ",
                                           colour=discord.Colour(0x370c5e), description=f"{mensagem}")
@@ -1376,7 +1381,7 @@ class Utilidades:
                                      text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
                                                                                                self.client.user.name,
                                                                                                year()))
-                    await ctx.message.delete()
+                    await ctx.send(f'Mensagem enviada para o canal {channel}')
                     await channel.send(embed=embed)
                 else:
                     embed = discord.Embed(title="Anúncio novo ",
@@ -1390,21 +1395,65 @@ class Utilidades:
                                      text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
                                                                                                self.client.user.name,
                                                                                                year()))
-                    await ctx.message.delete()
+                    await ctx.send(f'Mensagem enviada para o canal {channel}')
                     await channel.send(embed=embed)
 
         else:
-            embed = discord.Embed(title="Anuncio Importante!",
-                                  colour=discord.Colour(0x370c5e), description=f"{html} {mensagem}")
-            embed.set_image(url="http://3.bp.blogspot.com/-TdzBjPxRhGU/TfuMXBMtvLI/"
-                                "AAAAAAAAHKs/iF_iO31lSYA/s1600/300px-Nyan_Cat_animation.gif")
-            embed.set_author(name=f"{ctx.author.name}", icon_url=f"{avi}")
-            embed.set_footer(icon_url=betina_icon,
-                             text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
-                                                                                       self.client.user.name,
-                                                                                       year()))
-            await ctx.message.delete()
-            await ctx.send(embed=embed)
+            if channel is None:
+                if (html[-1] == 'g' and html[-2] == 'p' and html[-3] == 'j') or (
+                        html[-1] == 'g' and html[-2] == 'n' and html[-3] == 'p') \
+                        or (html[-1] == 'f' and html[-2] == 'i' and html[-3] == 'g'):
+                    embed = discord.Embed(title="Anúncio novo ",
+                                          colour=discord.Colour(0x370c5e), description=f"{mensagem}")
+
+                    embed.set_image(url=f'{html}')
+                    embed.set_author(name=f"{ctx.author.name}", icon_url=f"{avi}")
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
+                    await ctx.message.delete()
+                    await ctx.send(embed=embed)
+                else:
+                    embed = discord.Embed(title="Anúncio novo ",
+                                          colour=discord.Colour(0x370c5e), description=f"{mensagem}", url=f'{html}')
+
+                    embed.set_image(url="http://3.bp.blogspot.com/-TdzBjPxRhGU/T"
+                                        "fuMXBMtvLI/AAAAAAAAHKs/iF_iO31lSYA/s1600/300px-Nyan_Cat_animation.gif")
+                    embed.set_author(name=f"{ctx.author.name}", icon_url=f"{avi}")
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
+                    await ctx.message.delete()
+                    await ctx.send(embed=embed)
+            else:
+                if (html[-1] =='g' and html[-2] =='p' and html[-3] =='j') or (html[-1] =='g' and html[-2] =='n' and html[-3] =='p'):
+                    embed = discord.Embed(title="Anúncio novo ",
+                                          colour=discord.Colour(0x370c5e), description=f"{mensagem}")
+
+                    embed.set_image(url=f'{html}')
+                    embed.set_author(name=f"{ctx.author.name}", icon_url=f"{avi}")
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
+                    await ctx.send(f'Mensagem enviada para o canal {channel}')
+                    await channel.send(embed=embed)
+                else:
+                    embed = discord.Embed(title="Anúncio novo ",
+                                          colour=discord.Colour(0x370c5e), description=f"{mensagem}",
+                                          url=f'{html}')
+
+                    embed.set_image(url="http://3.bp.blogspot.com/-TdzBjPxRhGU/T"
+                                        "fuMXBMtvLI/AAAAAAAAHKs/iF_iO31lSYA/s1600/300px-Nyan_Cat_animation.gif")
+                    embed.set_author(name=f"{ctx.author.name}", icon_url=f"{avi}")
+                    embed.set_footer(icon_url=betina_icon,
+                                     text="Usado às {} Horário de Brasília | © {} {} .".format(hora(),
+                                                                                               self.client.user.name,
+                                                                                               year()))
+                    await ctx.send(f'Mensagem enviada para o canal {channel}')
+                    await channel.send(embed=embed)
 
 
     @anuncio.error
