@@ -53,7 +53,7 @@ with open('limitador.json', 'r') as file:
         limitador_log = {}
 
 
-class Diversão:
+class Diversão(commands.Cog):
     def __init__(self, client):
         self.client = client
 
