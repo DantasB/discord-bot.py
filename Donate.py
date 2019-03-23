@@ -29,7 +29,7 @@ from horario import*
 betina_icon = "https://images.discordapp.net/avatars/527565353199337474/4c21db45f96d92a2b8214b5f93d059c4.png?size=256"
 
 
-class Donate:
+class Donate(commands.Cog):
     def __init__(self, client):
         self.client = client
 
