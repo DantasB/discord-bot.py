@@ -57,7 +57,7 @@ with open('limitador.json', 'r') as file:
 
         
 
-class Interação:
+class Interação(commands.Cog):
     def __init__(self, client):
         self.client = client
 
