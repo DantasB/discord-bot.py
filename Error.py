@@ -34,7 +34,7 @@ def similar(a, b):
     return SequenceMatcher(None, a, b).ratio()
 
 
-class Error:
+class Error(commands.Cog):
     def __init__(self, client):
         self.client = client
 
