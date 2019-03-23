@@ -5,3 +5,4 @@ forex-python
 pillow
 matplotlib
 wordcloud
+pycep-correios
