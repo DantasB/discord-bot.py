@@ -33,7 +33,7 @@ betina_icon = "https://images.discordapp.net/avatars/527565353199337474/4c21db45
 numero = {}
 
 
-class Tickets:
+class Tickets(commands.Cog):
     def __init__(self, client):
         self.client = client
 
